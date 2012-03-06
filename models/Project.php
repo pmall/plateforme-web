@@ -11,24 +11,51 @@ class Project extends Model{
 	public $comment;
 	public $public;
 	public $date;
+	public $conditions;
 	public $chips;
 
 	# Retourne un tableau contenant tout les projets
-	public static function All(){
+	public static function All(Array $filter = array()){
 
 		$dbh = Dbh::getInstance();
 
-		$stmt = $dbh->prepare(
-			"SELECT * FROM _projects"
+		# On garde seulement les valeurs non vide
+		$filter = array_filter($filter, function($v){
+			return !empty($v);
+		});
+
+		# On récupère les valeurs du filtre
+		$filter_values = array_values($filter);
+
+		# On formatte les valeurs pour le where
+		$filter = array_map(function($v){
+			if($v == 'name'){
+				return $v . ' LIKE ?';
+			}else{
+				return $v . ' = ?';
+			}
+		}, array_keys($filter));
+
+		# On ajoute 1 dans la chaine where
+		array_unshift($filter, 1);
+
+		# On crée la chaine where
+		$where = 'WHERE ' . implode(' AND ', $filter);
+
+		# On prépare la requete
+		$select_projects_stmt = $dbh->prepare(
+			"SELECT * FROM _projects " . $where
 		);
 
-		$stmt->execute();
+		# On execute la requete
+		$stmt->execute($filter_values);
 
+		# On récupère la liste des projets
 		$projects = array();
 
-		while($project = $stmt->fetch(PDO::FETCH_ASSOC)){
+		while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
 
-			$projects[] = new Project($project, true);
+			$projects[] = new Project($row, true);
 
 		}
 
@@ -56,6 +83,43 @@ class Project extends Model{
 			return null;
 
 		}
+
+	}
+
+	# Retourne un projet avec ses conditions
+	public static function GetWithConditions($id){
+
+		$project = Project::Get($id);
+
+		if($project){
+
+			$dbh = Dbh::getInstance();
+
+			# On prépare la requete pour selectionner les puces
+			$stmt = $dbh->prepare(
+				"SELECT id, name
+				FROM _conditions
+				WHERE id_project = ?"
+			);
+
+			# On selectionne les conditions
+			$stmt->execute(array($id));
+
+			# On formatte les conditions
+			$conditions = array();
+
+			while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+
+				 $conditions[$row['name']]['id'] = $row['id'];
+				 $conditions[$row['name']]['name'] = $row['name'];
+
+			}
+
+			$project->conditions = $conditions;
+
+		}
+
+		return $project;
 
 	}
 
@@ -272,6 +336,19 @@ class Project extends Model{
 			$this->addError(new Error(
 				'Lignée ne doit pas être vide',
 				'cell_line'
+			));
+
+		}
+
+		# Si il n'y a pas au moins 4 puces de choisi
+		$puces_remplies = array_filter($this->chips, function($v){
+			return !empty($v['condition']) or !empty($v['num']);
+		});
+
+		if(count($puces_remplies) < 4){
+
+			$this->addError(new Error(
+				'Vous devez sélectionner au moins 4 puces.'
 			));
 
 		}

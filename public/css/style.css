@@ -1,9 +1,16 @@
+#notice{
+	padding:10px;
+	margin:10px 0;
+	border:1px solid black;
+	background-color:lightgreen;
+}
+
 .error{
 	color:red;
 }
 
 .projects{
-	margin:0;
+	margin:20px 0;
 	padding:0;
 }
 
@@ -23,10 +30,6 @@
 	background-color:#CCCCCC;
 }
 
-.project p{
-	margin:5px;
-}
-
 .project ul{
 	margin:20px;
 	padding:10px;
@@ -36,10 +39,6 @@
 	padding: 5px;
 	border:1px solid black;
 	background-color:lightgreen;
-}
-
-.desc{
-	display:inline;
 }
 
 form.action{

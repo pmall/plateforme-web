@@ -329,7 +329,13 @@ class User extends Model{
 		$dbh = Dbh::GetInstance();
 
 		$stmt = $dbh->prepare(
-			"DELETE FROM _users WHERE id = ?"
+			"DELETE u, p, co, ch
+			FROM _users AS u, _projects AS p,
+			_conditions AS co, _chips AS ch
+			WHERE u.id = p.id_user
+			AND p.id = co.id_project
+			AND co.id = ch.id_condition
+			AND u.id = ?"
 		);
 
 		$stmt->execute(array($this->id));

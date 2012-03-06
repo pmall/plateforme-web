@@ -1,34 +1,33 @@
 <?php
 
+function __autoload($classname){
+
+	require 'framework/' . $classname . '.php';
+
+}
+
+# On inclu les fichiers
 require('config.php');
-
-require('framework/App.php');
-require('framework/Request.php');
-require('framework/Response.php');
-require('framework/Route.php');
-require('framework/Router.php');
-require('framework/Dbh.php');
-require('framework/Model.php');
-require('framework/Error.php');
-require('framework/View.php');
-
 require('models/Dir.php');
 require('models/User.php');
 require('models/Project.php');
+require('models/Analysis.php');
 
+# On déclare l'app
 $app = new App('elexir2');
 
 # ==============================================================================
 # Accueil
 # ==============================================================================
 
-$app->get('/', function(){
+$app->get('/', function($req){
 
 	$dirs = Dir::All();
 	$users = User::AllWithProjects();
 
 	return new View('accueil.php', array(
 		'title' => 'Accueil plateforme',
+		'notice' => $req->getFlash('notice'),
 		'dirs' => $dirs,
 		'users' => $users
 	));
@@ -46,6 +45,12 @@ include('users.php');
 # ==============================================================================
 
 include('projects.php');
+
+# ==============================================================================
+# Analyses !
+# ==============================================================================
+
+include('analyses.php');
 
 # ==============================================================================
 # On run l'appli !!

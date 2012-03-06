@@ -33,13 +33,13 @@ final class Route{
 			$patterns = array(
 				'#\.#',
 				'#\*#',
-				'#:([a-zA-Z][a-zA-Z0-9]+)#'
+				'#:([a-zA-Z][a-zA-Z0-9_\-]+)#'
 			);
 
 			$replacements = array(
 				'\.',
 				'(.*?)',
-				'(?P<$1>[a-zA-Z0-9]+?)'
+				'(?P<$1>[a-zA-Z0-9_\-]+?)'
 			);
 
 			# On transforme le pattern en regex

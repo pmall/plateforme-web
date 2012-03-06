@@ -62,7 +62,7 @@ class Dir{
 
 			if($this->isCelfile($file)){
 
-				$validCelfiles[] = $file;
+				$validCelfiles[] = $this->formatCelfile($file);
 
 			}
 
@@ -87,6 +87,18 @@ class Dir{
 			'/\.(cel|CEL)$/',
 			$file
 		);
+
+	}
+
+	private function formatCelfile($celfile){
+
+		#return preg_replace(
+		#	'/\.(cel|CEL)$/',
+		#	'',
+		#	$celfile
+		#);
+
+		return $celfile;
 
 	}
 

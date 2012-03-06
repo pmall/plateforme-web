@@ -12,6 +12,26 @@ $app->get('/users', function($req, $res){
 
 });
 
+# Affichage d'un utilisateur en particulier
+$app->get('/user/:id', function($req, $res, $matches){
+
+	$user = User::GetWithProjects($matches['id']);
+
+	if(!$user){
+
+		$res->redirect('index.php');
+
+	}else{
+
+		return new View('users/show.php', array(
+			'title' => 'Liste des projets de l\'utilisateur ' . $user->login,
+			'user' => $user 
+		));
+
+	}
+
+});
+
 # Affichage du formulaire pour ajouter un utilisateur
 $app->get('/user', function($req, $res){
 
@@ -31,6 +51,11 @@ $app->post('/user', function($req, $res){
 
 	if($user->save()){
 
+		$res->setFlash(
+			'notice',
+			'L\'utilisateur ' . $user->login . ' a bien été ajouté.'
+		);
+
 		$res->redirect('/index.php');
 
 	}else{
@@ -38,26 +63,6 @@ $app->post('/user', function($req, $res){
 		return new View('users/new.php', array(
 			'title' => 'Ajout d\'un nouvel utilisateur',
 			'user' => $user
-		));
-
-	}
-
-});
-
-# Affichage des projets d'un utilisateur
-$app->get('/user/:id', function($req, $res, $matches){
-
-	$user = User::GetWithProjects($matches['id']);
-
-	if(!$user){
-
-		$res->redirect('index.php');
-
-	}else{
-
-		return new View('users/show.php', array(
-			'title' => 'Liste des projets de l\'utilisateur ' . $user->login,
-			'user' => $user 
 		));
 
 	}
@@ -105,6 +110,11 @@ $app->put('/user/:id', function($req, $res, $matches){
 
 		if($user->save()){
 
+			$res->setFlash(
+				'notice',
+				'L\'utilisateur ' . $user->login . ' a bien été modifié.'
+			);
+
 			$res->redirect('index.php');
 
 		}else{
@@ -131,6 +141,11 @@ $app->delete('/user/:id/', function($req, $res, $matches){
 		$user->delete();
 
 	}
+
+	$res->setFlash(
+		'notice',
+		'L\'utilisateur ' . $user->login . ' a bien été supprimé.'
+	);
 
 	$res->redirect('index.php');
 

@@ -48,6 +48,13 @@ class Response{
 
 	}
 
+	# Ajoute une valeur dans le flash
+	public function setFlash($key, $value){
+
+		Flash::getInstance()->set($key, $value);
+
+	}
+
 	public function isSent(){
 
 		return $this->isSent;

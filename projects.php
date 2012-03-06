@@ -1,13 +1,23 @@
 <?php
 
 # Affichage de la liste des projets
-$app->get('/projects', function(){
+$app->get('/projects', function($req){
 
-	$projects = Project::All();
+	$filter = array(
+		'id_user' => $req->param('id_user'),
+		'name' => $req->param('name'),
+		'type' => $req->param('type'),
+		'organism' => $req->param('organism'),
+		'cell_line' => $req->param('cell_line')
+	);
+
+	$projects = Project::All($filter);
 
 	return new View('projects/list.php', array(
 		'title' => 'Liste des projets',
-		'projects' => $projects
+		'users' => User::OptionArray(),
+		'projects' => $projects,
+		'filter' => $filter
 	));
 
 });
@@ -139,6 +149,8 @@ $app->put('/project/:id', function($req, $res, $matches){
 
 		}else{
 
+			$name = $project->name;
+
 			$project->assign($req->param('project'));
 
 			$celfiles = $project->getCelfiles();
@@ -152,7 +164,7 @@ $app->put('/project/:id', function($req, $res, $matches){
 			}else{
 
 				return new View('projects/edit.php', array(
-					'title' => 'Modification du projet ' . $project->name,
+					'title' => 'Modification du projet ' . $name,
 					'dir' => $project->dir,
 					'project' => $project,
 					'users' => User::OptionArray(),

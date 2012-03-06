@@ -23,6 +23,11 @@
         </li>
       </ul>
     </nav>
+    <?php if(!empty($notice)): ?>
+    <div id="notice">
+      <?php echo $notice; ?>
+    </div>
+    <?php endif; ?>
     <?php echo $out ?>
   </body>
 </html>

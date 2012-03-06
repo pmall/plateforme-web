@@ -2,10 +2,10 @@
 
 final class Request{
 
-	public $get;
-	public $post;
-	public $session;
-	public $cookies;
+	private $get;
+	private $post;
+	private $session;
+	private $cookies;
 	public $url;
 	public $method;
 
@@ -95,6 +95,13 @@ final class Request{
 
 		# et on les retourne
 		return $params;
+
+	}
+
+	# Retourne une valeur du flash
+	public function getFlash($key){
+
+		return Flash::getInstance()->get($key);
 
 	}
 
