@@ -40,6 +40,11 @@ $app->post('/project/:id_project/analysis', function($req, $res, $matches){
 
 		if($analysis->save()){
 
+			$res->setFlash(
+				'notice',
+				'L\'analyse ' . $analysis->name . ' a bien été ajoutée.'
+			);
+
 			$res->redirect('index.php');
 
 		}else{
@@ -97,6 +102,11 @@ $app->put('/project/:id_project/analysis/:id_analysis/edit', function($req, $res
 
 		if($analysis->save()){
 
+			$res->setFlash(
+				'notice',
+				'L\'analyse ' . $name . ' a bien été modifiée.'
+			);
+
 			$res->redirect('index.php');
 
 		}else{
@@ -110,6 +120,27 @@ $app->put('/project/:id_project/analysis/:id_analysis/edit', function($req, $res
 		}
 
 	}
+
+});
+
+# Suppression de l'analyse
+$app->delete('/project/:id_project/analysis/:id_analysis', function($req, $res, $matches){
+
+	$analysis = Analysis::Get($matches['id_analysis']);
+
+	if($analysis){
+
+		$analysis->delete();
+
+	}
+
+	$res->setFlash(
+		'notice',
+		'L\'analyse ' . $analysis->name . ' a bien été supprimée.'
+	);
+
+
+	$res->redirect('index.php');
 
 });
 

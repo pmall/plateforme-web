@@ -87,6 +87,7 @@ class Analysis extends Model{
 
 	public function validates(){
 
+		# On valide que le nom n'est pas vide
 		if(empty($this->name)){
 
 			$this->addError(new Error(
@@ -94,14 +95,115 @@ class Analysis extends Model{
 				'name'
 			));
 
+		}else{
+
+			# Le nom ne doit contenir que des alphanum + _ + - + .
+			if(!preg_match('/^[A-Za-z0-9_\-.]+$/', $this->name)){
+
+				$this->addError(new Error(
+					'Le nom ne doit contenir que des chiffres, des
+					lettres, des underscores, des tirets et des
+					points',
+					'name'
+				));
+
+			}
+
 		}
 
+		# On valide que le type n'est pas vide
 		if(empty($this->type)){
 
 			$this->addError(new Error(
 				'Le type ne doit pas être vide',
 				'type'
 			));
+
+		}
+
+		# On fait un tableau letter => condition
+		$letters = array();
+
+		foreach($this->groups as $group){
+
+			if(!empty($group['letter'])){
+
+				$letters[$group['letter']][] = $group['id_condition'];
+
+			}
+
+		}
+
+		# On valide paire
+		if($this->type == 'paire'){
+
+			if(count($letters) < 2){
+
+				$this->addError(new Error(
+					'Pour une analyse de type paire, les
+					lettres A et B doivent être associées a
+					une condition'
+				));
+
+			}
+
+			foreach($letters as $letter => $groups){
+
+				if($letter == 'C' or $letter == 'D'){
+
+					$this->addError(new Error(
+						'La lettre ' . $letter . ' ne 
+						peut pas être utilisé pour une 
+						expérience de type paire'
+					));
+
+				}
+
+			}
+
+		}
+
+		# On valide impaire
+		if($this->type == 'impaire'){
+
+			if(count($letters) < 2){
+
+				$this->addError(new Error(
+					'Pour une analyse de type impaire, les
+					lettres A et B doivent être associées a
+					une condition'
+				));
+
+			}
+
+			foreach($letters as $letter => $groups){
+
+				if($letter == 'C' or $letter == 'D'){
+
+					$this->addError(new Error(
+						'La lettre ' . $letter . ' ne 
+						peut pas être utilisé pour une 
+						expérience de type impaire'
+					));
+
+				}
+
+			}
+
+		}
+
+		# On valide J/O
+		if($this->type == 'J/O'){
+
+			if(count($letters) < 4){
+
+				$this->addError(new Error(
+					'Pour une analyse de type J / O, les
+					lettres A, B, C, et D doivent être
+					associées a une condition'
+				));
+
+			}
 
 		}
 
@@ -181,6 +283,21 @@ class Analysis extends Model{
 			));
 
 		}
+
+	}
+
+	protected function rawDelete(){
+
+		$dbh = Dbh::getInstance();
+
+		$stmt = $dbh->prepare(
+			"DELETE a, g
+			FROM _analyses AS a
+			LEFT JOIN _groups AS g ON a.id = g.id_analysis
+			WHERE a.id = ?"
+		);
+
+		$stmt->execute(array($this->id));
 
 	}
 

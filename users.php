@@ -112,7 +112,7 @@ $app->put('/user/:id', function($req, $res, $matches){
 
 			$res->setFlash(
 				'notice',
-				'L\'utilisateur ' . $user->login . ' a bien été modifié.'
+				'L\'utilisateur ' . $login . ' a bien été modifié.'
 			);
 
 			$res->redirect('index.php');
@@ -120,7 +120,7 @@ $app->put('/user/:id', function($req, $res, $matches){
 		}else{
 
 			return new View('users/edit.php', array(
-				'title' => 'Modification de l\'utilisateur ' . $user->login,
+				'title' => 'Modification de l\'utilisateur ' . $login,
 				'login' => $login,
 				'user' => $user
 			));

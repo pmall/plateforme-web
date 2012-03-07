@@ -160,6 +160,18 @@ class User extends Model{
 
 		}else{
 
+			# Le nom ne doit contenir que des alphanum + _ + - + .
+			if(!preg_match('/^[A-Za-z0-9_\-.]+$/', $this->login)){
+
+				$this->addError(new Error(
+					'Le nom ne doit contenir que des chiffres, des
+					lettres, des underscores, des tirets et des
+					points',
+					'login'
+				));
+
+			}
+
 			# On récupère les utilisateur qui ont ce login
 			$stmt = $dbh->prepare(
 				"SELECT id FROM _users WHERE login = ?"
@@ -304,13 +316,14 @@ class User extends Model{
 		$dbh = Dbh::GetInstance();
 
 		$stmt = $dbh->prepare(
-			"DELETE u, p, co, ch
-			FROM _users AS u, _projects AS p,
-			_conditions AS co, _chips AS ch
-			WHERE u.id = p.id_user
-			AND p.id = co.id_project
-			AND co.id = ch.id_condition
-			AND u.id = ?"
+			"DELETE u, p, co, ch, a, g
+			FROM _users AS u
+			LEFT JOIN _projects AS p ON u.id = p.id_user
+			LEFT JOIN _conditions AS co ON p.id = co.id_project
+			LEFT JOIN _chips AS ch ON co.id = ch.id_condition
+			LEFT JOIN _analyses AS a ON p.id = a.id_project
+			LEFT JOIN _groups AS g ON a.id = g.id_analysis
+			WHERE u.id = ?"
 		);
 
 		$stmt->execute(array($this->id));

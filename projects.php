@@ -71,6 +71,11 @@ $app->post('/project', function($req, $res) use($config){
 
 		if($project->save()){
 
+			$res->setFlash(
+				'notice',
+				'Le projet ' . $project->name . ' a bien été ajouté.'
+			);
+
 			$res->redirect('index.php');
 
 		}else{
@@ -155,6 +160,11 @@ $app->put('/project/:id', function($req, $res, $matches) use($config){
 
 			if($project->save()){
 
+				$res->setFlash(
+					'notice',
+					'Le projet ' . $name . ' a bien été modifié.'
+				);
+
 				$res->redirect('index.php');
 
 			}else{
@@ -185,6 +195,11 @@ $app->delete('/project/:id/', function($req, $res, $matches){
 		$project->delete();
 
 	}
+
+	$res->setFlash(
+		'notice',
+		'Le projet ' . $project->name . ' a bien été supprimé.'
+	);
 
 	$res->redirect('index.php');
 

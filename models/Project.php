@@ -296,6 +296,20 @@ class Project extends Model{
 				'name'
 			));
 
+		}else{
+
+			# Le nom ne doit contenir que des alphanum + _ + - + .
+			if(!preg_match('/^[A-Za-z0-9_\-.]+$/', $this->name)){
+
+				$this->addError(new Error(
+					'Le nom ne doit contenir que des chiffres, des
+					lettres, des underscores, des tirets et des
+					points',
+					'name'
+				));
+
+			}
+
 		}
 
 		$typeEtOrgaRempli = true;
@@ -344,7 +358,7 @@ class Project extends Model{
 
 		}
 
-		# Si il n'y a pas au moins 4 puces de choisi
+		# On valide si il y a au moins 2 puces de selectionnées
 		$puces_remplies = array_filter($this->chips, function($v){
 			return !empty($v['condition']) or !empty($v['num']);
 		});
@@ -352,7 +366,7 @@ class Project extends Model{
 		if(count($puces_remplies) < 2){
 
 			$this->addError(new Error(
-				'Vous devez sélectionner au moins 4 puces.'
+				'Vous devez sélectionner au moins 2 puces.'
 			));
 
 		}
@@ -377,6 +391,56 @@ class Project extends Model{
 					'Vous devez donner une condition a la puce ' . $chip['name'],
 					$chip['name']
 				));
+
+			}
+
+		}
+
+		# On valide les numéros de puces
+
+		# On fait une liste condition => chips
+		$conditions = array();
+
+		foreach($this->chips as $chip){
+
+			if(!empty($chip['condition']) and !empty($chip['num'])){
+
+				$conditions[$chip['condition']][] = array(
+					'name' => $chip['name'],
+					'num' => $chip['num']
+				);
+
+			}
+
+		}
+
+		# On valide les numéros
+		foreach($conditions as $condition){
+
+			# On classe les puces de la condition
+			usort($condition, function($a, $b){
+				if($a['num'] == $b['num']){
+					return strnatcmp($a['name'], $b['name']);
+				}else{
+					return ($a['num'] < $b['num']) ? -1 : 1;
+				}
+			});
+
+			# On vérifie que leur num commencent bien a 1 et se suivent
+			$i = 1;
+
+			foreach($condition as $chip){
+
+				if($chip['num'] != $i){
+
+					$this->addError(new Error(
+						'Le numéro de la puce ' . $chip['name'] . ' est incorect',
+						$chip['name']
+					));
+
+				}
+
+				$i++;
 
 			}
 
@@ -471,11 +535,13 @@ class Project extends Model{
 		$dbh = Dbh::getInstance();
 
 		$stmt = $dbh->prepare(
-			"DELETE p, co, ch
-			FROM _projects AS p, _conditions AS co, _chips AS ch
-			WHERE p.id = co.id_project
-			AND co.id = ch.id_condition
-			AND p.id = ?"
+			"DELETE p, co, ch, a, g
+			FROM _projects AS p
+			LEFT JOIN _conditions AS co ON p.id = co.id_project
+			LEFT JOIN _chips AS ch ON co.id = ch.id_condition
+			LEFT JOIN _analyses AS a ON p.id = a.id_project
+			LEFT JOIN _groups AS g ON a.id = g.id_analysis
+			WHERE p.id = ?"
 		);
 
 		$stmt->execute(array($this->id));
