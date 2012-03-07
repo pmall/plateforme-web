@@ -89,6 +89,37 @@ class Model{
 
 	}
 
+	# Retourne un chiffre ou une lettre aléatoirement
+	private function rand(){
+
+		$char = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+		return $char[rand(0, 35)];
+
+	}
+
+	# Retourne un identifiant unique
+	protected function makeUniqid($stmt){
+
+		while(1){
+
+			$uniqid = implode('', array(
+				$this->rand(),
+				$this->rand(),
+				$this->rand(),
+				$this->rand(),
+				$this->rand(),
+				$this->rand()
+			));
+
+			$stmt->execute(array($uniqid));
+
+			if($stmt->rowCount() == 0){ return $uniqid; }
+
+		}
+
+	}
+
 	# Sauvegarde du modele dans la bdd
 	public function save(){
 

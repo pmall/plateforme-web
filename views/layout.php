@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title><?php echo $title ?></title>
+    <title><?= $title ?></title>
     <link type="text/css" rel="stylesheet" href="/elexir2/public/css/style.css" />
     <!-- shim pour que IE < 9 reconnaisse les balises html5 >
     <!--[if lt IE 9]>
@@ -23,11 +23,11 @@
         </li>
       </ul>
     </nav>
-    <?php if(!empty($notice)): ?>
+    <? if(!empty($notice)): ?>
     <div id="notice">
-      <?php echo $notice; ?>
+      <?= $notice; ?>
     </div>
-    <?php endif; ?>
-    <?php echo $out ?>
+    <? endif; ?>
+    <?= $out ?>
   </body>
 </html>

@@ -8,14 +8,33 @@ class Analysis extends Model{
 	public $type;
 	public $groups;
 
+	# Retourne un tableau contenant toutes les analyses
+	public static function All(){
+
+		$dbh = Dbh::getInstance();
+
+		$stmt = $dbh->prepare("SELECT * FROM _analyses");
+
+		$stmt->execute();
+
+		$analyses = array();
+
+		while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+
+			$analyses[] = new Analysis($row, true);
+
+		}
+
+		return $analyses;
+
+	}
+
 	# Retourne l'analyse qui correspond a l'id
 	public static function Get($id){
 
 		$dbh = Dbh::getInstance();
 
-		$stmt = $dbh->prepare(
-			"SELECT * FROM _analyses WHERE id = ?"
-		);
+		$stmt = $dbh->prepare("SELECT * FROM _analyses WHERE id = ?");
 
 		$stmt->execute(array($id));
 
@@ -66,25 +85,6 @@ class Analysis extends Model{
 
 	}
 
-	# Retourne un identifiant unique
-	private function makeUniqid(){
-
-		$dbh = Dbh::getInstance();
-
-		$stmt = $dbh->prepare("SELECT id FROM _porjects WHERE id = ?");
-
-		while(1){
-
-			$uniqid = rand(0, 9) . rand(0, 9) . rand(0, 9) . rand(0, 9) . rand(0, 9) . rand(0, 9);
-
-			$stmt->execute(array($uniqid));
-
-			if($stmt->rowCount() == 0){ return $uniqid; }
-
-		}
-
-	}
-
 	public function validates(){
 
 		if(empty($this->name)){
@@ -109,7 +109,11 @@ class Analysis extends Model{
 
 	protected function beforeInsert(){
 
-		$this->id = $this->makeUniqid();
+		$dbh = Dbh::getInstance();
+
+		$this->id = $this->makeUniqid($dbh->prepare(
+			"SELECT id FROM _analyses WHERE id = ?"
+		));
 
 	}
 

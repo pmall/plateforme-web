@@ -2,6 +2,7 @@
 
 class Project extends Model{
 
+	public $id;
 	public $id_user;
 	public $dir;
 	public $name;
@@ -13,8 +14,9 @@ class Project extends Model{
 	public $date;
 	public $conditions;
 	public $chips;
+	public $analyses;
 
-	# Retourne un tableau contenant tout les projets
+	# Retourne un tableau contenant tous les projets
 	public static function All(Array $filter = array()){
 
 		$dbh = Dbh::getInstance();
@@ -43,7 +45,7 @@ class Project extends Model{
 		$where = 'WHERE ' . implode(' AND ', $filter);
 
 		# On prépare la requete
-		$select_projects_stmt = $dbh->prepare(
+		$stmt = $dbh->prepare(
 			"SELECT * FROM _projects " . $where
 		);
 
@@ -56,6 +58,27 @@ class Project extends Model{
 		while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
 
 			$projects[] = new Project($row, true);
+
+		}
+
+		return $projects;
+
+	}
+
+	# Retourne un tableau avec les projets et les analysis correspondantes
+	public static function AllWithAnalyses(Array $filter = array()){
+
+		$dbh = Dbh::getInstance();
+
+		$projects = Project::All($filter);
+		$analyses = Analysis::All();
+
+		foreach($projects as $project){
+
+			# On récupère les analyses qui correspondent au projet
+			$project->analyses = array_filter($analyses, function($analysis) use($project){
+				return $project->id == $analysis->id_project;
+			});
 
 		}
 
@@ -233,7 +256,7 @@ class Project extends Model{
 
 	}
 
-	# Retourne le numéro de la puce demandé
+	# Retourne la condition de la puce demandé
 	public function getChipCondition($chipname){
 
 		if(!empty($this->chips)){
@@ -247,25 +270,6 @@ class Project extends Model{
 				return '';
 
 			}
-
-		}
-
-	}
-
-	# Retourne un identifiant unique
-	private function makeUniqid(){
-
-		$dbh = Dbh::getInstance();
-
-		$stmt = $dbh->prepare("SELECT id FROM _porjects WHERE id = ?");
-
-		while(1){
-
-			$uniqid = rand(0, 9) . rand(0, 9) . rand(0, 9) . rand(0, 9) . rand(0, 9) . rand(0, 9);
-
-			$stmt->execute(array($uniqid));
-
-			if($stmt->rowCount() == 0){ return $uniqid; }
 
 		}
 
@@ -345,7 +349,7 @@ class Project extends Model{
 			return !empty($v['condition']) or !empty($v['num']);
 		});
 
-		if(count($puces_remplies) < 4){
+		if(count($puces_remplies) < 2){
 
 			$this->addError(new Error(
 				'Vous devez sélectionner au moins 4 puces.'
@@ -383,7 +387,12 @@ class Project extends Model{
 	# Avant l'insertion
 	protected function beforeInsert(){
 
-		$this->id = $this->makeUniqid();
+		$dbh = Dbh::getInstance();
+
+		$this->id = $this->makeUniqid($dbh->prepare(
+			"SELECT id FROM _projects WHERE id = ?"
+		));
+
 		$this->date = date("Y-m-d H:i:s");
 
 	}

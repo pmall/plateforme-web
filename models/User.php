@@ -41,35 +41,20 @@ class User extends Model{
 
 		$dbh = Dbh::getInstance();
 
-		$stmt = $dbh->prepare(
-			"SELECT u.login, p.*
-			FROM _users AS u, _projects AS p
-			WHERE u.id = p.id_user"
-		);
+		$users = User::All();
+		$projects = Project::AllWithAnalyses();
 
-		$stmt->execute();
+		foreach($users as $user){
 
-		$users = array();
-
-		while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-
-			if(!array_key_exists($row['id_user'], $users)){
-
-				$users[$row['id_user']] = new User(array(
-					'id' => $row['id_user'],
-					'login' => $row['login']
-				), true);
-
-			}
-
-			$users[$row['id_user']]->projects[] = new Project($row, true);
+			$user->projects = array_filter($projects, function($project) use($user){
+				return $user->id == $project->id_user;
+			});
 
 		}
 
 		return $users;
 
 	}
-
 
 	# Retourne tous les utilisateurs
 	public static function Get($id){
@@ -95,35 +80,25 @@ class User extends Model{
 	}
 
 	# Retourne l'utilisateur idUser avec ses projets
-	public static function GetWithProjects($idUser){
+	public static function GetWithProjects($id){
 
 		$dbh = Dbh::getInstance();
 
-		$stmt = $dbh->prepare(
-			"SELECT u.login, p.*
-			FROM _users AS u, _projects AS p
-			WHERE u.id = p.id_user
-			AND u.id = ?"
-		);
+		$stmt = $dbh->prepare("SELECT * FROM _users WHERE id = ?");
 
-		$stmt->execute(array($idUser));
+		$stmt->execute(array($id));
+
+		$projects = Project::AllWithAnalyses(array('id_user' => $id));
 
 		$user = null;
 
-		while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+		if($row = $stmt->fetch(PDO::FETCH_ASSOC)){
 
-			# Si l'utilisateur n'existe pas on le crée
-			if(!$user){
+			$user = new User($row, true);
 
-				$user = new User(array(
-					'id' => $row['id_user'],
-					'login' => $row['login']
-				), true);
-
-			}
-
-			# On ajoute le projet à l'user
-			$user->projects[] = new Project($row, true);
+			$user->projects = array_filter($projects, function($project) use($user){
+				return $user->id == $project->id_user;
+			});
 
 		}
 

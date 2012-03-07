@@ -11,7 +11,7 @@ $app->get('/projects', function($req){
 		'cell_line' => $req->param('cell_line')
 	);
 
-	$projects = Project::All($filter);
+	$projects = Project::AllWithAnalyses($filter);
 
 	return new View('projects/list.php', array(
 		'title' => 'Liste des projets',
@@ -23,8 +23,7 @@ $app->get('/projects', function($req){
 });
 
 # Affichage du formulaire pour ajouter un nouveau projet
-$app->get('/project', function($req, $res){
-	global $config;
+$app->get('/project', function($req, $res) use($config){
 
 	$dir = trim($req->param('dir'), '/');
 
@@ -54,8 +53,7 @@ $app->get('/project', function($req, $res){
 });
 
 # Ajout du formulaire dans la base de données
-$app->post('/project', function($req, $res){
-	global $config;
+$app->post('/project', function($req, $res) use($config){
 
 	$dir = trim($req->param('dir'), '/');
 
@@ -92,8 +90,7 @@ $app->post('/project', function($req, $res){
 });
 
 # Affichage du formulaire pour modifier un projet
-$app->get('/project/:id/edit', function($req, $res, $matches){
-	global $config;
+$app->get('/project/:id/edit', function($req, $res, $matches) use($config){
 
 	$project = Project::GetWithChips($matches['id']);
 
@@ -130,8 +127,7 @@ $app->get('/project/:id/edit', function($req, $res, $matches){
 });
 
 # Modification du projet dans la base de données
-$app->put('/project/:id', function($req, $res, $matches){
-	global $config;
+$app->put('/project/:id', function($req, $res, $matches) use($config){
 
 	$project = Project::Get($matches['id']);
 

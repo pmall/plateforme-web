@@ -5,10 +5,6 @@
 	background-color:lightgreen;
 }
 
-.error{
-	color:red;
-}
-
 .projects{
 	margin:20px 0;
 	padding:0;
@@ -41,6 +37,18 @@
 	background-color:lightgreen;
 }
 
+/* =============================================================================
+  FORMULAIRE
+============================================================================= */
+
+fieldset{
+	margin:20px 0;
+}
+
+.error{
+	color:red;
+}
+
 form.action{
 	display:inline;
 }
@@ -67,4 +75,10 @@ textarea{
 	vertical-align:top;
 	width:300px;
 	height:80px;
+}
+
+form ul.list{
+	margin:0;
+	padding:0;
+	list-style-type:none;
 }

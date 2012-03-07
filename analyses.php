@@ -69,7 +69,7 @@ $app->get('/project/:id_project/analysis/:id_analysis/edit', function($req, $res
 	}else{
 
 		return new View('analyses/edit.php', array(
-			'title' => 'Edition de l\'analyse ' . $analysis->name . '.',
+			'title' => 'Modification de l\'analyse ' . $analysis->name . '.',
 			'project' => $project,
 			'analysis' => $analysis
 		));
@@ -102,7 +102,7 @@ $app->put('/project/:id_project/analysis/:id_analysis/edit', function($req, $res
 		}else{
 
 			return new View('analyses/edit.php', array(
-				'title' => 'Edition de l\'analyse ' . $name . '.',
+				'title' => 'Modification de l\'analyse ' . $name . '.',
 				'project' => $project,
 				'analysis' => $analysis
 			));
