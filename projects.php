@@ -15,6 +15,7 @@ $app->get('/projects', function($req){
 
 	return new View('projects/list.php', array(
 		'title' => 'Liste des projets',
+		'numProjects' => Project::count(),
 		'users' => User::OptionArray(),
 		'projects' => $projects,
 		'filter' => $filter

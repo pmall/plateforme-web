@@ -15,7 +15,14 @@ $app->get('/users', function($req, $res){
 # Affichage d'un utilisateur en particulier
 $app->get('/user/:id', function($req, $res, $matches){
 
-	$user = User::GetWithProjects($matches['id']);
+	$filter = array(
+		'name' => $req->param('name'),
+		'type' => $req->param('type'),
+		'organism' => $req->param('organism'),
+		'cell_line' => $req->param('cell_line')
+	);
+
+	$user = User::GetWithProjects($matches['id'], $filter);
 
 	if(!$user){
 
@@ -25,7 +32,9 @@ $app->get('/user/:id', function($req, $res, $matches){
 
 		return new View('users/show.php', array(
 			'title' => 'Liste des projets de l\'utilisateur ' . $user->login,
-			'user' => $user 
+			'numProjects' => User::CountProjects($user->id),
+			'user' => $user,
+			'filter' => $filter
 		));
 
 	}

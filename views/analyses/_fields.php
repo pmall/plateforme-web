@@ -9,7 +9,7 @@
   </div>
   <div class="field">
     <?= label($analysis, 'name', 'Nom :'); ?>
-    <?= field($analysis, 'name', 'text'); ?>
+    <?= field($analysis, 'name', 'text', array('maxlength' => 255)); ?>
   </div>
   <div class="field">
     <?= label($analysis, 'type', 'Type d\'analyse :') ?>
@@ -24,19 +24,19 @@
   <legend>Conditions du projet</legend>
   <ul class="list">
     <? $i = 0; ?>
-    <? foreach($project->conditions as $condition): ?>
+    <? foreach($project->conditions as $id_condition => $condition): ?>
     <li>
       <div class="field">
-        <? $error = ''; if($analysis->hasError($condition['name'])){ $error = ' class="error"'; } ?>
-        <label for="condition_<?= ++$i; ?>"<?= $error; ?>><?= $condition['name'] ?></label>
-        <input name="analysis[groups][<?= $condition['name'] ?>][id_condition]" type="hidden" value="<?= $condition['id'] ?>" />
-        <input name="analysis[groups][<?= $condition['name'] ?>][name]" type="hidden" value="<?= $condition['name'] ?>" />
-        <select id="condition_<?= $i; ?>" name="analysis[groups][<?= $condition['name'] ?>][letter]">
+        <? $error = ''; if($analysis->hasError($condition)){ $error = ' class="error"'; } ?>
+        <label for="condition_<?= ++$i; ?>"<?= $error; ?>><?= $condition ?></label>
+        <input name="analysis[groups][<?= $condition ?>][id_condition]" type="hidden" value="<?= $id_condition ?>" />
+        <input name="analysis[groups][<?= $condition ?>][name]" type="hidden" value="<?= $condition ?>" />
+        <select id="condition_<?= $i; ?>" name="analysis[groups][<?= $condition ?>][letter]">
           <option value=""></option>
-          <option value="A"<? if($analysis->groups[$condition['name']]['letter'] == 'A'): ?> selected="selected"<? endif; ?>>A</option>
-          <option value="B"<? if($analysis->groups[$condition['name']]['letter'] == 'B'): ?> selected="selected"<? endif; ?>>B</option>
-          <option value="C"<? if($analysis->groups[$condition['name']]['letter'] == 'C'): ?> selected="selected"<? endif; ?>>C</option>
-          <option value="D"<? if($analysis->groups[$condition['name']]['letter'] == 'D'): ?> selected="selected"<? endif; ?>>D</option>
+          <option value="A"<? if($analysis->groups[$condition]['letter'] == 'A'): ?> selected="selected"<? endif; ?>>A</option>
+          <option value="B"<? if($analysis->groups[$condition]['letter'] == 'B'): ?> selected="selected"<? endif; ?>>B</option>
+          <option value="C"<? if($analysis->groups[$condition]['letter'] == 'C'): ?> selected="selected"<? endif; ?>>C</option>
+          <option value="D"<? if($analysis->groups[$condition]['letter'] == 'D'): ?> selected="selected"<? endif; ?>>D</option>
         </select>
       </div>
     </li>

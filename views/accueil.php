@@ -1,30 +1,34 @@
 <section>
-  <h1><?= $title; ?></h1>
+  <h1><?= $title ?></h1>
+  <h2>Nouveau projet</h2>
   <form action="/elexir2/index.php/project" method="get">
-    <select name="dir">
-      <option value=""></option>
-      <? foreach($dirs as $dir): ?>
-      <option value="<?= urlencode($dir); ?>">
-        <? echo $dir; ?>
-      </option>
-      <? endforeach; ?>
-    </select>
-    <input type="submit" value="Nouveau projet" />
+    <fieldset>
+      <legend>Ajouter un projet</legend>
+      <select name="dir">
+        <option value="">Choisir une expérience</option>
+        <? foreach($dirs as $dir): ?>
+        <option value="<?= urlencode($dir) ?>">
+          <?= $dir ?>
+        </option>
+        <? endforeach ?>
+      </select>
+      <input type="submit" value="Créer un projet" />
+    </fieldset>
   </form>
   <? if(count($users) == 0): ?>
   <p>
     Il n'y a pas d'utilisateurs.
-  </p>
-  <p>
     <a href="/elexir2/index.php/user">Ajouter un utilisateur</a>.
   </p>
   <? else: ?>
+  <h2>Liste des projets</h2>
+  <? $this->partial('projects/_filter.php', array('users' => null)); ?>
   <ul>
     <? foreach($users as $user): ?>
     <li>
       <h2>
-        <a name="<?= $user->id; ?>" href="/elexir2/index.php/user/<?= $user->id; ?>">
-          <?= $user->login; ?>
+        <a name="<?= $user->id ?>" href="/elexir2/index.php/user/<?= $user->id ?>">
+          <?= $user->login ?>
         </a>
       </h2>
       <? if(count($user->projects) == 0): ?>
@@ -35,9 +39,9 @@
       <? $this->partial('projects/_list.php', array(
 	    'projects' => $user->projects
       )); ?>
-      <? endif; ?>
+      <? endif ?>
     </li>
-    <? endforeach; ?>
+    <? endforeach ?>
   </ul>
-  <? endif; ?>
+  <? endif ?>
 </section>

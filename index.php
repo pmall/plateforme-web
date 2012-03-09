@@ -22,14 +22,22 @@ $app = new App('elexir2');
 
 $app->get('/', function($req){
 
+	$filter = array(
+		'name' => $req->param('name'),
+		'type' => $req->param('type'),
+		'organism' => $req->param('organism'),
+		'cell_line' => $req->param('cell_line')
+	);
+
 	$dirs = Dir::All();
-	$users = User::AllWithProjects();
+	$users = User::AllWithProjects($filter);
 
 	return new View('accueil.php', array(
 		'title' => 'Accueil plateforme',
 		'notice' => $req->getFlash('notice'),
 		'dirs' => $dirs,
-		'users' => $users
+		'users' => $users,
+		'filter' => $filter
 	));
 
 });

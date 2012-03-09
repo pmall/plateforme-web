@@ -139,7 +139,6 @@ $app->delete('/project/:id_project/analysis/:id_analysis', function($req, $res, 
 		'L\'analyse ' . $analysis->name . ' a bien été supprimée.'
 	);
 
-
 	$res->redirect('index.php');
 
 });

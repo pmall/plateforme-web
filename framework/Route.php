@@ -24,8 +24,10 @@ final class Route{
 
 			# On récupère la bonne partie de l'url
 			$path = preg_replace(
-				'#^' . $root . '(/index\.php)?(/(.*?)/?(\?.*)?)?$#',
-				'$3',
+			#	'#^' . $root . '(/index\.php)?(/(.*?)/?(\?.*)?)?$#',
+				'#^' . $root . '(/index\.php)?((/(.*?)/?)?(\?.*)?)?$#',
+			#	'$3',
+				'$4',
 				$request->url
 			);
 

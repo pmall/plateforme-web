@@ -101,18 +101,18 @@ class View{
 				# Si le fichier de layout existe
 				if(file_exists($layout)){
 
+					# On ouvre le buffer
+					ob_start();
+
 					# On inclu le layout
 					include($layout);
 
-					# On récupère le contenu
-					$out = ob_get_contents();
+					# On récupère son contenu
+					$out = ob_get_clean();
 
 				}
 
 			}
-
-			# On vide le buffer
-			ob_end_clean();
 
 			# On affiche le contenu
 			return $out;

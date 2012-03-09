@@ -2,10 +2,7 @@
   <h1><?= $title; ?></h1>
   <? if(count($users) == 0): ?>
   <p>
-    Il n'y a pas d'utilisateurs.
-  </p>
-  <p>
-    <a href="/elexir2/index.php/user">Ajouter un utilisateur</a>.
+    Il n'y a pas d'utilisateurs. <a href="/elexir2/index.php/user">Ajouter un utilisateur</a>.
   </p>
   <? else: ?>
   <ul>
@@ -14,7 +11,8 @@
     </li>
     <? foreach($users as $user): ?>
     <li>
-      <a href="/elexir2/index.php/user/<?= $user->id; ?>/edit"><?= $user->login ?></a>
+      <a href="/elexir2/index.php/user/<?= $user->id; ?>"><?= $user->login ?></a>
+      [<a href="/elexir2/index.php/user/<?= $user->id ?>/edit">modifier</a>]
       <form action="/elexir2/index.php/user/<?= $user->id ?>" method="post" class="action">
         <input name="_method" type="hidden" value="delete" />
         <input type="submit" value="supprimer" />

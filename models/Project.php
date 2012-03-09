@@ -31,7 +31,7 @@ class Project extends Model{
 
 		# On formatte les valeurs pour le where
 		$filter = array_map(function($v){
-			if($v == 'name'){
+			if($v == 'name' or $v == 'cell_line'){
 				return $v . ' LIKE ?';
 			}else{
 				return $v . ' = ?';
@@ -109,43 +109,6 @@ class Project extends Model{
 
 	}
 
-	# Retourne un projet avec ses conditions
-	public static function GetWithConditions($id){
-
-		$project = Project::Get($id);
-
-		if($project){
-
-			$dbh = Dbh::getInstance();
-
-			# On prépare la requete pour selectionner les puces
-			$stmt = $dbh->prepare(
-				"SELECT id, name
-				FROM _conditions
-				WHERE id_project = ?"
-			);
-
-			# On selectionne les conditions
-			$stmt->execute(array($id));
-
-			# On formatte les conditions
-			$conditions = array();
-
-			while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-
-				 $conditions[$row['name']]['id'] = $row['id'];
-				 $conditions[$row['name']]['name'] = $row['name'];
-
-			}
-
-			$project->conditions = $conditions;
-
-		}
-
-		return $project;
-
-	}
-
 	# Retourne un projet avec ses puces
 	public static function GetWithChips($id){
 
@@ -185,6 +148,44 @@ class Project extends Model{
 
 	}
 
+	# Retourne un projet avec ses conditions
+	public static function GetWithConditions($id){
+
+		$project = Project::Get($id);
+
+		if($project){
+
+			$dbh = Dbh::getInstance();
+
+			# On prépare la requete pour selectionner les puces
+			$stmt = $dbh->prepare(
+				"SELECT id, name
+				FROM _conditions
+				WHERE id_project = ?"
+			);
+
+			# On selectionne les conditions
+			$stmt->execute(array($id));
+
+			# On formatte les conditions
+			$conditions = array();
+
+			while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+
+				 $conditions[$row['id']] = $row['name'];
+
+			}
+
+			$project->conditions = $conditions;
+
+		}
+
+		asort($project->conditions, SORT_LOCALE_STRING);
+
+		return $project;
+
+	}
+
 	# Retourne un tableau contenant les projets correspondants a un id_user
 	public static function GetByUser($idUser){
 
@@ -208,6 +209,27 @@ class Project extends Model{
 		}
 
 		return $projects;
+
+	}
+
+	# Retourne le nombre de projets
+	public static function Count(){
+
+		$dbh = Dbh::getInstance();
+
+		$stmt = $dbh->prepare("SELECT COUNT(*) AS num FROM _projects");
+
+		$stmt->execute();
+
+		$numProjects = 0;
+
+		if($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+
+			$numProjects = $row['num'];
+
+		}
+
+		return $numProjects;
 
 	}
 
@@ -298,6 +320,17 @@ class Project extends Model{
 
 		}else{
 
+			# Le nom doit faire moins de 255 caractères
+			if(strlen($this->name) > 255){
+
+				$this->addError(new Error(
+					'Le nom doit faire 255 caractères au
+					maximum',
+					'name'
+				));
+
+			}
+
 			# Le nom ne doit contenir que des alphanum + _ + - + .
 			if(!preg_match('/^[A-Za-z0-9_\-.]+$/', $this->name)){
 
@@ -356,9 +389,34 @@ class Project extends Model{
 				'cell_line'
 			));
 
+		}else{
+
+			# Lignée doit faire moins de 20 caractères
+			if(strlen($this->cell_line) > 20){
+
+				$this->addError(new Error(
+					'Lignée doit faire 20 caractères au
+					maximum',
+					'cell_line'
+				));
+
+			}
+
+			# Lignée cellulaire ne doit contenir que des alphanum + _ + - + .
+			if(!preg_match('/^[A-Za-z0-9_\-.]+$/', $this->cell_line)){
+
+				$this->addError(new Error(
+					'Lignée ne doit contenir que des chiffres, des
+					lettres, des underscores, des tirets et des
+					points',
+					'cell_line'
+				));
+
+			}
+
 		}
 
-		# On valide si il y a au moins 2 puces de selectionnées
+		# On valide qu'il y a au moins 2 puces de selectionnées
 		$puces_remplies = array_filter($this->chips, function($v){
 			return !empty($v['condition']) or !empty($v['num']);
 		});
@@ -372,27 +430,74 @@ class Project extends Model{
 		}
 
 		# On valide les puces
+		$conds_length_errors = array();
+		$conds_format_errors = array();
+
 		foreach($this->chips as $chip){
 
-			# Erreur si il y a une condition et pas de num
-			if(!empty($chip['condition']) and empty($chip['num'])){
+			if(!empty($chip['condition'])){
 
-				$this->addError(new Error(
-					'Vous devez donner un numéro a la puce ' . $chip['name'],
-					$chip['name']
-				));
+				if(strlen($chip['condition']) > 20){
+
+					$conds_length_errors[] = $chip['name'];
+
+				}
+
+				if(!preg_match('/^[A-Za-z0-9_\-.]+$/', $chip['condition'])){
+
+					$conds_format_errors[] = $chip['name'];
+
+				}
+
+				if(empty($chip['num'])){
+
+					$this->addError(new Error(
+						'Vous devez donner un numéro a la puce ' . $chip['name'],
+						$chip['name']
+					));
+
+				}
 
 			}
 
 			# Erreur si il y a un num et pas de condition
-			if(!empty($chip['num']) and empty($chip['condition'])){
+			if(!empty($chip['num'])){
 
-				$this->addError(new Error(
-					'Vous devez donner une condition a la puce ' . $chip['name'],
-					$chip['name']
-				));
+				if(empty($chip['condition'])){
+
+					$this->addError(new Error(
+						'Vous devez donner une condition a la puce ' . $chip['name'],
+						$chip['name']
+					));
+
+				}
 
 			}
+
+		}
+
+		# Si il y a des noms de condition trop longs on ajoute une
+		# erreur sur toutes ces puces concernées
+		if(count($conds_length_errors) > 0){
+
+			$this->addError(new Error(
+				'Le nom d\'une condition doit faire 20
+				caractères au maximum',
+				$conds_length_errors
+			));
+
+		}
+
+		# Si il y a des noms de condition mal formattés on ajoute une
+		# erreur sur toutes ces puces concernées
+		if(count($conds_format_errors) > 0){
+
+			$this->addError(new Error(
+				'Le nom d\'une condition ne doit contenir que des chiffres, des
+				lettres, des underscores, des tirets et des
+				points',
+				$conds_format_errors
+			));
 
 		}
 

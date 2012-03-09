@@ -97,6 +97,17 @@ class Analysis extends Model{
 
 		}else{
 
+			# Le nom doit faire 255 caractères au maximum
+			if(strlen($this->name) > 255){
+
+				$this->addError(new Error(
+					'Le nom doit faire 255 caractères au
+					maximum',
+					'name'
+				));
+
+			}
+
 			# Le nom ne doit contenir que des alphanum + _ + - + .
 			if(!preg_match('/^[A-Za-z0-9_\-.]+$/', $this->name)){
 

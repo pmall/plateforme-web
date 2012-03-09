@@ -1,4 +1,4 @@
-<p>A partir du répertoire <?= $dir; ?></p>
+<p>A partir de l'expérience <?= $dir; ?></p>
 <fieldset>
   <legend>Description du projet</legend>
 <div class="field">
@@ -7,7 +7,7 @@
 </div>
 <div class="field">
   <?= label($project, 'name', 'nom :'); ?>
-  <?= field($project, 'name', 'text'); ?>
+  <?= field($project, 'name', 'text', array('maxlength' => 255)); ?>
 </div>
 <div class="field">
   <?= label($project, 'type', 'type :'); ?>
@@ -25,7 +25,7 @@
 </div>
 <div class="field">
   <?= label($project, 'cell_line', 'Lignée :'); ?>
-  <?= field($project, 'cell_line', 'text'); ?>
+  <?= field($project, 'cell_line', 'text', array('maxlength' => 20)); ?>
 </div>
 <div class="field">
   <?= label($project, 'comment', 'commentaire :'); ?>
@@ -45,9 +45,9 @@
       <div class="field">
 	<? $error = ''; if($project->hasError($celfile)){ $error = ' class="error"'; } ?>
         <label for="chip_<?= ++$i ?>"<?= $error ?>><?= $celfile ?></label>
-        <input id="chip_<?= $i ?>" name="project[chips][<?= $celfile ?>][num]" type="text" size="3" value="<?= $project->getChipNum($celfile) ?>" />
-        <input name="project[chips][<?= $celfile ?>][condition]" type="text" value="<?= $project->getChipCondition($celfile) ?>" />
         <input name="project[chips][<?= $celfile ?>][name]" type="hidden" value="<?= $celfile ?>" />
+        <input id="chip_<?= $i ?>" name="project[chips][<?= $celfile ?>][num]" type="text" size="3" value="<?= $project->getChipNum($celfile) ?>" />
+        <input name="project[chips][<?= $celfile ?>][condition]" type="text" value="<?= $project->getChipCondition($celfile) ?>" maxlength="20" />
       </div>
     </li>
     <? endforeach; ?>

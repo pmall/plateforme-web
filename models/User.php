@@ -37,12 +37,12 @@ class User extends Model{
 	}
 
 	# Retourne tous les utilisateurs et leur projets
-	public static function AllWithProjects(){
+	public static function AllWithProjects(Array $filter = array()){
 
 		$dbh = Dbh::getInstance();
 
 		$users = User::All();
-		$projects = Project::AllWithAnalyses();
+		$projects = Project::AllWithAnalyses($filter);
 
 		foreach($users as $user){
 
@@ -80,7 +80,7 @@ class User extends Model{
 	}
 
 	# Retourne l'utilisateur idUser avec ses projets
-	public static function GetWithProjects($id){
+	public static function GetWithProjects($id, Array $filter = array()){
 
 		$dbh = Dbh::getInstance();
 
@@ -88,7 +88,9 @@ class User extends Model{
 
 		$stmt->execute(array($id));
 
-		$projects = Project::AllWithAnalyses(array('id_user' => $id));
+		$filter['id_user'] = $id;
+
+		$projects = Project::AllWithAnalyses($filter);
 
 		$user = null;
 
@@ -103,6 +105,31 @@ class User extends Model{
 		}
 
 		return $user;
+
+	}
+
+	# Retourne le nombre de projets de l'utilisateur
+	public static function CountProjects($id){
+
+		$dbh = Dbh::getInstance();
+
+		$stmt = $dbh->prepare(
+			"SELECT COUNT(*) AS num
+			FROM _projects
+			WHERE id_user = ?"
+		);
+
+		$stmt->execute(array($id));
+
+		$numProjects = 0;
+
+		if($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+
+			$numProjects = $row['num'];
+
+		}
+
+		return $numProjects;
 
 	}
 

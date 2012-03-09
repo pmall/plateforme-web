@@ -1,3 +1,7 @@
+h1{
+	border-bottom:1px dashed black;
+}
+
 #notice{
 	padding:10px;
 	margin:10px 0;
@@ -15,15 +19,19 @@
 	padding: 10px;
 	list-style-type:none;
 	border:1px solid black;
+	border-top:0;
+}
+
+.project:nth-child(1){
+	border:1px solid black;
 }
 
 .project:nth-child(odd){
-	background-color:#EEEEEE;
+	background-color:#F9F9F9;
 }
 
 .project:nth-child(even){
-	border-top:0;
-	background-color:#CCCCCC;
+	background-color:#E0E0E0;
 }
 
 .project ul{
@@ -39,6 +47,7 @@
 
 .analyses li{
 	margin:5px 0;
+	list-style-type:square;
 }
 
 /* =============================================================================
