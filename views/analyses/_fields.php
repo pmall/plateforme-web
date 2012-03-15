@@ -28,10 +28,10 @@
     <li>
       <div class="field">
         <? $error = ''; if($analysis->hasError($condition)){ $error = ' class="error"'; } ?>
-        <label for="condition_<?= ++$i; ?>"<?= $error; ?>><?= $condition ?></label>
+        <label for="group_<?= ++$i; ?>"<?= $error; ?>><?= $condition ?></label>
         <input name="analysis[groups][<?= $condition ?>][id_condition]" type="hidden" value="<?= $id_condition ?>" />
         <input name="analysis[groups][<?= $condition ?>][name]" type="hidden" value="<?= $condition ?>" />
-        <select id="condition_<?= $i; ?>" name="analysis[groups][<?= $condition ?>][letter]">
+        <select id="group_<?= $i; ?>" class="group" name="analysis[groups][<?= $condition ?>][letter]">
           <option value=""></option>
           <option value="A"<? if($analysis->groups[$condition]['letter'] == 'A'): ?> selected="selected"<? endif; ?>>A</option>
           <option value="B"<? if($analysis->groups[$condition]['letter'] == 'B'): ?> selected="selected"<? endif; ?>>B</option>

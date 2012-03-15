@@ -1,4 +1,3 @@
-<p>A partir de l'expérience <?= $dir; ?></p>
 <fieldset>
   <legend>Description du projet</legend>
 <div class="field">
@@ -25,7 +24,14 @@
 </div>
 <div class="field">
   <?= label($project, 'cell_line', 'Lignée :'); ?>
-  <?= field($project, 'cell_line', 'text', array('maxlength' => 20)); ?>
+  <?= field($project, 'cell_line', 'text', array('maxlength' => 20, 'list' => 'cell_lines')); ?>
+  <? if(count($cell_lines) > 0): ?>
+  <datalist id="cell_lines">
+  <? foreach($cell_lines as $cell_line): ?>
+  <option value="<?= $cell_line ?>"><?= $cell_line ?></option>
+  <? endforeach; ?>
+  </datalist>
+  <? endif; ?>
 </div>
 <div class="field">
   <?= label($project, 'comment', 'commentaire :'); ?>

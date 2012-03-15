@@ -1,9 +1,7 @@
-<form action="" method="get">
+<? if(!isset($url)): $url = ''; endif; ?>
+<form action="<?= $url ?>" method="get">
   <fieldset>
     <legend>Filtrer les projets</legend>
-    <p>
-      Pour les champs nom du projet et lignée cellulaire, le caractère % peut être utilisé pour remplacer 0 ou plusieurs caractères. Exemple : MCF% retourne à la fois MCF7 et MCF10.
-    </p>
     <? if(isset($users)): ?>
     <select name="id_user">
       <option value="">Tous les utilisateurs</option>
@@ -25,5 +23,8 @@
     </select>
     <input name="cell_line" type="text" value="<?= $filter['cell_line'] ?>" placeholder="Lignée cellulaire" />
     <input type="submit" value="filtrer" />
+    <p>
+      Pour les champs nom du projet et lignée cellulaire, le caractère % peut être utilisé pour remplacer 0 ou plusieurs caractères. Exemple : MCF% retourne à la fois MCF7 et MCF10.
+    </p>
   </fieldset>
 </form>

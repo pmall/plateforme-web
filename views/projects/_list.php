@@ -1,29 +1,48 @@
 <ul class="projects">
   <? foreach($projects as $project): ?>
-  <li class="project">
+  <li id="project_<?= $project->id ?>" class="project">
     <p>
       <strong><?= $project->id ?></strong> /
       <a href="/elexir2/index.php/project/<?= $project->id; ?>/edit"><strong><?= $project->name ?></strong></a> /
       <a href="/elexir2/index.php/projects/?type=<?= $project->type ?>"><?= $project->type ?></a> /
       <a href="/elexir2/index.php/projects/?organism=<?= $project->organism ?>"><?= $project->organism ?></a> /
-      <a href="/elexir2/index.php/projects/?cell_line=<?= $project->cell_line ?>"><?= $project->cell_line ?></a>
+      <a href="/elexir2/index.php/projects/?cell_line=<?= $project->cell_line ?>"><?= $project->cell_line ?></a> /
+      <a href="/elexir2/index.php/project/<?= $project->id ?>/<?= $project->name ?>_qc.pdf">Fichier contrôle qualité</a>
     </p>
     <? if($project->comment): ?>
     <p class="comment">
-      <?= $project->comment; ?>
+      <?= nl2br($project->comment); ?>
     </p>
     <? endif ?>
     <p>
-      <form action="" method="get" class="action">
+      <form action="/elexir2/index.php/job"
+            method="post"
+            class="action job"
+            data-type="qc"
+            data-id_project="<?= $project->id ?>"
+            >
+        <input type="hidden" name="job[type]" value="qc" />
+        <input type="hidden" name="job[id_project]" value="<?= $project->id ?>" />
         <input type="submit" value="Contrôle Qualité" />
       </form>
-      <form action="" method="get" class="action">
-        <input type="submit" value="preprocessing" />
+      <form action="/elexir2/index.php/job"
+            method="post"
+            class="action job"
+            data-type="preprocessing"
+            data-id_project="<?= $project->id ?>"
+            >
+        <input type="hidden" name="job[type]" value="preprocessing" />
+        <input type="hidden" name="job[id_project]" value="<?= $project->id ?>" />
+        <input type="submit" value="Preprocessing" />
       </form>
       <form action="/elexir2/index.php/project/<?= $project->id ?>/analysis" method="get" class="action">
         <input type="submit" value="Nouvelle analyse" />
       </form>
-      <form action="/elexir2/index.php/project/<?= $project->id ?>" method="post" class="action">
+      <form action="/elexir2/index.php/project/<?= $project->id ?>"
+            method="post"
+            class="action delete"
+            data-type="project"
+            data-id="<?= $project->id ?>">
         <input name="_method" type="hidden" value="delete" />
         <input type="submit" value="supprimer" />
       </form>
@@ -31,15 +50,32 @@
     <? if(count($project->analyses) > 0): ?>
     <ul class="analyses">
       <? foreach($project->analyses as $analysis): ?>
-      <li>
-        <form action="" method="get" class="action">
+      <li id="analysis_<?= $analysis->id ?>">
+        <form action="/elexir2/index.php/job"
+              method="post"
+              class="action job"
+              data-type="<?= $analysis->type ?>"
+              data-id_project="<?= $project->id ?>"
+              data-id_analysis="<?= $analysis->id ?>"
+              >
+          <input type="hidden" name="job[type]" value="<?= $analysis->type ?>" />
+          <input type="hidden" name="job[id_project]" value="<?= $project->id ?>" />
+          <input type="hidden" name="job[id_analysis]" value="<?= $analysis->id ?>" />
           <input type="submit" value="Run" />
         </form>
-        <form action="/elexir2/index.php/project/<?= $project->id ?>/analysis/<?= $analysis->id ?>" method="post" class="action">
+        <form action="/elexir2/index.php/project/<?= $project->id ?>/analysis/<?= $analysis->id ?>"
+              method="post"
+              class="action delete"
+              data-type="analysis"
+              data-id="<?= $analysis->id ?>"
+              data-id_project="<?= $project->id ?>">
           <input type="hidden" name="_method" value="delete" />
           <input type="submit" value="supprimer" />
         </form>
-        <a href="/elexir2/index.php/project/<?= $project->id ?>/analysis/<?= $analysis->id ?>/edit"><?= $analysis->name ?></a>
+        <strong><?= $analysis->id ?></strong> /
+        <a href="/elexir2/index.php/project/<?= $project->id ?>/analysis/<?= $analysis->id ?>/edit"><?= $analysis->name ?></a> /
+        <?= $analysis->type ?> /
+	<a href="/elexir2/index.php/project/<?= $project->id ?>/anaysis/<?= $analysis->id ?>/<?= $analysis->name ?>.xls">Fichier xls</a>
       </li>
       <? endforeach; ?>
     </ul>
@@ -47,4 +83,3 @@
   </li>
   <? endforeach; ?>
 </ul>
-

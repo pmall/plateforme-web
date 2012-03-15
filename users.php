@@ -151,12 +151,20 @@ $app->delete('/user/:id/', function($req, $res, $matches){
 
 	}
 
-	$res->setFlash(
-		'notice',
-		'L\'utilisateur ' . $user->login . ' a bien été supprimé.'
-	);
+	if($req->isAjax()){
 
-	$res->redirect('index.php');
+		echo 'ok';
+
+	}else{
+
+		$res->setFlash(
+			'notice',
+			'L\'utilisateur ' . $user->login . ' a bien été supprimé.'
+		);
+
+		$res->redirect('index.php');
+
+	}
 
 });
 

@@ -13,9 +13,9 @@ class Model{
 		$this->_initialValues = $values;
 		$this->_errors = array();
 
-		$this->assign($values);
-
 		$this->initialize();
+
+		$this->assign($values);
 
 	}
 

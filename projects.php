@@ -15,10 +15,11 @@ $app->get('/projects', function($req){
 
 	return new View('projects/list.php', array(
 		'title' => 'Liste des projets',
+		'jobs' => Job::All(10),
 		'numProjects' => Project::count(),
+		'filter' => $filter,
 		'users' => User::OptionArray(),
-		'projects' => $projects,
-		'filter' => $filter
+		'projects' => $projects
 	));
 
 });
@@ -42,10 +43,11 @@ $app->get('/project', function($req, $res) use($config){
 		sort($celfiles);
 
 		return new View('projects/new.php', array(
-			'title' => 'Ajout d\'un nouveau projet',
+			'title' => 'Ajout d\'un nouveau projet à partir du répertoire ' . $dir,
 			'dir' => $dir,
 			'project' => $project,
 			'users' => User::OptionArray(),
+			'cell_lines' => Project::CellLines(),
 			'celfiles' => $celfiles
 		));
 
@@ -86,6 +88,7 @@ $app->post('/project', function($req, $res) use($config){
 				'dir' => $dir,
 				'project' => $project,
 				'users' => User::OptionArray(),
+				'cell_lines' => Project::CellLines(),
 				'celfiles' => $celfiles
 			));
 
@@ -120,9 +123,9 @@ $app->get('/project/:id/edit', function($req, $res, $matches) use($config){
 
 			return new View('projects/edit.php', array(
 				'title' => 'Modification du projet ' . $project->name,
-				'dir' => $dir,
 				'project' => $project,
 				'users' => User::OptionArray(),
+				'cell_lines' => Project::CellLines(),
 				'celfiles' => $celfiles
 			));
 
@@ -175,6 +178,7 @@ $app->put('/project/:id', function($req, $res, $matches) use($config){
 					'dir' => $project->dir,
 					'project' => $project,
 					'users' => User::OptionArray(),
+					'cell_lines' => Project::CellLines(),
 					'celfiles' => $celfiles
 				));
 
@@ -197,12 +201,29 @@ $app->delete('/project/:id/', function($req, $res, $matches){
 
 	}
 
-	$res->setFlash(
-		'notice',
-		'Le projet ' . $project->name . ' a bien été supprimé.'
-	);
+	if($req->isAjax()){
 
-	$res->redirect('index.php');
+		echo 'ok';
+
+	}else{
+
+		$res->setFlash(
+			'notice',
+			'Le projet ' . $project->name . ' a bien été supprimé.'
+		);
+
+		$res->redirect('index.php');
+
+	}
+
+});
+
+# Controle qualité !
+$app->get('/project/:id_project/:filename.pdf', function($req, $res, $matches){
+
+	$res->setContentType('application/pdf');
+
+	$res->setBody($matches['id_project'] . ' ' . $matches['filename']);
 
 });
 

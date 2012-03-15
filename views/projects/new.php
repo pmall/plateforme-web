@@ -1,20 +1,17 @@
 <? require 'helpers/form.php' ?>
+<script src="/elexir2/public/js/project.js"></script>
 <section>
   <h1><?= $title; ?></h1>
   <?= displayErrors($project) ?>
   <? if(count($users) == 0): ?>
   <p>
     Vous devez créer au moins un utilisateur avant de pouvoir crée un projet.
-  </p>
-  <p>
     <a href="/elexir2/index.php/user">Ajouter un utilisateur</a>.
   </p>
   <? else: ?>
   <? if(count($celfiles) == 0): ?>
   <p>
     Le répertoire <?= $dir ?> ne contient pas de fichier cel valide.
-  </p>
-  <p>
     <a href="/elexir2/index.php">Retour a l'accueil</a>.
   </p>
   <? else: ?>

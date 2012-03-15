@@ -105,6 +105,15 @@ final class Request{
 
 	}
 
+	# Fonction qui retourne vrai ou faux selon que la requete est ajax ou pas
+	public function isAjax(){
+
+		return isset($_SERVER['HTTP_X_REQUESTED_WITH'])
+			&& strtolower($_SERVER['HTTP_X_REQUESTED_WITH'])
+			== 'xmlhttprequest';
+
+	}
+
 }
 
 ?>

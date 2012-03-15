@@ -71,25 +71,30 @@ class App{
 
 			}
 
-			# On execute la route et on récupère l'éventuelle
-			# vue retournée
-			$view = $route->execute(
+			# On execute la route et on récupère la valeur retournée
+			$retour = $route->execute(
 				$this->request,
 				$this->response
 			);
 
-			# Si l'action retourne une vue,
-			# On la rend dans le body de la réponse
-			if($view instanceOf View){
+			# Si la valeur de retour n'est pas vide
+			if($retour){
 
-				$this->response->setBody(
-					$view->render()
-				);
+				# Si c'est une vue qui a été retournée, on la
+				# rend
+				if($retour instanceOf View){
+
+					$retour = $retour->render();
+
+				}
+
+				# On attribue la valeur de retour au corps de
+				# la réponse
+				$this->response->setBody($retour);
 
 			}
 
-			# Si la réponse n'a pas été renderé,
-			# On le fait
+			# Si la réponse n'a pas été envoyée, on l'envoit
 			if(!$this->response->isSent()){
 
 				$this->response->send();

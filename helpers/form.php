@@ -6,7 +6,7 @@ function displayErrors(Model $model){
 
 	if(!$model->isValid()){
 
-		$html.= '<div class="errors">';
+		$html.= '<div class="error">';
 		$html.= '<ul>';
 
 		foreach($model->getErrors() as $error){

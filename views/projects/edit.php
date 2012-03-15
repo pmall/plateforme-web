@@ -1,4 +1,5 @@
 <? require 'helpers/form.php' ?>
+<script src="/elexir2/public/js/project.js"></script>
 <section>
   <h1><?= $title; ?></h1>
   <?= displayErrors($project) ?>

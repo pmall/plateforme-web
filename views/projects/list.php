@@ -1,3 +1,4 @@
+<? $this->partial('jobs/list.php', array('title' => 'Liste des tâches')); ?>
 <section>
   <h1><?php echo $title ?></h1>
   <? if($numProjects == 0): ?>
@@ -12,6 +13,7 @@
   </p>
   <? else: ?>
   <? $this->partial('projects/_list.php'); ?>
+  <script src="/elexir2/public/js/list.js"></script>
   <? endif; ?>
   <? endif; ?>
 </section>

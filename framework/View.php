@@ -74,7 +74,7 @@ class View{
 
 	}
 
-	public function render($noLayout = false){
+	public function render($useLayout = true){
 
 		# On récupère les fichiers
 		$file = $this->getFile($this->file);
@@ -96,7 +96,7 @@ class View{
 			$out = ob_get_clean();
 
 			# Si on doit utiliser un layout
-			if(!$noLayout and !empty($layout)){
+			if($useLayout and !empty($layout)){
 
 				# Si le fichier de layout existe
 				if(file_exists($layout)){

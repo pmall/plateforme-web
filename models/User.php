@@ -37,12 +37,12 @@ class User extends Model{
 	}
 
 	# Retourne tous les utilisateurs et leur projets
-	public static function AllWithProjects(Array $filter = array()){
+	public static function AllWithProjects(){
 
 		$dbh = Dbh::getInstance();
 
 		$users = User::All();
-		$projects = Project::AllWithAnalyses($filter);
+		$projects = Project::AllWithAnalyses();
 
 		foreach($users as $user){
 

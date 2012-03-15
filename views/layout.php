@@ -4,12 +4,10 @@
     <meta charset="utf-8" />
     <title><?= $title ?></title>
     <link type="text/css" rel="stylesheet" href="/elexir2/public/css/style.css" />
-    <!-- shim pour que IE < 9 reconnaisse les balises html5 >
-    <!--[if lt IE 9]>
-    <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
   </head>
   <body>
+    <h1>Plateforme</h1>
     <nav>
       <ul>
         <li>

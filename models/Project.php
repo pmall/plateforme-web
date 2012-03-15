@@ -186,32 +186,6 @@ class Project extends Model{
 
 	}
 
-	# Retourne un tableau contenant les projets correspondants a un id_user
-	public static function GetByUser($idUser){
-
-		$dbh = Dbh::getInstance();
-
-		$stmt = $dbh->prepare(
-			"SELECT p.*, u.login AS username
-			FROM _projects AS p, _users AS u
-			WHERE u.id = p.id_user
-			AND id_user = ?"
-		);
-
-		$stmt->execute(array($idUser));
-
-		$projects = array();
-
-		while($project = $stmt->fetch(PDO::FETCH_ASSOC)){
-
-			$projects[] = new Project($project, true);
-
-		}
-
-		return $projects;
-
-	}
-
 	# Retourne le nombre de projets
 	public static function Count(){
 
@@ -230,6 +204,27 @@ class Project extends Model{
 		}
 
 		return $numProjects;
+
+	}
+
+	# On retourne la liste des différentes lignées cellulaires
+	public static function CellLines(){
+
+		$dbh = Dbh::getInstance();
+
+		$stmt = $dbh->prepare("SELECT DISTINCT(cell_line) FROM _projects");
+
+		$stmt->execute();
+
+		$cell_lines = array();
+
+		while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+
+			$cell_lines[] = $row['cell_line']; 
+
+		}
+
+		return $cell_lines;
 
 	}
 

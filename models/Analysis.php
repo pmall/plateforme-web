@@ -145,27 +145,49 @@ class Analysis extends Model{
 
 		}
 
+		# On valide que la lettre A est présente
+		if(!array_key_exists('A', $letters)){
+
+			$this->addError(new Error(
+				'Vous devez attribuer la lettre A à une
+				condition'
+			));
+
+		}
+
+		# On valide que la lettre B est présente
+		if(!array_key_exists('B', $letters)){
+
+			$this->addError(new Error(
+				'Vous devez attribuer la lettre B à une
+				condition'
+			));
+
+		}
+
 		# On valide paire
 		if($this->type == 'paire'){
 
-			if(count($letters) < 2){
+			foreach(array_keys($letters) as $letter){
 
-				$this->addError(new Error(
-					'Pour une analyse de type paire, les
-					lettres A et B doivent être associées a
-					une condition'
-				));
+				if($letter == 'A' or $letter == 'B'){
 
-			}
+					if(count($letters[$letter]) > 1){
 
-			foreach($letters as $letter => $groups){
+						$this->addError(new Error(
+							'Pour une analyse de type paire,
+							une seule condition doit être
+							doit être utilisé pour la lettre ' . $letter 
+						));
 
-				if($letter == 'C' or $letter == 'D'){
+					}
+
+				}else{
 
 					$this->addError(new Error(
-						'La lettre ' . $letter . ' ne 
-						peut pas être utilisé pour une 
-						expérience de type paire'
+						'Pour une analyse de type paire,
+						vous ne pouvez pas utiliser la
+						lettre ' . $letter 
 					));
 
 				}
@@ -177,24 +199,14 @@ class Analysis extends Model{
 		# On valide impaire
 		if($this->type == 'impaire'){
 
-			if(count($letters) < 2){
+			foreach(array_keys($letters) as $letter){
 
-				$this->addError(new Error(
-					'Pour une analyse de type impaire, les
-					lettres A et B doivent être associées a
-					une condition'
-				));
-
-			}
-
-			foreach($letters as $letter => $groups){
-
-				if($letter == 'C' or $letter == 'D'){
+				if($letter != 'A' and $letter != 'B'){
 
 					$this->addError(new Error(
-						'La lettre ' . $letter . ' ne 
-						peut pas être utilisé pour une 
-						expérience de type impaire'
+						'Pour une analyse de type
+						impaire, vous ne pouvez pas
+						utiliser la lettre ' . $letter 
 					));
 
 				}
@@ -206,13 +218,37 @@ class Analysis extends Model{
 		# On valide J/O
 		if($this->type == 'J/O'){
 
-			if(count($letters) < 4){
+			# On valide que la lettre C est présente
+			if(!array_key_exists('C', $letters)){
 
 				$this->addError(new Error(
-					'Pour une analyse de type J / O, les
-					lettres A, B, C, et D doivent être
-					associées a une condition'
+					'Vous devez attribuer la lettre C à une
+					condition'
 				));
+
+			}
+
+			# On valide que la lettre D est présente
+			if(!array_key_exists('D', $letters)){
+
+				$this->addError(new Error(
+					'Vous devez attribuer la lettre D à une
+					condition'
+				));
+
+			}
+
+			foreach(array_keys($letters) as $letter){
+
+				if(count($letters[$letter]) > 1){
+
+					$this->addError(new Error(
+						'Pour une analyse de type J/O,
+						une seule condition doit être
+						doit être utilisé pour la lettre ' . $letter 
+					));
+
+				}
 
 			}
 

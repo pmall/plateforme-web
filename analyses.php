@@ -134,12 +134,29 @@ $app->delete('/project/:id_project/analysis/:id_analysis', function($req, $res, 
 
 	}
 
-	$res->setFlash(
-		'notice',
-		'L\'analyse ' . $analysis->name . ' a bien été supprimée.'
-	);
+	if($req->isAjax()){
 
-	$res->redirect('index.php');
+		echo 'ok';
+
+	}else{
+
+		$res->setFlash(
+			'notice',
+			'L\'analyse ' . $analysis->name . ' a bien été supprimée.'
+		);
+
+		$res->redirect('index.php');
+
+	}
+
+});
+
+# fichier xls !
+$app->get('/project/:id_project/anaysis/:id_analysis/:filename.xls', function($req, $res, $matches){
+
+	$res->setContentType('application/vnd.ms-excel');
+
+	$res->setBody($matches['id_analysis'] . ' ' . $matches['filename']);
 
 });
 
