@@ -26,7 +26,7 @@
   <? else: ?>
   <ul id="shortlinks">
     <? foreach($users as $user): ?>
-    <li><a href="#<?= $user->login ?>"><?= $user->login ?></a></li>
+    <li><a href="#<?= h($user->login) ?>"><?= h($user->login) ?></a></li>
     <? endforeach; ?>
   </ul>
   <? $this->partial('projects/_filter.php', array(
@@ -37,13 +37,13 @@
     <? foreach($users as $user): ?>
     <li>
       <h2>
-        <a name="<?= $user->login ?>" href="/elexir2/index.php/user/<?= $user->id ?>">
-          <?= $user->login ?>
+        <a name="<?= h($user->login) ?>" href="/elexir2/index.php/user/<?= h($user->id) ?>">
+          <?= h($user->login) ?>
         </a>
       </h2>
       <? if(count($user->projects) == 0): ?>
       <p>
-        Il n'y a pas de projet associé à l'utilisateur <?= $user->login ?>.
+        Il n'y a pas de projet associé à l'utilisateur <?= h($user->login) ?>.
       </p>
       <? else: ?>
       <? $this->partial('projects/_list.php', array(

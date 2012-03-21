@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title><?= $title ?></title>
+    <title><?= h($title) ?></title>
     <link type="text/css" rel="stylesheet" href="/elexir2/public/css/style.css" />
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
   </head>
@@ -23,7 +23,7 @@
     </nav>
     <? if(!empty($notice)): ?>
     <div id="notice">
-      <?= $notice; ?>
+      <?= h($notice); ?>
     </div>
     <? endif; ?>
     <?= $out ?>

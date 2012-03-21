@@ -60,10 +60,9 @@ class Analysis extends Model{
 			$dbh = Dbh::getInstance();
 
 			$stmt = $dbh->prepare(
-				"SELECT c.name, g.*
-				FROM _conditions AS c, _groups AS g
-				WHERE c.id = g.id_condition
-				AND id_analysis = ?"
+				"SELECT `condition`, letter
+				FROM _groups
+				WHERE id_analysis = ?"
 			);
 
 			$stmt->execute(array($id));
@@ -72,8 +71,8 @@ class Analysis extends Model{
 
 			while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
 
-				$groups[$row['name']]['id_condition'] = $row['id_condition'];
-				$groups[$row['name']]['letter'] = $row['letter'];
+				$groups[$row['condition']]['condition'] = $row['condition'];
+				$groups[$row['condition']]['letter'] = $row['letter'];
 
 			}
 
@@ -139,7 +138,7 @@ class Analysis extends Model{
 
 			if(!empty($group['letter'])){
 
-				$letters[$group['letter']][] = $group['id_condition'];
+				$letters[$group['letter']][] = $group['condition'];
 
 			}
 
@@ -317,7 +316,7 @@ class Analysis extends Model{
 
 		$stmt = $dbh->prepare(
 			"INSERT INTO _groups
-			(id_analysis, id_condition, letter)
+			(id_analysis, `condition`, letter)
 			VALUES(?, ?, ?)"
 		);
 
@@ -325,7 +324,7 @@ class Analysis extends Model{
 
 			$stmt->execute(array(
 				$this->id,
-				$group['id_condition'],
+				$group['condition'],
 				$group['letter']
 			));
 

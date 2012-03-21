@@ -1,7 +1,6 @@
-<? require 'helpers/form.php' ?>
 <script src="/elexir2/public/js/project.js"></script>
 <section>
-  <h1><?= $title; ?></h1>
+  <h1><?= h($title) ?></h1>
   <?= displayErrors($project) ?>
   <? if(count($users) == 0): ?>
   <p>
@@ -11,7 +10,7 @@
   <? else: ?>
   <? if(count($celfiles) == 0): ?>
   <p>
-    Le répertoire <?= $dir ?> ne contient pas de fichier cel valide.
+    Le répertoire <?= h($dir) ?> ne contient pas de fichier cel valide.
     <a href="/elexir2/index.php">Retour a l'accueil</a>.
   </p>
   <? else: ?>

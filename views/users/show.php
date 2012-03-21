@@ -1,5 +1,5 @@
 <section>
-  <h1><?= $title; ?></h1>
+  <h1><?= h($title) ?></h1>
   <? if($numProjects == 0): ?>
   <p>
     Il n'y a aucun projet correspondant à cet utilisateur.

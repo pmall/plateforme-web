@@ -52,8 +52,8 @@
 	<? $error = ''; if($project->hasError($celfile)){ $error = ' class="error"'; } ?>
         <label for="chip_<?= ++$i ?>"<?= $error ?>><?= $celfile ?></label>
         <input name="project[chips][<?= $celfile ?>][name]" type="hidden" value="<?= $celfile ?>" />
-        <input id="chip_<?= $i ?>" name="project[chips][<?= $celfile ?>][num]" type="text" size="3" value="<?= $project->getChipNum($celfile) ?>" />
-        <input name="project[chips][<?= $celfile ?>][condition]" type="text" value="<?= $project->getChipCondition($celfile) ?>" maxlength="20" />
+        <input id="chip_<?= $i ?>" name="project[chips][<?= $celfile ?>][num]" type="text" size="3" value="<?= h($project->getChipNum($celfile)) ?>" />
+        <input name="project[chips][<?= $celfile ?>][condition]" type="text" value="<?= h($project->getChipCondition($celfile)) ?>" maxlength="20" />
       </div>
     </li>
     <? endforeach; ?>

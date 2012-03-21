@@ -120,10 +120,9 @@ class Project extends Model{
 
 			# On prépare la requete pour selectionner les puces
 			$stmt = $dbh->prepare(
-				"SELECT ch.name, ch.num, co.name AS `condition`
-				FROM _conditions AS co, _chips AS ch
-				WHERE co.id = ch.id_condition
-				AND co.id_project = ?"
+				"SELECT name, `condition`, num
+				FROM _chips
+				WHERE id_project = ?"
 			);
 
 			# On selectionne les puces
@@ -159,8 +158,8 @@ class Project extends Model{
 
 			# On prépare la requete pour selectionner les puces
 			$stmt = $dbh->prepare(
-				"SELECT id, name
-				FROM _conditions
+				"SELECT DISTINCT `condition`
+				FROM _chips
 				WHERE id_project = ?"
 			);
 
@@ -172,7 +171,7 @@ class Project extends Model{
 
 			while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
 
-				 $conditions[$row['id']] = $row['name'];
+				 $conditions[] = $row['condition'];
 
 			}
 
@@ -616,9 +615,7 @@ class Project extends Model{
 
 		# On prépare la requete pour supprimer les puces du projet
 		$delete_chips_stmt = $dbh->prepare(
-			"DELETE co, ch FROM _conditions AS co, _chips AS ch
-			WHERE co.id = ch.id_condition
-			AND co.id_project = ?"
+			"DELETE FROM _chips WHERE id_project = ?"
 		);
 
 		# On supprime les puces
@@ -635,10 +632,9 @@ class Project extends Model{
 		$dbh = Dbh::getInstance();
 
 		$stmt = $dbh->prepare(
-			"DELETE p, co, ch, a, g
+			"DELETE p, c, a, g
 			FROM _projects AS p
-			LEFT JOIN _conditions AS co ON p.id = co.id_project
-			LEFT JOIN _chips AS ch ON co.id = ch.id_condition
+			LEFT JOIN _chips AS c ON p.id = c.id_project
 			LEFT JOIN _analyses AS a ON p.id = a.id_project
 			LEFT JOIN _groups AS g ON a.id = g.id_analysis
 			WHERE p.id = ?"
@@ -653,44 +649,22 @@ class Project extends Model{
 
 		$dbh = Dbh::getInstance();
 
-		$insert_condition_stmt = $dbh->prepare(
-			"INSERT INTO _conditions
-			(id_project, name)
-			VALUES (?, ?)"
-		);
-
 		$insert_chip_stmt = $dbh->prepare(
 			"INSERT INTO _chips
-			(id_condition, name, num)
-			VALUES (?, ?, ?)"
+			(id_project, name, `condition`, num)
+			VALUES (?, ?, ?, ?)"
 		);
-
-		# On récupère les conditions
-		$conditions = array();
 
 		# Pour chaque puce
 		foreach($this->chips as $chip){
 
 			if(!empty($chip['condition']) and !empty($chip['num'])){
 
-				# Si on a pas déjà ajouté la condition
-				if(!array_key_exists($chip['condition'], $conditions)){
-
-					# On ajoute la condition
-					$insert_condition_stmt->execute(array(
-						$this->id,
-						$chip['condition']
-					));
-
-					# On garde l'id de la condition
-					$conditions[$chip['condition']] = $dbh->lastInsertId();
-
-				}
-
 				# On ajoute la puce
 				$insert_chip_stmt->execute(array(
-					$conditions[$chip['condition']],
+					$this->id,
 					$chip['name'],
+					$chip['condition'],
 					$chip['num']
 				));
 

@@ -1,6 +1,5 @@
-<? require 'helpers/form.php' ?>
 <section>
-  <h1><?= $title; ?></h1>
+  <h1><?= h($title) ?></h1>
   <?= displayErrors($user) ?>
   <form action="" method="post">
     <? $this->partial('users/_fields.php') ?>

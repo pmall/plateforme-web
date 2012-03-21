@@ -24,14 +24,13 @@
   <legend>Conditions du projet</legend>
   <ul class="list">
     <? $i = 0; ?>
-    <? foreach($project->conditions as $id_condition => $condition): ?>
+    <? foreach($project->conditions as $condition): ?>
     <li>
       <div class="field">
         <? $error = ''; if($analysis->hasError($condition)){ $error = ' class="error"'; } ?>
         <label for="group_<?= ++$i; ?>"<?= $error; ?>><?= $condition ?></label>
-        <input name="analysis[groups][<?= $condition ?>][id_condition]" type="hidden" value="<?= $id_condition ?>" />
-        <input name="analysis[groups][<?= $condition ?>][name]" type="hidden" value="<?= $condition ?>" />
-        <select id="group_<?= $i; ?>" class="group" name="analysis[groups][<?= $condition ?>][letter]">
+        <input name="analysis[groups][<?= h($condition) ?>][condition]" type="hidden" value="<?= h($condition) ?>" />
+        <select id="group_<?= $i; ?>" class="group" name="analysis[groups][<?= h($condition) ?>][letter]">
           <option value=""></option>
           <option value="A"<? if($analysis->groups[$condition]['letter'] == 'A'): ?> selected="selected"<? endif; ?>>A</option>
           <option value="B"<? if($analysis->groups[$condition]['letter'] == 'B'): ?> selected="selected"<? endif; ?>>B</option>

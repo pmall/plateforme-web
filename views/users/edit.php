@@ -1,8 +1,7 @@
-<? require 'helpers/form.php' ?>
 <section>
-  <h1><?= $title; ?></h1>
+  <h1><?= h($title) ?></h1>
   <?= displayErrors($user) ?>
-  <form action="/elexir2/index.php/user/<?= $user->id ?>" method="post">
+  <form action="/elexir2/index.php/user/<?= h($user->id) ?>" method="post">
     <? $this->partial('users/_fields.php') ?>
     <div class="field">
       <label for="valider">Valider :</label>

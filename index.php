@@ -6,13 +6,20 @@ function __autoload($classname){
 
 }
 
-# On inclu les fichiers
+# On inclu la configuration
 require('config.php');
+
+# On inclu les modèles
 require('models/Dir.php');
 require('models/Job.php');
 require('models/User.php');
 require('models/Project.php');
 require('models/Analysis.php');
+
+# On inclu les ptits helpers pour les vues
+require('helpers/html.php');
+require('helpers/forms.php');
+require('helpers/jobs.php');
 
 # On déclare l'app
 $app = new App('elexir2');

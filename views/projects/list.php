@@ -1,6 +1,6 @@
 <? $this->partial('jobs/list.php', array('title' => 'Liste des tâches')); ?>
 <section>
-  <h1><?php echo $title ?></h1>
+  <h1><?= h($title) ?></h1>
   <? if($numProjects == 0): ?>
   <p>
     Il n'y a aucun projet a afficher. <a href="/elexir2/index.php">Retour à l'accueil</a>.
