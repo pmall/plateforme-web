@@ -2,9 +2,12 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title><?= h($title) ?></title>
+    <title>Elexir : <?= h($title) ?></title>
     <link type="text/css" rel="stylesheet" href="/elexir2/public/css/style.css" />
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
   </head>
   <body>
     <h1>Plateforme</h1>

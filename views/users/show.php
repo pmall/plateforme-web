@@ -15,6 +15,7 @@
   <? $this->partial('projects/_list.php', array(
 	'projects' => $user->projects
   )); ?>
+  <script src="/elexir2/public/js/list.js"></script>
   <? endif; ?>
   <? endif; ?>
 </section>

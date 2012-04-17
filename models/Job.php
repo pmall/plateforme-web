@@ -17,9 +17,9 @@ class Job extends Model{
 
 		$stmt = $dbh->prepare(
 			"SELECT j.*, p.name AS name_project, a.name AS name_analysis
-			FROM _jobs AS j
-			LEFT JOIN _analyses AS a ON a.id = j.id_analysis,
-			_projects AS p
+			FROM jobs AS j
+			LEFT JOIN analyses AS a ON a.id = j.id_analysis,
+			projects AS p
 			WHERE p.id = j.id_project
 			ORDER BY id DESC
 			LIMIT 0, :limit"
@@ -63,8 +63,7 @@ class Job extends Model{
 		# On vérifie qui il n'y ai pas le même job entrain d'être traité
 		# dans la liste de jobs
 		$stmt = $dbh->prepare(
-			"SELECT id FROM _jobs
-			WHERE $where"
+			"SELECT id FROM jobs WHERE $where"
 		);
 
 		$stmt->execute(array_values($filter));
@@ -91,7 +90,7 @@ class Job extends Model{
 		$dbh = Dbh::getInstance();
 
 		$stmt = $dbh->prepare(
-			"INSERT INTO _jobs
+			"INSERT INTO jobs
 			(id_project, id_analysis, type, status)
 			VALUES(?, ?, ?, ?)"
 		);

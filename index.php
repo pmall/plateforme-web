@@ -33,6 +33,8 @@ $app->get('/', function($req){
 	$dirs = Dir::All();
 	$users = User::AllWithProjects();
 
+	sort($dirs);
+
 	return new View('accueil.php', array(
 		'title' => 'Accueil plateforme',
 		'notice' => $req->getFlash('notice'),

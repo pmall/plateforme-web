@@ -36,7 +36,10 @@ $app->get('/project', function($req, $res) use($config){
 	}else{
 
 		$project = new Project();
-		$project->dir = $req->param('dir');
+		$project->dir = $dir;
+
+		# par défaut le nom du projet est le nom du répertoire
+		$project->name = $dir;
 
 		$celfiles = $project->getCelfiles();
 

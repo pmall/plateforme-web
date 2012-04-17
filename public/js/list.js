@@ -58,39 +58,44 @@ function deleteItem(form){
 
 	var elem = $(form);
 	var id_elem = elem.data('id');
+	var name_elem = elem.data('name');
 	var type_elem = elem.data('type');
 	var id_html = '#' + type_elem + '_' + id_elem;
 	var url = '/elexir2/index.php/';
 
-	if(type_elem == 'analysis'){
+	if(confirm('Voulez vous vraiment supprimer ' + name_elem + ' ?')){
 
-		id_project = elem.data('id_project');
+		if(type_elem == 'analysis'){
 
-		url+= 'project/' + id_project + '/' + type_elem + '/' + id_elem;
+			id_project = elem.data('id_project');
 
-	}else{
+			url+= 'project/' + id_project + '/' + type_elem + '/' + id_elem;
 
-		url+= type_elem + '/' + id_elem;
+		}else{
 
-	}
-
-	$.ajax({
-		url:url,
-		type:'delete',
-		success: function(text) {
-
-			if(text == 'ok'){
-
-				var elem = $(id_html);
-
-				elem.fadeOut('slow', function(){
-					elem.remove();
-				});
-
-			}
+			url+= type_elem + '/' + id_elem;
 
 		}
-	});
+
+		$.ajax({
+			url:url,
+			type:'delete',
+			success: function(text) {
+
+				if(text == 'ok'){
+
+					var elem = $(id_html);
+
+					elem.fadeOut('slow', function(){
+						elem.remove();
+					});
+
+				}
+
+			}
+		});
+
+	}
 
 	return false;
 

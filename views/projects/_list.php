@@ -42,7 +42,8 @@
             method="post"
             class="action delete"
             data-type="project"
-            data-id="<?= $project->id ?>">
+            data-id="<?= $project->id ?>"
+            data-name="<?= $project->name ?>">
         <input name="_method" type="hidden" value="delete" />
         <input type="submit" value="supprimer" />
       </form>
@@ -56,8 +57,7 @@
               class="action job"
               data-type="<?= $analysis->type ?>"
               data-id_project="<?= $project->id ?>"
-              data-id_analysis="<?= $analysis->id ?>"
-              >
+              data-id_analysis="<?= $analysis->id ?>">
           <input type="hidden" name="job[type]" value="<?= $analysis->type ?>" />
           <input type="hidden" name="job[id_project]" value="<?= $project->id ?>" />
           <input type="hidden" name="job[id_analysis]" value="<?= $analysis->id ?>" />
@@ -68,7 +68,8 @@
               class="action delete"
               data-type="analysis"
               data-id="<?= $analysis->id ?>"
-              data-id_project="<?= $project->id ?>">
+              data-id_project="<?= $project->id ?>"
+              data-name="<?= $analysis->name ?>">
           <input type="hidden" name="_method" value="delete" />
           <input type="submit" value="supprimer" />
         </form>

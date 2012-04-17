@@ -18,7 +18,7 @@ class User extends Model{
 
 		$stmt = $dbh->prepare(
 			"SELECT id, login, salt, admin
-			FROM _users
+			FROM users
 			ORDER BY login ASC"
 		);
 
@@ -62,7 +62,7 @@ class User extends Model{
 		$dbh = Dbh::GetInstance();
 
 		$stmt = $dbh->prepare(
-			"SELECT id, login, salt, admin FROM _users WHERE id = ?"
+			"SELECT id, login, salt, admin FROM users WHERE id = ?"
 		);
 
 		$stmt->execute(array($id));
@@ -84,7 +84,7 @@ class User extends Model{
 
 		$dbh = Dbh::getInstance();
 
-		$stmt = $dbh->prepare("SELECT * FROM _users WHERE id = ?");
+		$stmt = $dbh->prepare("SELECT * FROM users WHERE id = ?");
 
 		$stmt->execute(array($id));
 
@@ -115,7 +115,7 @@ class User extends Model{
 
 		$stmt = $dbh->prepare(
 			"SELECT COUNT(*) AS num
-			FROM _projects
+			FROM projects
 			WHERE id_user = ?"
 		);
 
@@ -201,7 +201,7 @@ class User extends Model{
 
 			# On récupère les utilisateur qui ont ce login
 			$stmt = $dbh->prepare(
-				"SELECT id FROM _users WHERE login = ?"
+				"SELECT id FROM users WHERE login = ?"
 			);
 
 			$stmt->execute(array($this->login));
@@ -292,7 +292,7 @@ class User extends Model{
 		$dbh = Dbh::GetInstance();
 
 		$stmt = $dbh->prepare(
-			"INSERT INTO _users
+			"INSERT INTO users
 			(login, password, salt, admin)
 			VALUES(?, ?, ?, ?)"
 		);
@@ -312,7 +312,7 @@ class User extends Model{
 		$dbh = Dbh::GetInstance();
 
 		$stmt = $dbh->prepare(
-			"UPDATE _users SET login = ?, admin = ?	WHERE id = ?"
+			"UPDATE users SET login = ?, admin = ?	WHERE id = ?"
 		);
 
 		$stmt->execute(array(
@@ -324,7 +324,7 @@ class User extends Model{
 		if(!empty($this->encrypted_password)){
 
 			$stmt = $dbh->prepare(
-				"UPDATE _users SET password = ?, salt = ? WHERE id = ?"
+				"UPDATE users SET password = ?, salt = ? WHERE id = ?"
 			);
 
 			$stmt->execute(array(
@@ -344,12 +344,12 @@ class User extends Model{
 
 		$stmt = $dbh->prepare(
 			"DELETE u, p, co, ch, a, g
-			FROM _users AS u
-			LEFT JOIN _projects AS p ON u.id = p.id_user
-			LEFT JOIN _conditions AS co ON p.id = co.id_project
-			LEFT JOIN _chips AS ch ON co.id = ch.id_condition
-			LEFT JOIN _analyses AS a ON p.id = a.id_project
-			LEFT JOIN _groups AS g ON a.id = g.id_analysis
+			FROM users AS u
+			LEFT JOIN projects AS p ON u.id = p.id_user
+			LEFT JOIN conditions AS co ON p.id = co.id_project
+			LEFT JOIN chips AS ch ON co.id = ch.id_condition
+			LEFT JOIN analyses AS a ON p.id = a.id_project
+			LEFT JOIN groups AS g ON a.id = g.id_analysis
 			WHERE u.id = ?"
 		);
 

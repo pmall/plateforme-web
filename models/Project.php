@@ -46,7 +46,7 @@ class Project extends Model{
 
 		# On prépare la requete
 		$stmt = $dbh->prepare(
-			"SELECT * FROM _projects " . $where
+			"SELECT * FROM projects " . $where
 		);
 
 		# On execute la requete
@@ -92,7 +92,7 @@ class Project extends Model{
 		$dbh = Dbh::getInstance();
 
 		$stmt = $dbh->prepare(
-			"SELECT * FROM _projects WHERE id = ?"
+			"SELECT * FROM projects WHERE id = ?"
 		);
 
 		$stmt->execute(array($id));
@@ -121,7 +121,7 @@ class Project extends Model{
 			# On prépare la requete pour selectionner les puces
 			$stmt = $dbh->prepare(
 				"SELECT name, `condition`, num
-				FROM _chips
+				FROM chips
 				WHERE id_project = ?"
 			);
 
@@ -159,7 +159,7 @@ class Project extends Model{
 			# On prépare la requete pour selectionner les puces
 			$stmt = $dbh->prepare(
 				"SELECT DISTINCT `condition`
-				FROM _chips
+				FROM chips
 				WHERE id_project = ?"
 			);
 
@@ -190,7 +190,7 @@ class Project extends Model{
 
 		$dbh = Dbh::getInstance();
 
-		$stmt = $dbh->prepare("SELECT COUNT(*) AS num FROM _projects");
+		$stmt = $dbh->prepare("SELECT COUNT(*) AS num FROM projects");
 
 		$stmt->execute();
 
@@ -211,7 +211,7 @@ class Project extends Model{
 
 		$dbh = Dbh::getInstance();
 
-		$stmt = $dbh->prepare("SELECT DISTINCT(cell_line) FROM _projects");
+		$stmt = $dbh->prepare("SELECT DISTINCT(cell_line) FROM projects");
 
 		$stmt->execute();
 
@@ -553,7 +553,7 @@ class Project extends Model{
 		$dbh = Dbh::getInstance();
 
 		$this->id = $this->makeUniqid($dbh->prepare(
-			"SELECT id FROM _projects WHERE id = ?"
+			"SELECT id FROM projects WHERE id = ?"
 		));
 
 		$this->date = date("Y-m-d H:i:s");
@@ -566,7 +566,7 @@ class Project extends Model{
 		$dbh = Dbh::getInstance();
 
 		$stmt = $dbh->prepare(
-			"INSERT INTO _projects
+			"INSERT INTO projects
 			(id, id_user, dir, name, type, organism, cell_line, comment, public, date)
 			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
 		);
@@ -595,7 +595,7 @@ class Project extends Model{
 
 		# On prépare la requete pour mettre a jout le projet
 		$update_project_stmt = $dbh->prepare(
-			"UPDATE _projects SET
+			"UPDATE projects SET
 			id_user = ?, name = ?, type = ?, organism = ?,
 			cell_line = ?, comment = ?, public = ?
 			WHERE id = ?"
@@ -615,7 +615,7 @@ class Project extends Model{
 
 		# On prépare la requete pour supprimer les puces du projet
 		$delete_chips_stmt = $dbh->prepare(
-			"DELETE FROM _chips WHERE id_project = ?"
+			"DELETE FROM chips WHERE id_project = ?"
 		);
 
 		# On supprime les puces
@@ -633,10 +633,10 @@ class Project extends Model{
 
 		$stmt = $dbh->prepare(
 			"DELETE p, c, a, g
-			FROM _projects AS p
-			LEFT JOIN _chips AS c ON p.id = c.id_project
-			LEFT JOIN _analyses AS a ON p.id = a.id_project
-			LEFT JOIN _groups AS g ON a.id = g.id_analysis
+			FROM projects AS p
+			LEFT JOIN chips AS c ON p.id = c.id_project
+			LEFT JOIN analyses AS a ON p.id = a.id_project
+			LEFT JOIN groups AS g ON a.id = g.id_analysis
 			WHERE p.id = ?"
 		);
 
@@ -650,7 +650,7 @@ class Project extends Model{
 		$dbh = Dbh::getInstance();
 
 		$insert_chip_stmt = $dbh->prepare(
-			"INSERT INTO _chips
+			"INSERT INTO chips
 			(id_project, name, `condition`, num)
 			VALUES (?, ?, ?, ?)"
 		);

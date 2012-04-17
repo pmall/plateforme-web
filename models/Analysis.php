@@ -13,7 +13,7 @@ class Analysis extends Model{
 
 		$dbh = Dbh::getInstance();
 
-		$stmt = $dbh->prepare("SELECT * FROM _analyses");
+		$stmt = $dbh->prepare("SELECT * FROM analyses");
 
 		$stmt->execute();
 
@@ -34,7 +34,7 @@ class Analysis extends Model{
 
 		$dbh = Dbh::getInstance();
 
-		$stmt = $dbh->prepare("SELECT * FROM _analyses WHERE id = ?");
+		$stmt = $dbh->prepare("SELECT * FROM analyses WHERE id = ?");
 
 		$stmt->execute(array($id));
 
@@ -61,7 +61,7 @@ class Analysis extends Model{
 
 			$stmt = $dbh->prepare(
 				"SELECT `condition`, letter
-				FROM _groups
+				FROM groups
 				WHERE id_analysis = ?"
 			);
 
@@ -81,6 +81,23 @@ class Analysis extends Model{
 		}
 
 		return $analysis;
+
+	}
+
+	public static function CountChips($id_project, $condition){
+
+		$dbh = Dbh::getInstance();
+
+		$stmt = $dbh->prepare(
+			"SELECT COUNT(*) FROM chips
+			WHERE id_project = ? AND `condition` = ?"
+		);
+
+		$stmt->execute(array($id_project, $condition));
+
+		$row = $stmt->fetch();
+
+		return $row[0];
 
 	}
 
@@ -167,6 +184,7 @@ class Analysis extends Model{
 		# On valide paire
 		if($this->type == 'paire'){
 
+			# On vérifie la répartition des conditions
 			foreach(array_keys($letters) as $letter){
 
 				if($letter == 'A' or $letter == 'B'){
@@ -176,7 +194,7 @@ class Analysis extends Model{
 						$this->addError(new Error(
 							'Pour une analyse de type paire,
 							une seule condition doit être
-							doit être utilisé pour la lettre ' . $letter 
+							utilisé pour la lettre ' . $letter 
 						));
 
 					}
@@ -190,6 +208,25 @@ class Analysis extends Model{
 					));
 
 				}
+
+			}
+
+			# On vérifie que les conditions A et B ont bien le
+			# même nombre de puces
+			$condition_a = $letters['A'][0];
+			$condition_b = $letters['B'][0];
+
+			$nb_a = Analysis::CountChips($this->id_project, $condition_a);
+			$nb_b = Analysis::CountChips($this->id_project, $condition_b);
+
+			if($nb_a != $nb_b){
+
+				$this->addError(new Error(
+					'A et B doivent avoir le même nombre
+					de puces pour une analyse paire. Ici 
+					' . $condition_a . ' : ' . $nb_a . '
+					et ' . $condition_b . ' : ' . $nb_b
+				));
 
 			}
 
@@ -260,7 +297,7 @@ class Analysis extends Model{
 		$dbh = Dbh::getInstance();
 
 		$this->id = $this->makeUniqid($dbh->prepare(
-			"SELECT id FROM _analyses WHERE id = ?"
+			"SELECT id FROM analyses WHERE id = ?"
 		));
 
 	}
@@ -270,7 +307,7 @@ class Analysis extends Model{
 		$dbh = Dbh::getInstance();
 
 		$stmt = $dbh->prepare(
-			"INSERT INTO _analyses
+			"INSERT INTO analyses
 			(id, id_project, name, type)
 			VALUES(?, ?, ?, ?)"
 		);
@@ -291,7 +328,7 @@ class Analysis extends Model{
 		$dbh = Dbh::getInstance();
 
 		$update_analysis_stmt = $dbh->prepare(
-			"UPDATE _analyses SET name = ?, type = ? WHERE id = ?"
+			"UPDATE analyses SET name = ?, type = ? WHERE id = ?"
 		);
 
 		$update_analysis_stmt->execute(array(
@@ -301,7 +338,7 @@ class Analysis extends Model{
 		));
 
 		$delete_groups_stmt = $dbh->prepare(
-			"DELETE FROM _groups WHERE id_analysis = ?"
+			"DELETE FROM groups WHERE id_analysis = ?"
 		);
 
 		$delete_groups_stmt->execute(array($this->id));
@@ -315,18 +352,22 @@ class Analysis extends Model{
 		$dbh = Dbh::getInstance();
 
 		$stmt = $dbh->prepare(
-			"INSERT INTO _groups
+			"INSERT INTO groups
 			(id_analysis, `condition`, letter)
 			VALUES(?, ?, ?)"
 		);
 
 		foreach($this->groups as $group){
 
-			$stmt->execute(array(
-				$this->id,
-				$group['condition'],
-				$group['letter']
-			));
+			if(!empty($group['letter'])){
+
+				$stmt->execute(array(
+					$this->id,
+					$group['condition'],
+					$group['letter']
+				));
+
+			}
 
 		}
 
@@ -338,8 +379,8 @@ class Analysis extends Model{
 
 		$stmt = $dbh->prepare(
 			"DELETE a, g
-			FROM _analyses AS a
-			LEFT JOIN _groups AS g ON a.id = g.id_analysis
+			FROM analyses AS a
+			LEFT JOIN groups AS g ON a.id = g.id_analysis
 			WHERE a.id = ?"
 		);
 

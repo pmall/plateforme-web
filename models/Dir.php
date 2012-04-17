@@ -84,19 +84,13 @@ class Dir{
 	private function isCelfile($file){
 
 		return preg_match(
-			'/\.(cel|CEL)$/',
+			'/^[a-zA-Z0-9_\-()]+\.(cel|CEL)$/',
 			$file
 		);
 
 	}
 
 	private function formatCelfile($celfile){
-
-		#return preg_replace(
-		#	'/\.(cel|CEL)$/',
-		#	'',
-		#	$celfile
-		#);
 
 		return $celfile;
 
