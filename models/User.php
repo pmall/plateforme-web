@@ -343,11 +343,10 @@ class User extends Model{
 		$dbh = Dbh::GetInstance();
 
 		$stmt = $dbh->prepare(
-			"DELETE u, p, co, ch, a, g
+			"DELETE u, p, ch, a, g
 			FROM users AS u
 			LEFT JOIN projects AS p ON u.id = p.id_user
-			LEFT JOIN conditions AS co ON p.id = co.id_project
-			LEFT JOIN chips AS ch ON co.id = ch.id_condition
+			LEFT JOIN chips AS ch ON p.id = ch.id_project
 			LEFT JOIN analyses AS a ON p.id = a.id_project
 			LEFT JOIN groups AS g ON a.id = g.id_analysis
 			WHERE u.id = ?"
