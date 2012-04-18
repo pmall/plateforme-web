@@ -1,11 +1,11 @@
-<script src="/elexir2/public/js/project.js"></script>
+<script src="/plateforme2/public/js/project.js"></script>
 <section>
   <h1><?= h($title) ?></h1>
   <?= displayErrors($project) ?>
   <? if(count($users) == 0): ?>
   <p>
     Vous devez créer au moins un utilisateur avant de pouvoir crée un projet.
-    <a href="/elexir2/index.php/user">Ajouter un utilisateur</a>.
+    <a href="/plateforme2/index.php/user">Ajouter un utilisateur</a>.
   </p>
   <? else: ?>
   <? if(count($celfiles) == 0): ?>
@@ -18,7 +18,7 @@
     et se finir par .CEL.
   </p>
   <p>
-    <a href="/elexir2/index.php">Retour a l'accueil</a>.
+    <a href="/plateforme2/index.php">Retour a l'accueil</a>.
   </p>
   <? else: ?>
   <form action="" method="post">

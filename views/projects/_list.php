@@ -3,11 +3,11 @@
   <li id="project_<?= $project->id ?>" class="project">
     <p>
       <strong><?= $project->id ?></strong> /
-      <a href="/elexir2/index.php/project/<?= $project->id; ?>/edit"><strong><?= $project->name ?></strong></a> /
-      <a href="/elexir2/index.php/projects/?type=<?= $project->type ?>"><?= $project->type ?></a> /
-      <a href="/elexir2/index.php/projects/?organism=<?= $project->organism ?>"><?= $project->organism ?></a> /
-      <a href="/elexir2/index.php/projects/?cell_line=<?= $project->cell_line ?>"><?= $project->cell_line ?></a> /
-      <a href="/elexir2/index.php/project/<?= $project->id ?>/<?= $project->name ?>_qc.pdf">Fichier contrôle qualité</a>
+      <a href="/plateforme2/index.php/project/<?= $project->id; ?>/edit"><strong><?= $project->name ?></strong></a> /
+      <a href="/plateforme2/index.php/projects/?type=<?= $project->type ?>"><?= $project->type ?></a> /
+      <a href="/plateforme2/index.php/projects/?organism=<?= $project->organism ?>"><?= $project->organism ?></a> /
+      <a href="/plateforme2/index.php/projects/?cell_line=<?= $project->cell_line ?>"><?= $project->cell_line ?></a> /
+      <a href="/plateforme2/index.php/project/<?= $project->id ?>/<?= $project->name ?>_qc.pdf">Fichier contrôle qualité</a>
     </p>
     <? if($project->comment): ?>
     <p class="comment">
@@ -15,7 +15,7 @@
     </p>
     <? endif ?>
     <p>
-      <form action="/elexir2/index.php/job"
+      <form action="/plateforme2/index.php/job"
             method="post"
             class="action job"
             data-type="qc"
@@ -25,7 +25,7 @@
         <input type="hidden" name="job[id_project]" value="<?= $project->id ?>" />
         <input type="submit" value="Contrôle Qualité" />
       </form>
-      <form action="/elexir2/index.php/job"
+      <form action="/plateforme2/index.php/job"
             method="post"
             class="action job"
             data-type="preprocessing"
@@ -35,10 +35,10 @@
         <input type="hidden" name="job[id_project]" value="<?= $project->id ?>" />
         <input type="submit" value="Preprocessing" />
       </form>
-      <form action="/elexir2/index.php/project/<?= $project->id ?>/analysis" method="get" class="action">
+      <form action="/plateforme2/index.php/project/<?= $project->id ?>/analysis" method="get" class="action">
         <input type="submit" value="Nouvelle analyse" />
       </form>
-      <form action="/elexir2/index.php/project/<?= $project->id ?>"
+      <form action="/plateforme2/index.php/project/<?= $project->id ?>"
             method="post"
             class="action delete"
             data-type="project"
@@ -52,7 +52,7 @@
     <ul class="analyses">
       <? foreach($project->analyses as $analysis): ?>
       <li id="analysis_<?= $analysis->id ?>">
-        <form action="/elexir2/index.php/job"
+        <form action="/plateforme2/index.php/job"
               method="post"
               class="action job"
               data-type="<?= $analysis->type ?>"
@@ -63,7 +63,7 @@
           <input type="hidden" name="job[id_analysis]" value="<?= $analysis->id ?>" />
           <input type="submit" value="Run" />
         </form>
-        <form action="/elexir2/index.php/project/<?= $project->id ?>/analysis/<?= $analysis->id ?>"
+        <form action="/plateforme2/index.php/project/<?= $project->id ?>/analysis/<?= $analysis->id ?>"
               method="post"
               class="action delete"
               data-type="analysis"
@@ -74,9 +74,9 @@
           <input type="submit" value="supprimer" />
         </form>
         <strong><?= $analysis->id ?></strong> /
-        <a href="/elexir2/index.php/project/<?= $project->id ?>/analysis/<?= $analysis->id ?>/edit"><?= $analysis->name ?></a> /
+        <a href="/plateforme2/index.php/project/<?= $project->id ?>/analysis/<?= $analysis->id ?>/edit"><?= $analysis->name ?></a> /
         <?= $analysis->type ?> /
-	<a href="/elexir2/index.php/project/<?= $project->id ?>/anaysis/<?= $analysis->id ?>/<?= $analysis->name ?>.xls">Fichier xls</a>
+	<a href="/plateforme2/index.php/project/<?= $project->id ?>/anaysis/<?= $analysis->id ?>/<?= $analysis->name ?>.xls">Fichier xls</a>
       </li>
       <? endforeach; ?>
     </ul>

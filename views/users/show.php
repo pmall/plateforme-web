@@ -3,7 +3,7 @@
   <? if($numProjects == 0): ?>
   <p>
     Il n'y a aucun projet correspondant à cet utilisateur.
-    <a href="/elexir2/index.php">Retour à l'accueil</a>.
+    <a href="/plateforme2/index.php">Retour à l'accueil</a>.
   </p>
   <? else: ?>
   <? $this->partial('projects/_filter.php') ?>
@@ -15,7 +15,7 @@
   <? $this->partial('projects/_list.php', array(
 	'projects' => $user->projects
   )); ?>
-  <script src="/elexir2/public/js/list.js"></script>
+  <script src="/plateforme2/public/js/list.js"></script>
   <? endif; ?>
   <? endif; ?>
 </section>

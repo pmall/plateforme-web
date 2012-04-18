@@ -1,5 +1,8 @@
 <?php
 
+# Repertoire de l'application
+$config['dir_app'] = 'plateforme2';
+
 # Fichiers contenant les celfiles
 $config['celdir'] = '/home/pierre/workspace/celdir';
 

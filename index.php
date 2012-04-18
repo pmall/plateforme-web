@@ -22,7 +22,7 @@ require('helpers/forms.php');
 require('helpers/jobs.php');
 
 # On déclare l'app
-$app = new App('elexir2');
+$app = new App($config['dir_app']);
 
 # ==============================================================================
 # Accueil

@@ -1,7 +1,7 @@
 <? $this->partial('jobs/list.php', array('title' => 'Liste des tâches')) ?>
 <section>
   <h1>Nouveau projet</h1>
-  <form action="/elexir2/index.php/project" method="get">
+  <form action="/plateforme2/index.php/project" method="get">
     <fieldset>
       <legend>Ajouter un projet</legend>
       <select name="dir">
@@ -21,7 +21,7 @@
   <? if(count($users) == 0): ?>
   <p>
     Il n'y a pas d'utilisateurs.
-    <a href="/elexir2/index.php/user">Ajouter un utilisateur</a>.
+    <a href="/plateforme2/index.php/user">Ajouter un utilisateur</a>.
   </p>
   <? else: ?>
   <ul id="shortlinks">
@@ -30,14 +30,14 @@
     <? endforeach; ?>
   </ul>
   <? $this->partial('projects/_filter.php', array(
-	'url' => '/elexir2/index.php/projects',
+	'url' => '/plateforme2/index.php/projects',
 	'users' => $user_list))
   ?>
   <ul>
     <? foreach($users as $user): ?>
     <li>
       <h2>
-        <a name="<?= h($user->login) ?>" href="/elexir2/index.php/user/<?= h($user->id) ?>">
+        <a name="<?= h($user->login) ?>" href="/plateforme2/index.php/user/<?= h($user->id) ?>">
           <?= h($user->login) ?>
         </a>
       </h2>
@@ -53,6 +53,6 @@
     </li>
     <? endforeach ?>
   </ul>
-  <script src="/elexir2/public/js/list.js"></script>
+  <script src="/plateforme2/public/js/list.js"></script>
   <? endif ?>
 </section>
