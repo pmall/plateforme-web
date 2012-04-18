@@ -1,4 +1,3 @@
-test
 <?php
 
 function __autoload($classname){
