@@ -11,7 +11,7 @@ function init(){
 function updateJobs(){
 
 	$.ajax({
-		url:'/elexir2/index.php/jobs',
+		url:'/plateforme2/index.php/jobs',
 		type:'get',
 		success:function(text){
 			$('#jobs').html(text);
@@ -28,7 +28,7 @@ function addJob(form){
 	var id_analysis = elem.data('id_analysis');
 
 	$.ajax({
-		url:'/elexir2/index.php/job',
+		url:'/plateforme2/index.php/job',
 		type:'post',
 		data:{
 			'job[type]':type,
@@ -61,7 +61,7 @@ function deleteItem(form){
 	var name_elem = elem.data('name');
 	var type_elem = elem.data('type');
 	var id_html = '#' + type_elem + '_' + id_elem;
-	var url = '/elexir2/index.php/';
+	var url = '/plateforme2/index.php/';
 
 	if(confirm('Voulez vous vraiment supprimer ' + name_elem + ' ?')){
 
