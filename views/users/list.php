@@ -5,13 +5,15 @@
     Il n'y a pas d'utilisateurs. <a href="/plateforme2/index.php/user">Ajouter un utilisateur</a>.
   </p>
   <? else: ?>
+  <p>
+    <a href="/plateforme2/index.php/user">Ajouter un utilisateur</a>
+  </p>
   <ul>
-    <li>
-      <a href="/plateforme2/index.php/user">Ajouter un utilisateur</a>
-    </li>
     <? foreach($users as $user): ?>
-    <li id="user_<?= h($user->id) ?>">
-      <a href="/plateforme2/index.php/user/<?= $user->id; ?>"><?= $user->login ?></a>
+    <li id="user_<?= h($user->id) ?>" class="user">
+      <span class="login">
+        <a href="/plateforme2/index.php/user/<?= $user->id; ?>"><?= $user->login ?></a>
+      </span>
       [<a href="/plateforme2/index.php/user/<?= $user->id ?>/edit">modifier</a>]
       <form action="/plateforme2/index.php/user/<?= $user->id ?>"
             method="post"

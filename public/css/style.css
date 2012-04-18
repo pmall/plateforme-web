@@ -88,6 +88,23 @@ h1{
 	list-style-type:square;
 }
 
+.user{
+	padding:5px 0;
+}
+
+.user:nth-child(odd){
+	background-color:#F9F9F9;
+}
+
+.user:nth-child(even){
+	background-color:#E0E0E0;
+}
+
+.user .login{
+	display:inline-block;
+	width:200px;
+}
+
 /* =============================================================================
   FORMULAIRE
 ============================================================================= */
@@ -162,7 +179,7 @@ input[type=submit]:active{
 
 label{
 	display:inline-block;
-	width:200px;
+	width:300px;
 	text-align:right;
 }
 
