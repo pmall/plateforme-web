@@ -9,7 +9,7 @@ class View{
 
 	public function __construct($file, Array $values = array()){
 
-		$this->viewDir = 'views';
+		$this->viewDir = 'app/views';
 		$this->layout = 'layout.php';
 		$this->file = $file;
 		$this->values = $values;
