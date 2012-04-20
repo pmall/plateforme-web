@@ -34,24 +34,39 @@ class Flash{
 
 	}
 
-	public function get($key){
+	public static function set($key, $value){
 
-		if(array_key_exists($key, $this->values)){
+		$flash = Flash::getInstance();
 
-			return $this->values[$key];
-
-		}
-
-	}
-
-	public function set($key, $value){
-
-		$this->values[$key] = $value;
+		$flash->values[$key] = $value;
 
 		$_SESSION['_flash'][$key] = $value;
 
 		return $value;
 
+	}
+
+	public static function get($key){
+
+		$flash = Flash::getInstance();
+
+		if(array_key_exists($key, $flash->values)){
+
+			return $this->values[$key];
+
+		}else{
+
+			return null;
+
+		}
+
+	}
+
+	public static function all(){
+
+		$flash = Flash::getInstance();
+
+		return $flash->values;
 	}
 
 }

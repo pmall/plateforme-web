@@ -2,10 +2,7 @@
 
 final class Request{
 
-	private $get;
-	private $post;
-	private $session;
-	private $cookies;
+	private $params;
 	public $url;
 	public $method;
 
@@ -13,10 +10,20 @@ final class Request{
 	public function __construct(){
 
 		# Initialisation des parametres
-		$this->get = $_GET;
-		$this->post = $_POST;
-		$this->session = $_SESSION;
-		$this->cookies = $_COOKIE;
+		$get = $_GET;
+		$post = $_POST;
+		$flash = Flash::all();
+		$session = $_SESSION;
+		$cookies = $_COOKIE;
+
+		# On merge tout les params dans l'ordre de préférence
+		$this->params = array_merge(
+			$get,
+			$post,
+			$flash,
+			$session,
+			$cookies
+		);
 
 		# Définition de l'url de la requete
 		$this->url = trim($_SERVER['REQUEST_URI'], '/');
@@ -40,39 +47,13 @@ final class Request{
 
 	}
 
-	# Ajoute un parametre a la requete
-	public function addParam($name, $value){
-
-		$this->params[$name] = $value;
-
-	}
-
-	# Ajoute plusieurs parametres a la requete
-	public function addParams(Array $params){
-
-		foreach($params as $name => $value){
-
-			$this->addParam($name, $value);
-
-		}
-
-	}
-
-	# Retourne le param demandé (par ordre de préférence)
+	# Retourne le param demandé
 	public function param($param){
 
-		# On merge tout les params dans l'ordre de préférence
-		$params = array_merge(
-			$this->get,
-			$this->post,
-			$this->session,
-			$this->cookies
-		);
-
 		# Si il est présent on retourne va valeur du parametre
-		if(in_array($param, array_keys($params))){
+		if(in_array($param, array_keys($this->params))){
 
-			return $params[$param];
+			return $this->params[$param];
 
 		}else{
 
@@ -82,26 +63,11 @@ final class Request{
 
 	}
 
-	# On retourn tout les parametres (par ordre de préférence)
-	public function getParams(){
-
-		# On merge tout les params dans l'ordre de préférence
-		$params = array_merge(
-			$this->get,
-			$this->post,
-			$this->session,
-			$this->cookies
-		);
+	# On retourne tous les parametres
+	public function params(){
 
 		# et on les retourne
-		return $params;
-
-	}
-
-	# Retourne une valeur du flash
-	public function getFlash($key){
-
-		return Flash::getInstance()->get($key);
+		return $this->params;
 
 	}
 
