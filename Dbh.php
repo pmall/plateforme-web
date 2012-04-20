@@ -21,6 +21,14 @@ class Dbh{
 
 	}
 
+	public static function prepare($query){
+
+		$dbh = Dbh::getInstance();
+
+		return $dbh->prepare($query);
+
+	}
+
 	private function __construct(){}
 
 }
