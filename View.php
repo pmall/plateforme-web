@@ -7,10 +7,10 @@ class View{
 	private $file;
 	private $values;
 
-	public function __construct($file, Array $values = array()){
+	public function __construct($viewsDir, $layout, $file, Array $values = array()){
 
-		$this->viewDir = 'app/views';
-		$this->layout = 'layout.php';
+		$this->viewsDir = $viewsDir;
+		$this->layout = $layout;
 		$this->file = $file;
 		$this->values = $values;
 
@@ -42,9 +42,9 @@ class View{
 
 	private function getFile($fileName){
 
-		return (empty($this->viewDir))
+		return (empty($this->viewsDir))
 			? $fileName
-			: $this->viewDir . '/' . $fileName;
+			: $this->viewsDir . '/' . $fileName;
 
 	}
 

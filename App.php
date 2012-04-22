@@ -2,6 +2,7 @@
 
 class App{
 
+	private $conf;
 	private $root;
 	private $request;
 	private $response;
@@ -11,14 +12,36 @@ class App{
 	# Constructeur
 	# =====================================================================
 
-	public function __construct($root = ''){
+	public function __construct($root = '', Array $conf = array()){
 
 		session_start();
 
+		# defaut conf merge avec la conf passée
+		$this->conf = array_merge(array(
+			'viewsDir' => 'views',
+			'layout' => 'layout'
+		), $conf);
+
+		# Valeur de l'app
 		$this->root = trim($root, '/');
 		$this->request = new Request();
 		$this->response = new Response($this->root);
 		$this->router = new Router();
+
+	}
+
+	# =====================================================================
+	# Factory
+	# =====================================================================
+
+	public function getView($viewfile, Array $values = array()){
+
+		return new View(
+			$this->conf['viewsDir'],
+			$this->conf['layout'],
+			$viewfile,
+			$values
+		);
 
 	}
 
