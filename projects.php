@@ -126,6 +126,7 @@ $app->get('/project/:id/edit', function($req, $res, $matches) use($app){
 
 			return $app->getView('projects/edit.php', array(
 				'title' => 'Modification du projet ' . $project->name,
+				'dir' => $dir,
 				'project' => $project,
 				'users' => User::OptionArray(),
 				'cell_lines' => Project::CellLines(),
@@ -178,7 +179,7 @@ $app->put('/project/:id', function($req, $res, $matches) use($app){
 
 				return $app->getView('projects/edit.php', array(
 					'title' => 'Modification du projet ' . $name,
-					'dir' => $project->dir,
+					'dir' => $dir,
 					'project' => $project,
 					'users' => User::OptionArray(),
 					'cell_lines' => Project::CellLines(),
