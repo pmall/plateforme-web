@@ -19,8 +19,6 @@ class Project extends Model{
 	# Retourne un tableau contenant tous les projets
 	public static function All(Array $filter = array()){
 
-		$dbh = Dbh::getInstance();
-
 		# On garde seulement les valeurs non vide
 		$filter = array_filter($filter, function($v){
 			return !empty($v);
@@ -45,7 +43,7 @@ class Project extends Model{
 		$where = 'WHERE ' . implode(' AND ', $filter);
 
 		# On prépare la requete
-		$stmt = $dbh->prepare(
+		$stmt = Dbh::prepare(
 			"SELECT * FROM projects " . $where
 		);
 
@@ -68,8 +66,6 @@ class Project extends Model{
 	# Retourne un tableau avec les projets et les analysis correspondantes
 	public static function AllWithAnalyses(Array $filter = array()){
 
-		$dbh = Dbh::getInstance();
-
 		$projects = Project::All($filter);
 		$analyses = Analysis::All();
 
@@ -89,9 +85,7 @@ class Project extends Model{
 	# Retourne un projet à partir de son id
 	public static function Get($id){
 
-		$dbh = Dbh::getInstance();
-
-		$stmt = $dbh->prepare(
+		$stmt = Dbh::prepare(
 			"SELECT * FROM projects WHERE id = ?"
 		);
 
@@ -116,10 +110,8 @@ class Project extends Model{
 
 		if($project){
 
-			$dbh = Dbh::getInstance();
-
 			# On prépare la requete pour selectionner les puces
-			$stmt = $dbh->prepare(
+			$stmt = Dbh::prepare(
 				"SELECT name, `condition`, num
 				FROM chips
 				WHERE id_project = ?"
@@ -154,10 +146,8 @@ class Project extends Model{
 
 		if($project){
 
-			$dbh = Dbh::getInstance();
-
 			# On prépare la requete pour selectionner les puces
-			$stmt = $dbh->prepare(
+			$stmt = Dbh::prepare(
 				"SELECT DISTINCT `condition`
 				FROM chips
 				WHERE id_project = ?"
@@ -188,9 +178,7 @@ class Project extends Model{
 	# Retourne le nombre de projets
 	public static function Count(){
 
-		$dbh = Dbh::getInstance();
-
-		$stmt = $dbh->prepare("SELECT COUNT(*) AS num FROM projects");
+		$stmt = Dbh::prepare("SELECT COUNT(*) AS num FROM projects");
 
 		$stmt->execute();
 
@@ -209,9 +197,7 @@ class Project extends Model{
 	# On retourne la liste des différentes lignées cellulaires
 	public static function CellLines(){
 
-		$dbh = Dbh::getInstance();
-
-		$stmt = $dbh->prepare("SELECT DISTINCT(cell_line) FROM projects");
+		$stmt = Dbh::prepare("SELECT DISTINCT(cell_line) FROM projects");
 
 		$stmt->execute();
 
@@ -550,9 +536,7 @@ class Project extends Model{
 	# Avant l'insertion
 	protected function beforeInsert(){
 
-		$dbh = Dbh::getInstance();
-
-		$this->id = $this->makeUniqid($dbh->prepare(
+		$this->id = $this->makeUniqid(Dbh::prepare(
 			"SELECT id FROM projects WHERE id = ?"
 		));
 
@@ -563,9 +547,7 @@ class Project extends Model{
 	# Insertion dans la base de données
 	protected function rawInsert(){
 
-		$dbh = Dbh::getInstance();
-
-		$stmt = $dbh->prepare(
+		$stmt = Dbh::prepare(
 			"INSERT INTO projects
 			(id, id_user, dir, name, type, organism, cell_line, comment, public, date)
 			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
@@ -591,10 +573,8 @@ class Project extends Model{
 	# Update dans la base de données
 	protected function rawUpdate(){
 
-		$dbh = Dbh::getInstance();
-
 		# On prépare la requete pour mettre a jout le projet
-		$update_project_stmt = $dbh->prepare(
+		$update_project_stmt = Dbh::prepare(
 			"UPDATE projects SET
 			id_user = ?, name = ?, type = ?, organism = ?,
 			cell_line = ?, comment = ?, public = ?
@@ -614,7 +594,7 @@ class Project extends Model{
 		));
 
 		# On prépare la requete pour supprimer les puces du projet
-		$delete_chips_stmt = $dbh->prepare(
+		$delete_chips_stmt = Dbh::prepare(
 			"DELETE FROM chips WHERE id_project = ?"
 		);
 
@@ -629,9 +609,7 @@ class Project extends Model{
 	# Supprime le projet de la base de données
 	protected function rawDelete(){
 
-		$dbh = Dbh::getInstance();
-
-		$stmt = $dbh->prepare(
+		$stmt = Dbh::prepare(
 			"DELETE p, c, a, g
 			FROM projects AS p
 			LEFT JOIN chips AS c ON p.id = c.id_project
@@ -647,9 +625,7 @@ class Project extends Model{
 	# Insert les puces dans la base de données
 	private function insertChips(){
 
-		$dbh = Dbh::getInstance();
-
-		$insert_chip_stmt = $dbh->prepare(
+		$insert_chip_stmt = Dbh::prepare(
 			"INSERT INTO chips
 			(id_project, name, `condition`, num)
 			VALUES (?, ?, ?, ?)"

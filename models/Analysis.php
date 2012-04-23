@@ -11,9 +11,7 @@ class Analysis extends Model{
 	# Retourne un tableau contenant toutes les analyses
 	public static function All(){
 
-		$dbh = Dbh::getInstance();
-
-		$stmt = $dbh->prepare("SELECT * FROM analyses");
+		$stmt = Dbh::prepare("SELECT * FROM analyses");
 
 		$stmt->execute();
 
@@ -32,9 +30,7 @@ class Analysis extends Model{
 	# Retourne l'analyse qui correspond a l'id
 	public static function Get($id){
 
-		$dbh = Dbh::getInstance();
-
-		$stmt = $dbh->prepare("SELECT * FROM analyses WHERE id = ?");
+		$stmt = Dbh::prepare("SELECT * FROM analyses WHERE id = ?");
 
 		$stmt->execute(array($id));
 
@@ -57,9 +53,7 @@ class Analysis extends Model{
 
 		if($analysis){
 
-			$dbh = Dbh::getInstance();
-
-			$stmt = $dbh->prepare(
+			$stmt = Dbh::prepare(
 				"SELECT `condition`, letter
 				FROM groups
 				WHERE id_analysis = ?"
@@ -86,9 +80,7 @@ class Analysis extends Model{
 
 	public static function CountChips($id_project, $condition){
 
-		$dbh = Dbh::getInstance();
-
-		$stmt = $dbh->prepare(
+		$stmt = Dbh::prepare(
 			"SELECT COUNT(*) FROM chips
 			WHERE id_project = ? AND `condition` = ?"
 		);
@@ -294,9 +286,7 @@ class Analysis extends Model{
 
 	protected function beforeInsert(){
 
-		$dbh = Dbh::getInstance();
-
-		$this->id = $this->makeUniqid($dbh->prepare(
+		$this->id = $this->makeUniqid(Dbh::prepare(
 			"SELECT id FROM analyses WHERE id = ?"
 		));
 
@@ -304,9 +294,7 @@ class Analysis extends Model{
 
 	protected function rawInsert(){
 
-		$dbh = Dbh::getInstance();
-
-		$stmt = $dbh->prepare(
+		$stmt = Dbh::prepare(
 			"INSERT INTO analyses
 			(id, id_project, name, type)
 			VALUES(?, ?, ?, ?)"
@@ -325,9 +313,7 @@ class Analysis extends Model{
 
 	protected function rawUpdate(){
 
-		$dbh = Dbh::getInstance();
-
-		$update_analysis_stmt = $dbh->prepare(
+		$update_analysis_stmt = Dbh::prepare(
 			"UPDATE analyses SET name = ?, type = ? WHERE id = ?"
 		);
 
@@ -337,7 +323,7 @@ class Analysis extends Model{
 			$this->id
 		));
 
-		$delete_groups_stmt = $dbh->prepare(
+		$delete_groups_stmt = Dbh::prepare(
 			"DELETE FROM groups WHERE id_analysis = ?"
 		);
 
@@ -349,9 +335,7 @@ class Analysis extends Model{
 
 	protected function insertGroups(){
 
-		$dbh = Dbh::getInstance();
-
-		$stmt = $dbh->prepare(
+		$stmt = Dbh::prepare(
 			"INSERT INTO groups
 			(id_analysis, `condition`, letter)
 			VALUES(?, ?, ?)"
@@ -375,9 +359,7 @@ class Analysis extends Model{
 
 	protected function rawDelete(){
 
-		$dbh = Dbh::getInstance();
-
-		$stmt = $dbh->prepare(
+		$stmt = Dbh::prepare(
 			"DELETE a, g
 			FROM analyses AS a
 			LEFT JOIN groups AS g ON a.id = g.id_analysis

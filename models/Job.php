@@ -13,9 +13,7 @@ class Job extends Model{
 
 	public static function All($limit = 0){
 
-		$dbh = Dbh::getInstance();
-
-		$stmt = $dbh->prepare(
+		$stmt = Dbh::prepare(
 			"SELECT j.*, p.name AS name_project, a.name AS name_analysis
 			FROM jobs AS j
 			LEFT JOIN analyses AS a ON a.id = j.id_analysis,
@@ -43,8 +41,6 @@ class Job extends Model{
 
 	public function validates(){
 
-		$dbh = Dbh::getInstance();
-
 		# On crée la chaine where
 		$filter = array_filter(array(
 			'id_project' => $this->id_project,
@@ -62,7 +58,7 @@ class Job extends Model{
 
 		# On vérifie qui il n'y ai pas le même job entrain d'être traité
 		# dans la liste de jobs
-		$stmt = $dbh->prepare(
+		$stmt = Dbh::prepare(
 			"SELECT id FROM jobs WHERE $where"
 		);
 
@@ -87,9 +83,7 @@ class Job extends Model{
 
 	public function rawInsert(){
 
-		$dbh = Dbh::getInstance();
-
-		$stmt = $dbh->prepare(
+		$stmt = Dbh::prepare(
 			"INSERT INTO jobs
 			(id_project, id_analysis, type, status)
 			VALUES(?, ?, ?, ?)"

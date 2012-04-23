@@ -14,9 +14,7 @@ class User extends Model{
 	# Retourne tous les utilisateurs
 	public static function All(){
 
-		$dbh = Dbh::GetInstance();
-
-		$stmt = $dbh->prepare(
+		$stmt = Dbh::prepare(
 			"SELECT id, login, salt, admin
 			FROM users
 			ORDER BY login ASC"
@@ -39,8 +37,6 @@ class User extends Model{
 	# Retourne tous les utilisateurs et leur projets
 	public static function AllWithProjects(){
 
-		$dbh = Dbh::getInstance();
-
 		$users = User::All();
 		$projects = Project::AllWithAnalyses();
 
@@ -59,9 +55,7 @@ class User extends Model{
 	# Retourne tous les utilisateurs
 	public static function Get($id){
 
-		$dbh = Dbh::GetInstance();
-
-		$stmt = $dbh->prepare(
+		$stmt = Dbh::prepare(
 			"SELECT id, login, salt, admin FROM users WHERE id = ?"
 		);
 
@@ -82,9 +76,7 @@ class User extends Model{
 	# Retourne l'utilisateur idUser avec ses projets
 	public static function GetWithProjects($id, Array $filter = array()){
 
-		$dbh = Dbh::getInstance();
-
-		$stmt = $dbh->prepare("SELECT * FROM users WHERE id = ?");
+		$stmt = Dbh::prepare("SELECT * FROM users WHERE id = ?");
 
 		$stmt->execute(array($id));
 
@@ -111,9 +103,7 @@ class User extends Model{
 	# Retourne le nombre de projets de l'utilisateur
 	public static function CountProjects($id){
 
-		$dbh = Dbh::getInstance();
-
-		$stmt = $dbh->prepare(
+		$stmt = Dbh::prepare(
 			"SELECT COUNT(*) AS num
 			FROM projects
 			WHERE id_user = ?"
@@ -175,8 +165,6 @@ class User extends Model{
 	# Valide le modele avant de le sauvegarder dans la base de données
 	protected function validates($context = ''){
 
-		$dbh = Dbh::GetInstance();
-
 		# Si le login est vide
 		if(empty($this->login)){
 
@@ -200,7 +188,7 @@ class User extends Model{
 			}
 
 			# On récupère les utilisateur qui ont ce login
-			$stmt = $dbh->prepare(
+			$stmt = Dbh::prepare(
 				"SELECT id FROM users WHERE login = ?"
 			);
 
@@ -289,9 +277,7 @@ class User extends Model{
 	# Insertion brute
 	protected function rawInsert(){
 
-		$dbh = Dbh::GetInstance();
-
-		$stmt = $dbh->prepare(
+		$stmt = Dbh::prepare(
 			"INSERT INTO users
 			(login, password, salt, admin)
 			VALUES(?, ?, ?, ?)"
@@ -309,9 +295,7 @@ class User extends Model{
 	# Update brute
 	protected function rawUpdate(){
 
-		$dbh = Dbh::GetInstance();
-
-		$stmt = $dbh->prepare(
+		$stmt = Dbh::prepare(
 			"UPDATE users SET login = ?, admin = ?	WHERE id = ?"
 		);
 
@@ -323,7 +307,7 @@ class User extends Model{
 
 		if(!empty($this->encrypted_password)){
 
-			$stmt = $dbh->prepare(
+			$stmt = Dbh::prepare(
 				"UPDATE users SET password = ?, salt = ? WHERE id = ?"
 			);
 
@@ -340,9 +324,7 @@ class User extends Model{
 	# Delete brut
 	protected function rawDelete(){
 
-		$dbh = Dbh::GetInstance();
-
-		$stmt = $dbh->prepare(
+		$stmt = Dbh::prepare(
 			"DELETE u, p, ch, a, g
 			FROM users AS u
 			LEFT JOIN projects AS p ON u.id = p.id_user
