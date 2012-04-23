@@ -194,6 +194,30 @@ class Project extends Model{
 
 	}
 
+	# Retourne vrai si le projet est déjà en train de préprocesser
+	public static function isProcessing($id){
+
+		$stmt = Dbh::prepare(
+			"SELECT COUNT(*) AS num
+			FROM jobs
+			WHERE id_project = ?
+			AND (status = 'waiting' OR status = 'processing')"
+		);
+
+		$stmt->execute(array($id));
+
+		if($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+
+			return $row['num'] > 0;
+
+		}else{
+
+			return false;
+
+		}
+
+	}
+
 	# On retourne la liste des différentes lignées cellulaires
 	public static function CellLines(){
 
@@ -278,7 +302,21 @@ class Project extends Model{
 	}
 
 	# Valide le projet avant la sauvegarde
-	public function validates(){
+	public function validates($context){
+
+		# On valide si le projet est déjà en processing ou non
+		$is_processing = ($context == 'update')
+			? Project::isProcessing($this->id)
+			: false;
+
+		if($is_processing){
+
+			$this->addError(new Error(
+				'Une traitement est déjà en cours sur ce projet,
+				impossible de le modifier'
+			));
+
+		}
 
 		# L'utilisateur ne doit pas être vide
 		if(empty($this->id_user)){

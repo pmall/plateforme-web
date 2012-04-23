@@ -93,7 +93,45 @@ class Analysis extends Model{
 
 	}
 
-	public function validates(){
+	# Retourne vrai si l'analyse est déjà en train d'être traitée
+	public static function isProcessing($id){
+
+		$stmt = Dbh::prepare(
+			"SELECT COUNT(*) AS num
+			FROM jobs
+			WHERE id_analysis = ?
+			AND (status = 'waiting' OR status = 'processing')"
+		);
+
+		$stmt->execute(array($id));
+
+		if($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+
+			return $row['num'] > 0;
+
+		}else{
+
+			return false;
+
+		}
+
+	}
+
+	public function validates($context){
+
+		# On valide si l'analyse est déjà en train d'être traitée ou non
+		$is_processing = ($context == 'update')
+			? Analysis::isProcessing($this->id)
+			: false;
+
+		if($is_processing){
+
+			$this->addError(new Error(
+				'Cette analyse est déjà en train d\'être traitée,
+				impossible de la modifier'
+			));
+
+		}
 
 		# On valide que le nom n'est pas vide
 		if(empty($this->name)){
