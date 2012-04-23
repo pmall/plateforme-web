@@ -1,7 +1,7 @@
 <?php
 
 # Affichage de la liste des projets
-$app->get('/projects', function($req){
+$app->get('/projects', function($req) use($app){
 
 	$filter = array(
 		'id_user' => $req->param('id_user'),
@@ -13,7 +13,7 @@ $app->get('/projects', function($req){
 
 	$projects = Project::AllWithAnalyses($filter);
 
-	return new View('projects/list.php', array(
+	return $app->getView('projects/list.php', array(
 		'title' => 'Liste des projets',
 		'jobs' => Job::All(10),
 		'numProjects' => Project::count(),
@@ -25,11 +25,11 @@ $app->get('/projects', function($req){
 });
 
 # Affichage du formulaire pour ajouter un nouveau projet
-$app->get('/project', function($req, $res) use($config){
+$app->get('/project', function($req, $res) use($app){
 
 	$dir = trim($req->param('dir'), '/');
 
-	if(!$dir or !file_exists($config['celdir'] . '/' . $dir)){
+	if(!$dir or !file_exists($app->getConf('celdir') . '/' . $dir)){
 
 		$res->redirect('index.php');
 
@@ -45,7 +45,7 @@ $app->get('/project', function($req, $res) use($config){
 
 		sort($celfiles);
 
-		return new View('projects/new.php', array(
+		return $app->getView('projects/new.php', array(
 			'title' => 'Ajout d\'un nouveau projet à partir du répertoire ' . $dir,
 			'dir' => $dir,
 			'project' => $project,
@@ -59,11 +59,11 @@ $app->get('/project', function($req, $res) use($config){
 });
 
 # Ajout du formulaire dans la base de données
-$app->post('/project', function($req, $res) use($config){
+$app->post('/project', function($req, $res) use($app){
 
 	$dir = trim($req->param('dir'), '/');
 
-	if(!$dir or !file_exists($config['celdir'] . '/' . $dir)){
+	if(!$dir or !file_exists($app->getConf('celdir') . '/' . $dir)){
 
 		$res->redirect('index.php');
 
@@ -77,7 +77,7 @@ $app->post('/project', function($req, $res) use($config){
 
 		if($project->save()){
 
-			$res->setFlash(
+			Flash::set(
 				'notice',
 				'Le projet ' . $project->name . ' a bien été ajouté.'
 			);
@@ -86,7 +86,7 @@ $app->post('/project', function($req, $res) use($config){
 
 		}else{
 
-			return new View('projects/new.php', array(
+			return $app->getView('projects/new.php', array(
 				'title' => 'Ajout d\'un nouveau projet',
 				'dir' => $dir,
 				'project' => $project,
@@ -102,7 +102,7 @@ $app->post('/project', function($req, $res) use($config){
 });
 
 # Affichage du formulaire pour modifier un projet
-$app->get('/project/:id/edit', function($req, $res, $matches) use($config){
+$app->get('/project/:id/edit', function($req, $res, $matches) use($app){
 
 	$project = Project::GetWithChips($matches['id']);
 
@@ -114,7 +114,7 @@ $app->get('/project/:id/edit', function($req, $res, $matches) use($config){
 
 		$dir = $project->dir;
 
-		if(!file_exists($config['celdir'] . '/' . $dir)){
+		if(!file_exists($app->getConf('celdir') . '/' . $dir)){
 
 			$res->redirect('index.php');
 
@@ -124,7 +124,7 @@ $app->get('/project/:id/edit', function($req, $res, $matches) use($config){
 
 			sort($celfiles);
 
-			return new View('projects/edit.php', array(
+			return $app->getView('projects/edit.php', array(
 				'title' => 'Modification du projet ' . $project->name,
 				'project' => $project,
 				'users' => User::OptionArray(),
@@ -139,7 +139,7 @@ $app->get('/project/:id/edit', function($req, $res, $matches) use($config){
 });
 
 # Modification du projet dans la base de données
-$app->put('/project/:id', function($req, $res, $matches) use($config){
+$app->put('/project/:id', function($req, $res, $matches) use($app){
 
 	$project = Project::Get($matches['id']);
 
@@ -151,7 +151,7 @@ $app->put('/project/:id', function($req, $res, $matches) use($config){
 
 		$dir = $project->dir;
 
-		if(!file_exists($config['celdir'] . '/' . $dir)){
+		if(!file_exists($app->getConf('celdir') . '/' . $dir)){
 
 			$res->redirect('index.php');
 
@@ -167,7 +167,7 @@ $app->put('/project/:id', function($req, $res, $matches) use($config){
 
 			if($project->save()){
 
-				$res->setFlash(
+				Flash::set(
 					'notice',
 					'Le projet ' . $name . ' a bien été modifié.'
 				);
@@ -176,7 +176,7 @@ $app->put('/project/:id', function($req, $res, $matches) use($config){
 
 			}else{
 
-				return new View('projects/edit.php', array(
+				return $app->getView('projects/edit.php', array(
 					'title' => 'Modification du projet ' . $name,
 					'dir' => $project->dir,
 					'project' => $project,
@@ -194,7 +194,7 @@ $app->put('/project/:id', function($req, $res, $matches) use($config){
 });
 
 # Suppression du projet
-$app->delete('/project/:id/', function($req, $res, $matches){
+$app->delete('/project/:id/', function($req, $res, $matches) use($app){
 
 	$project = Project::Get($matches['id']);
 
@@ -210,7 +210,7 @@ $app->delete('/project/:id/', function($req, $res, $matches){
 
 	}else{
 
-		$res->setFlash(
+		Flash::set(
 			'notice',
 			'Le projet ' . $project->name . ' a bien été supprimé.'
 		);
@@ -222,7 +222,7 @@ $app->delete('/project/:id/', function($req, $res, $matches){
 });
 
 # Controle qualité !
-$app->get('/project/:id_project/:filename.pdf', function($req, $res, $matches){
+$app->get('/project/:id_project/:filename.pdf', function($req, $res, $matches) use($app){
 
 	$res->setContentType('application/pdf');
 

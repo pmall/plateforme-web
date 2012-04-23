@@ -1,11 +1,11 @@
 <?php
 
 # Affichage de la liste des utilisateurs
-$app->get('/users', function($req, $res){
+$app->get('/users', function($req, $res) use($app){
 
 	$users = User::All();
 
-	return new View('users/list.php', array(
+	return $app->getView('users/list.php', array(
 		'title' => 'Liste des utilisateurs',
 		'users' => $users
 	));
@@ -13,7 +13,7 @@ $app->get('/users', function($req, $res){
 });
 
 # Affichage d'un utilisateur en particulier
-$app->get('/user/:id', function($req, $res, $matches){
+$app->get('/user/:id', function($req, $res, $matches) use($app){
 
 	$filter = array(
 		'name' => $req->param('name'),
@@ -30,7 +30,7 @@ $app->get('/user/:id', function($req, $res, $matches){
 
 	}else{
 
-		return new View('users/show.php', array(
+		return $app->getView('users/show.php', array(
 			'title' => 'Liste des projets de l\'utilisateur ' . $user->login,
 			'numProjects' => User::CountProjects($user->id),
 			'user' => $user,
@@ -42,11 +42,11 @@ $app->get('/user/:id', function($req, $res, $matches){
 });
 
 # Affichage du formulaire pour ajouter un utilisateur
-$app->get('/user', function($req, $res){
+$app->get('/user', function($req, $res) use($app){
 
 	$user = new User();
 
-	return new View('users/new.php', array(
+	return $app->getView('users/new.php', array(
 		'title' => 'Ajout d\'un nouvel utilisateur',
 		'user' => $user
 	));
@@ -54,13 +54,13 @@ $app->get('/user', function($req, $res){
 });
 
 # Ajout d'un utilisateur
-$app->post('/user', function($req, $res){
+$app->post('/user', function($req, $res) use($app){
 
 	$user = new User($req->param('user'));
 
 	if($user->save()){
 
-		$res->setFlash(
+		Flash::set(
 			'notice',
 			'L\'utilisateur ' . $user->login . ' a bien été ajouté.'
 		);
@@ -69,7 +69,7 @@ $app->post('/user', function($req, $res){
 
 	}else{
 
-		return new View('users/new.php', array(
+		return $app->getView('users/new.php', array(
 			'title' => 'Ajout d\'un nouvel utilisateur',
 			'user' => $user
 		));
@@ -79,7 +79,7 @@ $app->post('/user', function($req, $res){
 });
 
 # Affichage du formulaire pour modifier un utilisateur
-$app->get('/user/:id/edit', function($req, $res, $matches){
+$app->get('/user/:id/edit', function($req, $res, $matches) use($app){
 
 	$user = User::Get($matches['id']);
 
@@ -89,7 +89,7 @@ $app->get('/user/:id/edit', function($req, $res, $matches){
 
 	}else{
 
-		return new View('users/edit.php', array(
+		return $app->getView('users/edit.php', array(
 			'title' => 'Modification de l\'utilisateur ' . $user->login,
 			'login' => $user->login,
 			'user' => $user
@@ -100,7 +100,7 @@ $app->get('/user/:id/edit', function($req, $res, $matches){
 });
 
 # Modification de l'utilisateur
-$app->put('/user/:id', function($req, $res, $matches){
+$app->put('/user/:id', function($req, $res, $matches) use($app){
 
 	$user = User::Get($matches['id']);
 
@@ -119,7 +119,7 @@ $app->put('/user/:id', function($req, $res, $matches){
 
 		if($user->save()){
 
-			$res->setFlash(
+			Flash::set(
 				'notice',
 				'L\'utilisateur ' . $login . ' a bien été modifié.'
 			);
@@ -128,7 +128,7 @@ $app->put('/user/:id', function($req, $res, $matches){
 
 		}else{
 
-			return new View('users/edit.php', array(
+			return $app->getView('users/edit.php', array(
 				'title' => 'Modification de l\'utilisateur ' . $login,
 				'login' => $login,
 				'user' => $user
@@ -141,7 +141,7 @@ $app->put('/user/:id', function($req, $res, $matches){
 });
 
 # Suppression de l'utilisateur
-$app->delete('/user/:id/', function($req, $res, $matches){
+$app->delete('/user/:id/', function($req, $res, $matches) use($app){
 
 	$user = User::Get($matches['id']);
 
@@ -157,7 +157,7 @@ $app->delete('/user/:id/', function($req, $res, $matches){
 
 	}else{
 
-		$res->setFlash(
+		Flash::set(
 			'notice',
 			'L\'utilisateur ' . $user->login . ' a bien été supprimé.'
 		);

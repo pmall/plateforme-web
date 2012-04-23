@@ -22,22 +22,22 @@ require('helpers/forms.php');
 require('helpers/jobs.php');
 
 # On déclare l'app
-$app = new App($config['dir_app']);
+$app = new App($config['dir_app'], $config);
 
 # ==============================================================================
 # Accueil
 # ==============================================================================
 
-$app->get('/', function($req){
+$app->get('/', function($req) use($app){
 
 	$dirs = Dir::All();
 	$users = User::AllWithProjects();
 
 	sort($dirs);
 
-	return new View('accueil.php', array(
+	return $app->getView('accueil.php', array(
 		'title' => 'Accueil plateforme',
-		'notice' => $req->getFlash('notice'),
+		'notice' => $req->param('notice'),
 		'jobs' => Job::All(10),
 		'dirs' => $dirs,
 		'users' => $users,
@@ -57,7 +57,7 @@ $app->get('/', function($req){
 # Jobs !!
 # ==============================================================================
 
-$app->get('jobs', function($req, $res){
+$app->get('jobs', function($req, $res) use($app){
 
 	$limit = $req->param('limit');
 
@@ -67,13 +67,13 @@ $app->get('jobs', function($req, $res){
 
 	if($req->isAjax()){
 
-		$view = new View('jobs/_list.php', array('jobs' => $jobs));
+		$view = $app->getView('jobs/_list.php', array('jobs' => $jobs));
 
 		return $view->render(false);
 
 	}else{
 
-		return new View('jobs/list.php', array(
+		return $app->getView('jobs/list.php', array(
 			'title' => 'Liste des tâches',
 			'jobs' => $jobs
 		));
@@ -82,7 +82,7 @@ $app->get('jobs', function($req, $res){
 
 });
 
-$app->post('job', function($req, $res){
+$app->post('job', function($req, $res) use($app){
 
 	$job = new Job($req->param('job'));
 
@@ -94,7 +94,7 @@ $app->post('job', function($req, $res){
 
 		}else{
 
-			$res->setFlash(
+			Flash::set(
 				'notice',
 				'La tâche a bien été ajoutée à la liste.'
 			);

@@ -1,7 +1,7 @@
 <?php
 
 # Affichage du formulaire pour ajouter une analyse
-$app->get('/project/:id_project/analysis', function($req, $res, $matches){
+$app->get('/project/:id_project/analysis', function($req, $res, $matches) use($app){
 
 	$project = Project::GetWithConditions($matches['id_project']);
 
@@ -13,7 +13,7 @@ $app->get('/project/:id_project/analysis', function($req, $res, $matches){
 
 		$analysis = new Analysis();
 
-		return new View('analyses/new.php', array(
+		return $app->getView('analyses/new.php', array(
 			'title' => 'Ajout d\'une nouvelle analyse au projet ' . $project->name . '.',
 			'project' => $project,
 			'analysis' => $analysis
@@ -24,7 +24,7 @@ $app->get('/project/:id_project/analysis', function($req, $res, $matches){
 });
 
 # Insertion d'une nouvelle analyse dans la base de données
-$app->post('/project/:id_project/analysis', function($req, $res, $matches){
+$app->post('/project/:id_project/analysis', function($req, $res, $matches) use($app){
 
 	$project = Project::GetWithConditions($matches['id_project']);
 
@@ -40,7 +40,7 @@ $app->post('/project/:id_project/analysis', function($req, $res, $matches){
 
 		if($analysis->save()){
 
-			$res->setFlash(
+			Flash::set(
 				'notice',
 				'L\'analyse ' . $analysis->name . ' a bien été ajoutée.'
 			);
@@ -49,7 +49,7 @@ $app->post('/project/:id_project/analysis', function($req, $res, $matches){
 
 		}else{
 
-			return new View('analyses/new.php', array(
+			return $app->getView('analyses/new.php', array(
 				'title' => 'Ajout d\'une nouvelle analyse au projet ' . $project->name . '.',
 				'project' => $project,
 				'analysis' => $analysis
@@ -62,7 +62,7 @@ $app->post('/project/:id_project/analysis', function($req, $res, $matches){
 });
 
 # Affichage du formulaire pour modifier une analyse
-$app->get('/project/:id_project/analysis/:id_analysis/edit', function($req, $res, $matches){
+$app->get('/project/:id_project/analysis/:id_analysis/edit', function($req, $res, $matches) use($app){
 
 	$project = Project::GetWithConditions($matches['id_project']);
 	$analysis = Analysis::GetWithGroups($matches['id_analysis']);
@@ -73,7 +73,7 @@ $app->get('/project/:id_project/analysis/:id_analysis/edit', function($req, $res
 
 	}else{
 
-		return new View('analyses/edit.php', array(
+		return $app->getView('analyses/edit.php', array(
 			'title' => 'Modification de l\'analyse ' . $analysis->name . '.',
 			'project' => $project,
 			'analysis' => $analysis
@@ -84,7 +84,7 @@ $app->get('/project/:id_project/analysis/:id_analysis/edit', function($req, $res
 });
 
 # Modification du formulaire dans la base de données
-$app->put('/project/:id_project/analysis/:id_analysis/edit', function($req, $res, $matches){
+$app->put('/project/:id_project/analysis/:id_analysis/edit', function($req, $res, $matches) use($app){
 
 	$project = Project::GetWithConditions($matches['id_project']);
 	$analysis = Analysis::GetWithGroups($matches['id_analysis']);
@@ -102,7 +102,7 @@ $app->put('/project/:id_project/analysis/:id_analysis/edit', function($req, $res
 
 		if($analysis->save()){
 
-			$res->setFlash(
+			Flash::set(
 				'notice',
 				'L\'analyse ' . $name . ' a bien été modifiée.'
 			);
@@ -111,7 +111,7 @@ $app->put('/project/:id_project/analysis/:id_analysis/edit', function($req, $res
 
 		}else{
 
-			return new View('analyses/edit.php', array(
+			return $app->getView('analyses/edit.php', array(
 				'title' => 'Modification de l\'analyse ' . $name . '.',
 				'project' => $project,
 				'analysis' => $analysis
@@ -124,7 +124,7 @@ $app->put('/project/:id_project/analysis/:id_analysis/edit', function($req, $res
 });
 
 # Suppression de l'analyse
-$app->delete('/project/:id_project/analysis/:id_analysis', function($req, $res, $matches){
+$app->delete('/project/:id_project/analysis/:id_analysis', function($req, $res, $matches) use($app){
 
 	$analysis = Analysis::Get($matches['id_analysis']);
 
@@ -140,7 +140,7 @@ $app->delete('/project/:id_project/analysis/:id_analysis', function($req, $res, 
 
 	}else{
 
-		$res->setFlash(
+		Flash::set(
 			'notice',
 			'L\'analyse ' . $analysis->name . ' a bien été supprimée.'
 		);
@@ -152,7 +152,7 @@ $app->delete('/project/:id_project/analysis/:id_analysis', function($req, $res, 
 });
 
 # fichier xls !
-$app->get('/project/:id_project/anaysis/:id_analysis/:filename.xls', function($req, $res, $matches){
+$app->get('/project/:id_project/anaysis/:id_analysis/:filename.xls', function($req, $res, $matches) use($app){
 
 	$res->setContentType('application/vnd.ms-excel');
 
