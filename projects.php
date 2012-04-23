@@ -225,9 +225,23 @@ $app->delete('/project/:id/', function($req, $res, $matches) use($app){
 # Controle qualité !
 $app->get('/project/:id_project/:filename.pdf', function($req, $res, $matches) use($app){
 
-	$res->setContentType('application/pdf');
+	$file = implode('/', array(
+		$app->getConf('qcdir'),
+		$matches['id_project'],
+		$matches['filename'] . '.pdf'
+	));
 
-	$res->setBody($matches['id_project'] . ' ' . $matches['filename']);
+	if(file_exists($file)){
+
+		$res->setContentType('application/pdf');
+
+		$res->setBody(file_get_contents($file));
+
+	}else{
+
+		$res->addHeader('HTTP/1.1 404 Not Found');
+
+	}
 
 });
 

@@ -154,9 +154,25 @@ $app->delete('/project/:id_project/analysis/:id_analysis', function($req, $res, 
 # fichier xls !
 $app->get('/project/:id_project/anaysis/:id_analysis/:filename.xls', function($req, $res, $matches) use($app){
 
-	$res->setContentType('application/vnd.ms-excel');
+	$file = implode('/', array(
+		$app->getConf('xlsdir'),
+		$matches['id_project'],
+		$matches['id_analysis'],
+		$matches['filename'] . '.xls'
+	));
 
-	$res->setBody($matches['id_analysis'] . ' ' . $matches['filename']);
+	if(file_exists($file)){
+
+		$res->setContentType('application/vnd.ms-excel');
+
+		$res->setBody(file_get_contents($file));
+
+	}else{
+
+		$res->addHeader('HTTP/1.1 404 Not Found');
+
+	}
+
 
 });
 

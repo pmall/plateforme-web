@@ -7,7 +7,7 @@
       <a href="/plateforme2/index.php/projects/?type=<?= $project->type ?>"><?= $project->type ?></a> /
       <a href="/plateforme2/index.php/projects/?organism=<?= $project->organism ?>"><?= $project->organism ?></a> /
       <a href="/plateforme2/index.php/projects/?cell_line=<?= $project->cell_line ?>"><?= $project->cell_line ?></a> /
-      <a href="/plateforme2/index.php/project/<?= $project->id ?>/<?= $project->name ?>_qc.pdf">Fichier contrôle qualité</a>
+      <a href="/plateforme2/index.php/project/<?= $project->id ?>/<?= $project->name ?>.pdf">Fichier contrôle qualité</a>
     </p>
     <? if($project->comment): ?>
     <p class="comment">
