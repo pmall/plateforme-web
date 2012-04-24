@@ -12,6 +12,7 @@ class Project extends Model{
 	public $comment;
 	public $public;
 	public $date;
+	public $dirty;
 	public $conditions;
 	public $chips;
 	public $analyses;
@@ -79,6 +80,25 @@ class Project extends Model{
 		}
 
 		return $projects;
+
+	}
+
+	# Retourne le nombre de projets
+	public static function Count(){
+
+		$stmt = Dbh::prepare("SELECT COUNT(*) AS num FROM projects");
+
+		$stmt->execute();
+
+		$numProjects = 0;
+
+		if($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+
+			$numProjects = $row['num'];
+
+		}
+
+		return $numProjects;
 
 	}
 
@@ -175,49 +195,6 @@ class Project extends Model{
 
 	}
 
-	# Retourne le nombre de projets
-	public static function Count(){
-
-		$stmt = Dbh::prepare("SELECT COUNT(*) AS num FROM projects");
-
-		$stmt->execute();
-
-		$numProjects = 0;
-
-		if($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-
-			$numProjects = $row['num'];
-
-		}
-
-		return $numProjects;
-
-	}
-
-	# Retourne vrai si le projet est déjà en train de préprocesser
-	public static function isProcessing($id){
-
-		$stmt = Dbh::prepare(
-			"SELECT COUNT(*) AS num
-			FROM jobs
-			WHERE id_project = ?
-			AND (status = 'waiting' OR status = 'processing')"
-		);
-
-		$stmt->execute(array($id));
-
-		if($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-
-			return $row['num'] > 0;
-
-		}else{
-
-			return false;
-
-		}
-
-	}
-
 	# On retourne la liste des différentes lignées cellulaires
 	public static function CellLines(){
 
@@ -234,6 +211,29 @@ class Project extends Model{
 		}
 
 		return $cell_lines;
+
+	}
+
+	# Retourne vrai si le projet est préprocessé
+	public static function isPreprocessed($id){
+
+		$table1 = '_' . $id . '_intensites';
+		$table2 = '_' . $id . '_dabg';
+
+		$stmt = Dbh::prepare('SHOW TABLES LIKE ?');
+
+		$stmt->execute(array($table1));
+		$nb_table1 = $stmt->rowCount();
+
+		$stmt->execute(array($table2));
+		$nb_table2 = $stmt->rowCount();
+
+		return $nb_table1 == 1 and $nb_table2 == 1;
+
+	}
+
+	# Suprime le préprocessing et les analyses associées
+	public static function deletePreprocessing($id){
 
 	}
 
@@ -304,16 +304,16 @@ class Project extends Model{
 	# Valide le projet avant la sauvegarde
 	public function validates($context){
 
-		# On valide si le projet est déjà en processing ou non
+		# On valide si il y a des traitements en cours sur le projet
 		$is_processing = ($context == 'update')
-			? Project::isProcessing($this->id)
+			? Job::isProcessing($this->id)
 			: false;
 
 		if($is_processing){
 
 			$this->addError(new Error(
-				'Une traitement est déjà en cours sur ce projet,
-				impossible de le modifier'
+				'Des taches correspondant à ce projet sont en
+				cours de traitement, impossible de le modifier'
 			));
 
 		}
@@ -363,6 +363,7 @@ class Project extends Model{
 
 		}
 
+		# On valide le type et l'organisme
 		$typeEtOrgaRempli = true;
 
 		# Le type ne doit pas être vide !
@@ -587,8 +588,8 @@ class Project extends Model{
 
 		$stmt = Dbh::prepare(
 			"INSERT INTO projects
-			(id, id_user, dir, name, type, organism, cell_line, comment, public, date)
-			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+			(id, id_user, dir, name, type, organism, cell_line, comment, public, date, dirty)
+			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
 		);
 
 		$stmt->execute(array(
@@ -601,10 +602,68 @@ class Project extends Model{
 			$this->cell_line,
 			$this->comment,
 			$this->public,
-			$this->date
+			$this->date,
+			$this->dirty
 		));
 
 		$this->insertChips();
+
+	}
+
+	# Avant l'insert
+	protected function beforeUpdate(){
+
+		# On détermine si le projet est sale, a priori non
+		$dirty = false;
+
+		# Si le projet est déjà préprocessé
+		if(Project::isPreprocessed($this->id)){
+
+			# On récupère les chips
+			$current_chips = array();
+
+			$stmt = Dbh::prepare(
+				"SELECT name, `condition`, num
+				FROM chips
+				WHERE id_project = ?"
+			);
+
+			$stmt->execute(array($this->id));
+
+			while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+
+				$current_chips[$row['name']] = $row['condition'] . '_' . $row['num'];
+
+			}
+
+			# Le projet est sale si il n'y a pas le même nombre de puces
+			$dirty = (count($this->chips) != count($current_chips));	
+
+			# Si il y en a le même nombre on les compare une a une
+			if(!$dirty){
+
+				foreach($this->chips as $name => $value){
+
+					if(array_key_exists($value['name'], $current_chips)){
+
+						$name = $value['condition'] . '_' . $value['num'];
+
+						$dirty = ($dirty or ($name != $current_chips[$value['name']]));
+
+					}else{
+
+						$dirty = true;
+
+					}
+
+				}
+
+			}
+
+		}
+
+		# Si le projet est sale on le note
+		$this->dirty = $dirty;
 
 	}
 
@@ -615,7 +674,7 @@ class Project extends Model{
 		$update_project_stmt = Dbh::prepare(
 			"UPDATE projects SET
 			id_user = ?, name = ?, type = ?, organism = ?,
-			cell_line = ?, comment = ?, public = ?
+			cell_line = ?, comment = ?, public = ?, dirty = ?
 			WHERE id = ?"
 		);
 
@@ -628,6 +687,7 @@ class Project extends Model{
 			$this->cell_line,
 			$this->comment,
 			$this->public,
+			$this->dirty,
 			$this->id,
 		));
 

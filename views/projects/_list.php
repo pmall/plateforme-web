@@ -9,9 +9,15 @@
       <a href="/plateforme2/index.php/projects/?cell_line=<?= $project->cell_line ?>"><?= $project->cell_line ?></a> /
       <a href="/plateforme2/index.php/project/<?= $project->id ?>/<?= $project->name ?>.pdf">Fichier contrôle qualité</a>
     </p>
+    <? if($project->dirty): ?>
+    <p id="notice_dirty_<?= $project->id ?>" class="warning">
+      Attention : La description des puces du projet a changé depuis le dernier
+      préprocessing. Il faut relancer le préprocessing.
+    </p>
+    <? endif ?>
     <? if($project->comment): ?>
     <p class="comment">
-      <?= nl2br($project->comment); ?>
+      <?= nl2br(h($project->comment)); ?>
     </p>
     <? endif ?>
     <p>

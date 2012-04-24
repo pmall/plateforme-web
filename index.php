@@ -107,9 +107,16 @@ $app->post('job', function($req, $res) use($app){
 
 		if($req->isAjax()){
 
-			echo "Cette tache est déjà en cours de traitement";
+			echo implode("\n", array_map(function($v){
+				return preg_replace('#\n\s*#', ' ', $v);
+			}, $job->getErrors()));
 
 		}else{
+
+			Flash::set(
+				'notice',
+				implode('', $job->getErrors())
+			);
 
 			$res->redirect('index.php');
 

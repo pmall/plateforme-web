@@ -10,7 +10,7 @@ $config['celdir'] = '/data/elexir/celfiles';
 $config['qcdir'] = '/data/elexir/reports';
 
 # Fichier contenant les qc reports
-$config['xlsdir'] = '/data/elexir/xls';
+$config['xlsdir'] = '/data/elexir/reports';
 
 # Base de données
 $config['db_name'] = 'elexir2';

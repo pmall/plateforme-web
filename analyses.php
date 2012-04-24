@@ -158,12 +158,13 @@ $app->get('/project/:id_project/anaysis/:id_analysis/:filename.xls', function($r
 		$app->getConf('xlsdir'),
 		$matches['id_project'],
 		$matches['id_analysis'],
-		$matches['filename'] . '.xls'
+		'report.zip'
 	));
 
 	if(file_exists($file)){
 
-		$res->setContentType('application/vnd.ms-excel');
+		$res->setContentType('Content-type: application/octet-stream');
+		$res->addHeader('Content-Disposition: attachment; filename="' . $matches['filename'] . '.zip"');
 
 		$res->setBody(file_get_contents($file));
 

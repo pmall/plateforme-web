@@ -228,12 +228,13 @@ $app->get('/project/:id_project/:filename.pdf', function($req, $res, $matches) u
 	$file = implode('/', array(
 		$app->getConf('qcdir'),
 		$matches['id_project'],
-		$matches['filename'] . '.pdf'
+		'report.pdf'
 	));
 
 	if(file_exists($file)){
 
 		$res->setContentType('application/pdf');
+		$res->addHeader('Content-Disposition: attachment; filename="' . $matches['filename'] . '.pdf"');
 
 		$res->setBody(file_get_contents($file));
 

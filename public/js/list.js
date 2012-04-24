@@ -41,6 +41,12 @@ function addJob(form){
 
 				updateJobs();
 
+				if(type == 'preprocessing'){
+
+					$('#notice_dirty_' + id_project).fadeOut();
+
+				}
+
 			}else{
 
 				alert(text);
