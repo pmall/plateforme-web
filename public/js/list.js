@@ -69,7 +69,7 @@ function deleteItem(form){
 	var id_html = '#' + type_elem + '_' + id_elem;
 	var url = '/plateforme2/index.php/';
 
-	if(confirm('Voulez vous vraiment supprimer ' + name_elem + ' ?')){
+	if(confirm('Voulez vous vraiment supprimer ' + name_elem + ' ?\n(Toutes les données correspondantes seront supprimées)')){
 
 		if(type_elem == 'analysis'){
 

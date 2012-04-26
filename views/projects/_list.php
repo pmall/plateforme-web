@@ -2,11 +2,11 @@
   <? foreach($projects as $project): ?>
   <li id="project_<?= $project->id ?>" class="project">
     <p>
-      <strong><?= $project->id ?></strong> /
-      <a href="/plateforme2/index.php/project/<?= $project->id; ?>/edit"><strong><?= $project->name ?></strong></a> /
-      <a href="/plateforme2/index.php/projects/?type=<?= $project->type ?>"><?= $project->type ?></a> /
-      <a href="/plateforme2/index.php/projects/?organism=<?= $project->organism ?>"><?= $project->organism ?></a> /
-      <a href="/plateforme2/index.php/projects/?cell_line=<?= $project->cell_line ?>"><?= $project->cell_line ?></a> /
+      <span class="id"><?= $project->id ?></span> |
+      <a href="/plateforme2/index.php/project/<?= $project->id; ?>/edit"><strong><?= $project->name ?></strong></a> |
+      <a href="/plateforme2/index.php/projects/?type=<?= $project->type ?>"><?= $project->type ?></a> |
+      <a href="/plateforme2/index.php/projects/?organism=<?= $project->organism ?>"><?= $project->organism ?></a> |
+      <a href="/plateforme2/index.php/projects/?cell_line=<?= $project->cell_line ?>"><?= $project->cell_line ?></a> |
       <a href="/plateforme2/index.php/project/<?= $project->id ?>/<?= $project->name ?>.pdf">Fichier contrôle qualité</a>
     </p>
     <? if($project->dirty): ?>
@@ -79,9 +79,9 @@
           <input type="hidden" name="_method" value="delete" />
           <input type="submit" value="supprimer" />
         </form>
-        <strong><?= $analysis->id ?></strong> /
-        <a href="/plateforme2/index.php/project/<?= $project->id ?>/analysis/<?= $analysis->id ?>/edit"><?= $analysis->name ?></a> /
-        <?= $analysis->type ?> /
+        <span class="id"><?= $analysis->id ?></span> |
+        <a href="/plateforme2/index.php/project/<?= $project->id ?>/analysis/<?= $analysis->id ?>/edit"><?= $analysis->name ?></a> |
+        <?= $analysis->type ?> |
 	<a href="/plateforme2/index.php/project/<?= $project->id ?>/anaysis/<?= $analysis->id ?>/<?= $analysis->name ?>.xls">Fichier xls</a>
       </li>
       <? endforeach; ?>
