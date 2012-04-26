@@ -1,6 +1,6 @@
-<ul class="projects">
+<ul class="projects zebra-striped">
   <? foreach($projects as $project): ?>
-  <li id="project_<?= $project->id ?>" class="project">
+  <li id="project_<?= $project->id ?>">
     <p>
       <span class="id"><?= $project->id ?></span> |
       <a href="/plateforme2/index.php/project/<?= $project->id; ?>/edit"><strong><?= $project->name ?></strong></a> |
@@ -10,13 +10,13 @@
       <a href="/plateforme2/index.php/project/<?= $project->id ?>/<?= $project->name ?>.pdf">Fichier contrôle qualité</a>
     </p>
     <? if($project->dirty): ?>
-    <p id="notice_dirty_<?= $project->id ?>" class="warning">
+    <p id="notice_dirty_<?= $project->id ?>" class="alert alert-block">
       Attention : La description des puces du projet a changé depuis le dernier
       préprocessing. Il faut relancer le préprocessing.
     </p>
     <? endif ?>
     <? if($project->comment): ?>
-    <p class="comment">
+    <p class="alert alert-success">
       <?= nl2br(h($project->comment)); ?>
     </p>
     <? endif ?>
@@ -29,7 +29,7 @@
             >
         <input type="hidden" name="job[type]" value="qc" />
         <input type="hidden" name="job[id_project]" value="<?= $project->id ?>" />
-        <input type="submit" value="Contrôle Qualité" />
+        <input type="submit" value="Contrôle Qualité" class="btn btn-warning" />
       </form>
       <form action="/plateforme2/index.php/job"
             method="post"
@@ -39,10 +39,10 @@
             >
         <input type="hidden" name="job[type]" value="preprocessing" />
         <input type="hidden" name="job[id_project]" value="<?= $project->id ?>" />
-        <input type="submit" value="Preprocessing" />
+        <input type="submit" value="Preprocessing" class="btn btn-warning" />
       </form>
       <form action="/plateforme2/index.php/project/<?= $project->id ?>/analysis" method="get" class="action">
-        <input type="submit" value="Nouvelle analyse" />
+        <input type="submit" value="Nouvelle analyse" class="btn btn-warning" />
       </form>
       <form action="/plateforme2/index.php/project/<?= $project->id ?>"
             method="post"
@@ -51,11 +51,11 @@
             data-id="<?= $project->id ?>"
             data-name="<?= $project->name ?>">
         <input name="_method" type="hidden" value="delete" />
-        <input type="submit" value="supprimer" />
+        <input type="submit" value="supprimer" class="btn btn-warning" />
       </form>
     </p>
     <? if(count($project->analyses) > 0): ?>
-    <ul class="analyses">
+    <ul>
       <? foreach($project->analyses as $analysis): ?>
       <li id="analysis_<?= $analysis->id ?>">
         <form action="/plateforme2/index.php/job"
@@ -67,7 +67,7 @@
           <input type="hidden" name="job[type]" value="<?= $analysis->type ?>" />
           <input type="hidden" name="job[id_project]" value="<?= $project->id ?>" />
           <input type="hidden" name="job[id_analysis]" value="<?= $analysis->id ?>" />
-          <input type="submit" value="Run" />
+          <input type="submit" value="Run" class="btn btn-warning" />
         </form>
         <form action="/plateforme2/index.php/project/<?= $project->id ?>/analysis/<?= $analysis->id ?>"
               method="post"
@@ -77,7 +77,7 @@
               data-id_project="<?= $project->id ?>"
               data-name="<?= $analysis->name ?>">
           <input type="hidden" name="_method" value="delete" />
-          <input type="submit" value="supprimer" />
+          <input type="submit" value="supprimer" class="btn btn-warning" />
         </form>
         <span class="id"><?= $analysis->id ?></span> |
         <a href="/plateforme2/index.php/project/<?= $project->id ?>/analysis/<?= $analysis->id ?>/edit"><?= $analysis->name ?></a> |

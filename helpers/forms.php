@@ -6,7 +6,8 @@ function displayErrors(Model $model){
 
 	if(!$model->isValid()){
 
-		$html.= '<div class="error">';
+		$html.= '<div class="alert alert-error">';
+		$html.= '<strong>Erreurs !</strong>';
 		$html.= '<ul>';
 
 		foreach($model->getErrors() as $error){
@@ -30,7 +31,7 @@ function hasError(Model $model, $field){
 
 	if($model->hasError($field)){
 
-		$html.= 'class="error"';
+		$html.= ' error';
 
 	}
 
@@ -42,7 +43,7 @@ function label(Model $model, $name, $text){
 
 	$html = '';
 
-	$html.= '<label for="' . $name . '" ' . hasError($model, $name) . '>' . $text . '</label>' . "\n";
+	$html.= '<label for="' . $name . '" class="control-label' . hasError($model, $name) . '">' . $text . '</label>' . "\n";
 
 	return $html;
 
@@ -71,7 +72,7 @@ function field(Model $model, $name, $type, Array $options = array()){
 	$options_string = implode(' ', array_map(function($k, $v){ return $k . '="' . $v . '"'; }, array_keys($options), array_values($options)));
 
 	# On retourne le champ
-	return '<input ' . $options_string . ' />' . "\n";
+	return '<input ' . $options_string . ' class="span4" />' . "\n";
 
 }
 
@@ -79,7 +80,7 @@ function select(Model $model, $name, Array $options){
 
 	$modelName = strtolower(get_class($model));
 
-	$html = '<select id="' . $name . '" name="' . $modelName . '[' . $name . ']' . '">' . "\n";
+	$html = '<select id="' . $name . '" name="' . $modelName . '[' . $name . ']' . '" class="span4">' . "\n";
 	$html.= '<option value=""></option>' . "\n";
 
 	foreach($options as $value => $text){
@@ -108,7 +109,7 @@ function textarea(Model $model, $name){
 
 	$modelName = strtolower(get_class($model));
 
-	$html = '<textarea id="' . $name . '" name="' . $modelName . '[' . $name . ']' . '">' . "\n";
+	$html = '<textarea id="' . $name . '" name="' . $modelName . '[' . $name . ']' . '" class="span4">' . "\n";
 	$html.= $model->$name;
 	$html.= '</textarea>' . "\n";
 

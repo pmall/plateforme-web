@@ -34,6 +34,7 @@ $app->get('/user/:id', function($req, $res, $matches) use($app){
 			'title' => 'Liste des projets de l\'utilisateur ' . $user->login,
 			'numProjects' => User::CountProjects($user->id),
 			'user' => $user,
+			'users' => User::OptionArray(),
 			'filter' => $filter
 		));
 

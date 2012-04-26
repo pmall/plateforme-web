@@ -1,6 +1,6 @@
 <script src="/plateforme2/public/js/project.js"></script>
 <section>
-  <h1><?= h($title) ?></h1>
+  <h2><?= h($title) ?></h2>
   <?= displayErrors($project) ?>
   <? if(count($users) == 0): ?>
   <p>
@@ -21,7 +21,7 @@
     <a href="/plateforme2/index.php">Retour a l'accueil</a>.
   </p>
   <? else: ?>
-  <form action="" method="post">
+  <form action="" method="post" class="form-horizontal">
     <? $this->partial('projects/_fields.php') ?>
     <?= field($project, 'dir', 'hidden', array('value' => $dir)) ?>
   </form>

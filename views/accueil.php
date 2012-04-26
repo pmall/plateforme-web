@@ -1,7 +1,7 @@
 <? $this->partial('jobs/list.php', array('title' => 'Liste des tâches')) ?>
 <section>
-  <h1>Nouveau projet</h1>
-  <form action="/plateforme2/index.php/project" method="get">
+  <h2>Nouveau projet</h2>
+  <form action="/plateforme2/index.php/project" method="get" class="form-inline">
     <fieldset>
       <legend>Ajouter un projet</legend>
       <select name="dir">
@@ -12,19 +12,19 @@
         </option>
         <? endforeach ?>
       </select>
-      <input type="submit" value="Créer un projet" />
+      <button type="submit" class="btn btn-success"><i class="icon-plus-sign icon-white"></i> Créer un projet</button>
     </fieldset>
   </form>
 </section>
 <section>
-  <h1>Liste des utilisateurs et de leur projets</h1>
+  <h2>Liste des utilisateurs et de leur projets</h2>
   <? if(count($users) == 0): ?>
   <p>
     Il n'y a pas d'utilisateurs.
     <a href="/plateforme2/index.php/user">Ajouter un utilisateur</a>.
   </p>
   <? else: ?>
-  <ul id="shortlinks">
+  <ul class="nav nav-pills">
     <? foreach($users as $user): ?>
     <li><a href="#<?= h($user->login) ?>"><?= h($user->login) ?></a></li>
     <? endforeach; ?>
