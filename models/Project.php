@@ -580,6 +580,7 @@ class Project extends Model{
 		));
 
 		$this->date = date("Y-m-d H:i:s");
+		$this->dirty = 0;
 
 	}
 
@@ -707,6 +708,35 @@ class Project extends Model{
 	# Supprime le projet de la base de données
 	protected function rawDelete(){
 
+		# On supprime les tables
+
+		# On vérifie que l'id est bien formatté on sais jamais (sinon
+		# tout va foutre le camp)
+		if(preg_match('/[a-zA-Z0-9]{6}/', $this->id)){
+
+			$tables = array();
+
+			$stmt = Dbh::prepare("SHOW TABLES LIKE ?");
+
+			$stmt->execute(array(
+				'_' . $this->id . '%'
+			));
+
+			while($row = $stmt->fetch()){
+
+				$tables[] = $row[0];
+
+			}
+
+			if(count($tables) > 0){
+
+				Dbh::exec("DROP TABLE IF EXISTS " . implode(',', $tables));
+
+			}
+
+		}
+
+		# On supprime les lignes correspondantes dans les tables
 		$stmt = Dbh::prepare(
 			"DELETE p, c, a, g
 			FROM projects AS p

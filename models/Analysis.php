@@ -373,6 +373,35 @@ class Analysis extends Model{
 
 	protected function rawDelete(){
 
+		# On supprime les tables
+
+		# On vérifie que l'id est bien formatté on sais jamais (sinon
+		# tout va foutre le camp)
+		if(preg_match('/[a-zA-Z0-9]{6}/', $this->id)){
+
+			$tables = array();
+
+			$stmt = Dbh::prepare("SHOW TABLES LIKE ?");
+
+			$stmt->execute(array(
+				'%__' . $this->id . '%'
+			));
+
+			while($row = $stmt->fetch()){
+
+				$tables[] = $row[0];
+
+			}
+
+			if(count($tables) > 0){
+
+				Dbh::exec("DROP TABLE IF EXISTS " . implode(',', $tables));
+
+			}
+
+		}
+
+		# On supprime les lignes correspondantes dans les tables
 		$stmt = Dbh::prepare(
 			"DELETE a, g
 			FROM analyses AS a
