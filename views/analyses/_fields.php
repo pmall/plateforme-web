@@ -1,11 +1,14 @@
 <fieldset>
   <legend>Description de l'analyse</legend>
   <div class="algo_desc">
-    <ul>
-      <li>paire : A vs B, réplicats de A contre réplicats de B (autant de réplicats dans A et B)</li>
-      <li>impaire : A vs B, moyenne des réplicats de A contre moyenne des réplicats de B</li>
-      <li>J / O : A/C vs B/D ou je sais plus quoi</li>
-    </ul>
+    <dl>
+      <dt><em>paire</em></dt>
+      <dd>A : controle, B : test, réplicats de B contre réplicats de A (autant de réplicats dans A et B)</dd>
+      <dt><em>impaire</em></dt>
+      <dd>A : controle, B : test, moyenne des réplicats de B contre moyenne des réplicats de A</dd>
+      <dt><em>J/O</em></dt>
+      <dd>A/C vs B/D ou je sais plus quoi</dd>
+    </dl>
   </div>
   <div class="field">
     <?= label($analysis, 'name', 'Nom :'); ?>
