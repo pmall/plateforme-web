@@ -81,11 +81,11 @@ class Response{
 
 			foreach($this->headers as $header){
 
-				header($header);
+				header($header, false);
 
 			}
 
-			header('content-type: ' . $this->mime_type);
+			header('content-type: ' . $this->mime_type, false);
 
 			echo $this->body;
 

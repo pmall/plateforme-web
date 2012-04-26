@@ -21,11 +21,27 @@ class Dbh{
 
 	}
 
+	public static function exec($query){
+
+		$dbh = Dbh::getInstance();
+
+		return $dbh->exec($query);
+
+	}
+
 	public static function prepare($query){
 
 		$dbh = Dbh::getInstance();
 
 		return $dbh->prepare($query);
+
+	}
+
+	public static function quote($field){
+
+		$dbh = Dbh::getInstance();
+
+		return $dbh->quote($field);
 
 	}
 
