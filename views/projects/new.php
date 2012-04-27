@@ -1,4 +1,3 @@
-<script src="/plateforme2/public/js/project.js"></script>
 <section>
   <h2><?= h($title) ?></h2>
   <?= displayErrors($project) ?>
@@ -21,7 +20,7 @@
     <a href="/plateforme2/index.php">Retour a l'accueil</a>.
   </p>
   <? else: ?>
-  <form action="" method="post" class="form-horizontal">
+  <form id="form_analysis" action="" method="post" class="form-horizontal">
     <? $this->partial('projects/_fields.php') ?>
     <?= field($project, 'dir', 'hidden', array('value' => $dir)) ?>
   </form>

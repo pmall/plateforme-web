@@ -13,7 +13,6 @@
   </p>
   <? else: ?>
   <? $this->partial('projects/_list.php'); ?>
-  <script src="/plateforme2/public/js/list.js"></script>
   <? endif; ?>
   <? endif; ?>
 </section>

@@ -58,14 +58,14 @@
 </fieldset>
 <fieldset>
   <legend>Fichiers cel du répertoire</legend>
-    <? $i = 0; ?>
-    <? foreach($celfiles as $celfile): ?>
-    <? $error = ''; if($project->hasError($celfile)){ $error = ' error'; } ?>
-    <div class="control-group<?= $error ?>">
-      <label for="chip_<?= ++$i ?>" class="control-label"><?= $celfile ?></label>
-      <div class="controls">
-        <input name="project[chips][<?= $celfile ?>][name]" type="hidden" value="<?= $celfile ?>" />
-        <input
+  <? $i = 0; ?>
+  <? foreach($celfiles as $celfile): ?>
+  <? $error = ''; if($project->hasError($celfile)){ $error = ' error'; } ?>
+  <div class="control-group<?= $error ?>">
+    <label for="chip_<?= ++$i ?>" class="control-label"><?= $celfile ?></label>
+    <div class="controls">
+      <input name="project[chips][<?= $celfile ?>][name]" type="hidden" value="<?= $celfile ?>" />
+      <input
 		id="chip_<?= $i ?>"
 		name="project[chips][<?= $celfile ?>][num]"
 		type="text"
@@ -74,7 +74,7 @@
 		placeholder="Num"
 		class="span1"
 	/>
-        <input
+      <input
 		name="project[chips][<?= $celfile ?>][condition]"
 		type="text"
 		value="<?= h($project->getChipCondition($celfile)) ?>"
@@ -82,9 +82,9 @@
 		placeholder="Condition"
 		class="span3"
 	/>
-      </div>
     </div>
-    <? endforeach; ?>
+  </div>
+  <? endforeach; ?>
 </fieldset>
 <div class="form-actions">
   <button type="submit" class="btn-success" />Valider</button>

@@ -41,9 +41,13 @@ function hasError(Model $model, $field){
 
 function label(Model $model, $name, $text){
 
+	$modelName = strtolower(get_class($model));
+
+	$id = $modelName . '_' . $name;
+
 	$html = '';
 
-	$html.= '<label for="' . $name . '" class="control-label' . hasError($model, $name) . '">' . $text . '</label>' . "\n";
+	$html.= '<label for="' . $id . '" class="control-label' . hasError($model, $name) . '">' . $text . '</label>' . "\n";
 
 	return $html;
 
@@ -53,7 +57,7 @@ function field(Model $model, $name, $type, Array $options = array()){
 
 	$modelName = strtolower(get_class($model));
 
-	$options['id'] = $name;
+	$options['id'] = $modelName . '_' . $name;
 	$options['name'] = $modelName . '[' . $name . ']';
 	$options['type'] = $type;
 
@@ -80,7 +84,9 @@ function select(Model $model, $name, Array $options){
 
 	$modelName = strtolower(get_class($model));
 
-	$html = '<select id="' . $name . '" name="' . $modelName . '[' . $name . ']' . '" class="span4">' . "\n";
+	$id = $modelName . '_' . $name;
+
+	$html = '<select id="' . $id . '" name="' . $modelName . '[' . $name . ']' . '" class="span4">' . "\n";
 	$html.= '<option value=""></option>' . "\n";
 
 	foreach($options as $value => $text){
@@ -109,7 +115,9 @@ function textarea(Model $model, $name){
 
 	$modelName = strtolower(get_class($model));
 
-	$html = '<textarea id="' . $name . '" name="' . $modelName . '[' . $name . ']' . '" class="span4">' . "\n";
+	$id = $modelName . '_' . $name;
+
+	$html = '<textarea id="' . $id . '" name="' . $modelName . '[' . $name . ']' . '" class="span4">' . "\n";
 	$html.= $model->$name;
 	$html.= '</textarea>' . "\n";
 

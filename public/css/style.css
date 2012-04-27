@@ -31,9 +31,22 @@
 	padding:20px 20px;
 }
 
+.projects li ul{
+	margin:0;
+}
+
 .projects li ul li{
 	border:none;
 	padding:2px 0;
+}
+
+.list{
+	margin-bottom:150px;
+}
+
+.options{
+	display:inline-block;
+	vertical-align:middle;
 }
 
 .id{

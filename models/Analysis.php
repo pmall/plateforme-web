@@ -168,7 +168,11 @@ class Analysis extends Model{
 		}
 
 		# On valide que la lettre A est présente
+		$a_ok = true;
+
 		if(!array_key_exists('A', $letters)){
+
+			$a_ok = false;
 
 			$this->addError(new Error(
 				'Vous devez attribuer la lettre A à une
@@ -178,7 +182,11 @@ class Analysis extends Model{
 		}
 
 		# On valide que la lettre B est présente
+		$b_ok = true;
+
 		if(!array_key_exists('B', $letters)){
+
+			$b_ok = false;
 
 			$this->addError(new Error(
 				'Vous devez attribuer la lettre B à une
@@ -218,21 +226,32 @@ class Analysis extends Model{
 			}
 
 			# On vérifie que les conditions A et B ont bien le
-			# même nombre de puces
-			$condition_a = $letters['A'][0];
-			$condition_b = $letters['B'][0];
+			# même nombre de puces (si les deux sont spécifiés)
+			if($a_ok and $b_ok){
 
-			$nb_a = Analysis::CountChips($this->id_project, $condition_a);
-			$nb_b = Analysis::CountChips($this->id_project, $condition_b);
+				$condition_a = $letters['A'][0];
+				$condition_b = $letters['B'][0];
 
-			if($nb_a != $nb_b){
+				$nb_a = Analysis::CountChips(
+					$this->id_project,
+					$condition_a
+				);
 
-				$this->addError(new Error(
-					'A et B doivent avoir le même nombre
-					de puces pour une analyse paire. Ici 
-					' . $condition_a . ' : ' . $nb_a . '
-					et ' . $condition_b . ' : ' . $nb_b
-				));
+				$nb_b = Analysis::CountChips(
+					$this->id_project,
+					$condition_b
+				);
+
+				if($nb_a != $nb_b){
+
+					$this->addError(new Error(
+						'A et B doivent avoir le même nombre
+						de puces pour une analyse paire. Ici 
+						' . $condition_a . ' : ' . $nb_a . '
+						et ' . $condition_b . ' : ' . $nb_b
+					));
+
+				}
 
 			}
 
@@ -403,8 +422,9 @@ class Analysis extends Model{
 
 		# On supprime les lignes correspondantes dans les tables
 		$stmt = Dbh::prepare(
-			"DELETE a, g
+			"DELETE a, j, g
 			FROM analyses AS a
+			LEFT JOIN jobs AS j ON a.id = j.id_analysis
 			LEFT JOIN groups AS g ON a.id = g.id_analysis
 			WHERE a.id = ?"
 		);

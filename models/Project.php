@@ -738,10 +738,11 @@ class Project extends Model{
 
 		# On supprime les lignes correspondantes dans les tables
 		$stmt = Dbh::prepare(
-			"DELETE p, c, a, g
+			"DELETE p, c, a, j, g
 			FROM projects AS p
 			LEFT JOIN chips AS c ON p.id = c.id_project
 			LEFT JOIN analyses AS a ON p.id = a.id_project
+			LEFT JOIN jobs AS j ON p.id = j.id_project
 			LEFT JOIN groups AS g ON a.id = g.id_analysis
 			WHERE p.id = ?"
 		);

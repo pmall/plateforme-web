@@ -324,13 +324,20 @@ class User extends Model{
 	# Delete brut
 	protected function rawDelete(){
 
+		// On selectionne les projets de l'utilisateur
+		$projects = Project::All(array(
+			'id_user' => $this->id
+		));
+
+		foreach($projects as $project){
+
+			$project->delete();
+
+		}
+
 		$stmt = Dbh::prepare(
 			"DELETE u, p, ch, a, g
 			FROM users AS u
-			LEFT JOIN projects AS p ON u.id = p.id_user
-			LEFT JOIN chips AS ch ON p.id = ch.id_project
-			LEFT JOIN analyses AS a ON p.id = a.id_project
-			LEFT JOIN groups AS g ON a.id = g.id_analysis
 			WHERE u.id = ?"
 		);
 
