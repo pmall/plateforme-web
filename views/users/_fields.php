@@ -1,18 +1,18 @@
 <fieldset>
   <legend>Informations de l'utilisateur</legend>
-  <div class="control-group">
+  <div class="control-group<?= hasError($user, 'login'); ?>">
     <?= label($user, 'login', 'login') ?>
     <div class="controls">
       <?= field($user, 'login', 'text'); ?>
     </div>
   </div>
-  <div class="control-group">
+  <div class="control-group<?= hasError($user, 'password'); ?>">
     <?= label($user, 'password', 'password') ?>
     <div class="controls">
       <?= field($user, 'password', 'password'); ?>
     </div>
   </div>
-  <div class="control-group">
+  <div class="control-group<?= hasError($user, 'password_confirm'); ?>">
     <?= label($user, 'password_confirm', 'Confirmation du password') ?>
     <div class="controls">
       <?= field($user, 'password_confirm', 'password'); ?>

@@ -176,12 +176,11 @@ class User extends Model{
 		}else{
 
 			# Le nom ne doit contenir que des alphanum + _ + - + .
-			if(!preg_match('/^[A-Za-z0-9_\-.]+$/', $this->login)){
+			if(!preg_match('/^[A-Za-z0-9_\-]+$/', $this->login)){
 
 				$this->addError(new Error(
 					'Le nom ne doit contenir que des chiffres, des
-					lettres, des underscores, des tirets et des
-					points',
+					lettres, des underscores, et des tirets',
 					'login'
 				));
 
@@ -324,21 +323,21 @@ class User extends Model{
 	# Delete brut
 	protected function rawDelete(){
 
-		// On selectionne les projets de l'utilisateur
+		# On selectionne les projets de l'utilisateur
 		$projects = Project::All(array(
 			'id_user' => $this->id
 		));
 
+		# On supprime ces projets les uns après les autres
 		foreach($projects as $project){
 
 			$project->delete();
 
 		}
 
+		# On supprime l'utilisateur
 		$stmt = Dbh::prepare(
-			"DELETE u, p, ch, a, g
-			FROM users AS u
-			WHERE u.id = ?"
+			"DELETE FROM users WHERE id = ?"
 		);
 
 		$stmt->execute(array($this->id));
