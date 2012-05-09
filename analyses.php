@@ -154,19 +154,71 @@ $app->delete('/project/:id_project/analysis/:id_analysis', function($req, $res, 
 # fichier xls !
 $app->get('/project/:id_project/anaysis/:id_analysis/:filename.xls', function($req, $res, $matches) use($app){
 
-	$file = implode('/', array(
+	# Répertoire contenant les fichiers excel
+	$dir = implode('/', array(
 		$app->getConf('xlsdir'),
 		$matches['id_project'],
-		$matches['id_analysis'],
-		'report.zip'
+		$matches['id_analysis']
 	));
 
-	if(file_exists($file)){
+	# Liste des noms de fichiers
+	$filename_trans = $matches['filename'] . '_transcription.xls';
+	$filename_splicing = $matches['filename'] . '_splicing.xls';
+	$filename_splicing_SI = $matches['filename'] . '_splicing_SI.xls';
+	$filename_splicing_SIsd = $matches['filename'] . '_splicing_SIsd.xls';
+	$filename_splicing_psi = $matches['filename'] . '_splicing_psi.xls';
 
-		$res->setContentType('Content-type: application/octet-stream');
-		$res->addHeader('Content-Disposition: attachment; filename="' . $matches['filename'] . '.zip"');
+	# Liste de fichiers
+	$file_trans = $dir . '/' . $filename_trans;
+	$file_splicing = $dir . '/' . $filename_splicing;
+	$file_splicing_SI = $dir . '/' . $filename_splicing_SI;
+	$file_splicing_SIsd = $dir . '/' . $filename_splicing_SIsd;
+	$file_splicing_psi = $dir . '/' . $filename_splicing_psi;
 
-		$res->setBody(file_get_contents($file));
+	# On vérifie que tout les fichiers existent
+	$files_ok = true;
+	$files_ok = $files_ok and file_exists($file_trans);
+	$files_ok = $files_ok and file_exists($file_splicing);
+	$files_ok = $files_ok and file_exists($file_splicing_SI);
+	$files_ok = $files_ok and file_exists($file_splicing_SIsd);
+	$files_ok = $files_ok and file_exists($file_splicing_psi);
+
+	# Si ils existent
+	if($files_ok){
+
+		# On initialise un fichier zip
+		$zipfile = tempnam(sys_get_temp_dir(), 'kikou');
+
+		# On crée un fichier zip
+		$zip = new ZipArchive();
+
+		# On ouvre le fichier
+		$zip_res = $zip->open($zipfile, ZIPARCHIVE::CREATE|ZIPARCHIVE::OVERWRITE);
+
+		if($zip_res === true){
+
+			# On ajoute les fichiers au zip
+			$zip->addFile($file_trans, $filename_trans);
+			$zip->addFile($file_splicing, $filename_splicing);
+			$zip->addFile($file_splicing_SI, $filename_splicing_SI);
+			$zip->addFile($file_splicing_SIsd, $filename_splicing_SIsd);
+			$zip->addFile($file_splicing_psi, $filename_splicing_psi);
+
+			# On ferme le zip
+			if($zip->close() === false){ die($zipfile); }
+
+			# On envoit les bon headers
+			$res->setContentType('Content-type: application/x-zip');
+			$res->addHeader('Content-Disposition: attachment; filename="' . $matches['filename'] . '.zip"');
+
+			# On donne le contenu du zip au body
+			$res->setBody(readfile($zipfile));
+
+		}else{
+
+			var_dump($zip_res);
+
+		}
 
 	}else{
 
