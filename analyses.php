@@ -163,10 +163,10 @@ $app->get('/project/:id_project/anaysis/:id_analysis/:filename.xls', function($r
 
 	# Liste des noms de fichiers
 	$filename_trans = $matches['filename'] . '_transcription.xls';
-	$filename_splicing = $matches['filename'] . '_splicing.xls';
-	$filename_splicing_SI = $matches['filename'] . '_splicing_SI.xls';
-	$filename_splicing_SIsd = $matches['filename'] . '_splicing_SIsd.xls';
-	$filename_splicing_psi = $matches['filename'] . '_splicing_psi.xls';
+	$filename_splicing = $matches['filename'] . '_epissage.xls';
+	$filename_splicing_SI = $matches['filename'] . '_epissage_SI.xls';
+	$filename_splicing_SIsd = $matches['filename'] . '_epissage_SIsd.xls';
+	$filename_splicing_psi = $matches['filename'] . '_epissage_psi.xls';
 
 	# Liste de fichiers
 	$file_trans = $dir . '/' . $filename_trans;
@@ -177,17 +177,17 @@ $app->get('/project/:id_project/anaysis/:id_analysis/:filename.xls', function($r
 
 	# On vérifie que tout les fichiers existent
 	$files_ok = true;
-	$files_ok = $files_ok and file_exists($file_trans);
-	$files_ok = $files_ok and file_exists($file_splicing);
-	$files_ok = $files_ok and file_exists($file_splicing_SI);
-	$files_ok = $files_ok and file_exists($file_splicing_SIsd);
-	$files_ok = $files_ok and file_exists($file_splicing_psi);
+	$files_ok = ($files_ok and file_exists($file_trans));
+	$files_ok = ($files_ok and file_exists($file_splicing));
+	$files_ok = ($files_ok and file_exists($file_splicing_SI));
+	$files_ok = ($files_ok and file_exists($file_splicing_SIsd));
+	$files_ok = ($files_ok and file_exists($file_splicing_psi));
 
 	# Si ils existent
 	if($files_ok){
 
 		# On initialise un fichier zip
-		$zipfile = tempnam(sys_get_temp_dir(), 'kikou');
+		$zipfile = tempnam(sys_get_temp_dir(), 'zip');
 
 		# On crée un fichier zip
 		$zip = new ZipArchive();
@@ -195,6 +195,7 @@ $app->get('/project/:id_project/anaysis/:id_analysis/:filename.xls', function($r
 		# On ouvre le fichier
 		$zip_res = $zip->open($zipfile, ZIPARCHIVE::CREATE|ZIPARCHIVE::OVERWRITE);
 
+		# Si le zip est bien ouvert
 		if($zip_res === true){
 
 			# On ajoute les fichiers au zip
@@ -205,14 +206,14 @@ $app->get('/project/:id_project/anaysis/:id_analysis/:filename.xls', function($r
 			$zip->addFile($file_splicing_psi, $filename_splicing_psi);
 
 			# On ferme le zip
-			if($zip->close() === false){ die($zipfile); }
+			$zip->close();
 
 			# On envoit les bon headers
 			$res->setContentType('Content-type: application/x-zip');
 			$res->addHeader('Content-Disposition: attachment; filename="' . $matches['filename'] . '.zip"');
 
 			# On donne le contenu du zip au body
-			$res->setBody(readfile($zipfile));
+			$res->setBody(file_get_contents($zipfile));
 
 		}else{
 
