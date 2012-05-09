@@ -155,11 +155,31 @@ $app->delete('/project/:id_project/analysis/:id_analysis', function($req, $res, 
 $app->get('/project/:id_project/anaysis/:id_analysis/:filename.zip', function($req, $res, $matches) use($app){
 
 	# Répertoire contenant les fichiers excel
-	$dir = implode('/', array(
+	$file = implode('/', array(
 		$app->getConf('xlsdir'),
 		$matches['id_project'],
-		$matches['id_analysis']
-	));
+		$matches['id_analysis'],
+		$matches['filename']
+	)) . '.zip';
+
+	# Si le fichier existe
+	if(file_exists($file)){
+
+		# On envoit les bon headers
+		$res->setContentType('Content-type: application/x-zip');
+		$res->addHeader('Content-Disposition: attachment; filename="' . $matches['filename'] . '.zip"');
+
+		# On donne le contenu du zip au body
+		$res->setBody(file_get_contents($file));
+
+	}else{
+
+		# Sinon on envoitune erreur 404
+		$res->addHeader('HTTP/1.1 404 Not Found');
+
+	}
+
+/*
 
 	# Liste des noms de fichiers
 	$filename_trans = $matches['filename'] . '_transcription.xls';
@@ -227,6 +247,7 @@ $app->get('/project/:id_project/anaysis/:id_analysis/:filename.zip', function($r
 
 	}
 
+*/
 
 });
 
