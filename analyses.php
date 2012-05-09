@@ -152,7 +152,7 @@ $app->delete('/project/:id_project/analysis/:id_analysis', function($req, $res, 
 });
 
 # fichier xls !
-$app->get('/project/:id_project/anaysis/:id_analysis/:filename.xls', function($req, $res, $matches) use($app){
+$app->get('/project/:id_project/anaysis/:id_analysis/:filename.zip', function($req, $res, $matches) use($app){
 
 	# Répertoire contenant les fichiers excel
 	$dir = implode('/', array(

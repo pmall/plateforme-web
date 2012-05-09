@@ -51,7 +51,7 @@
         <span class="id"><?= $analysis->id ?></span> |
         <a href="/plateforme2/index.php/project/<?= $project->id ?>/analysis/<?= $analysis->id ?>/edit"><?= $analysis->name ?></a> |
         <?= $analysis->type ?> |
-	<a href="/plateforme2/index.php/project/<?= $project->id ?>/anaysis/<?= $analysis->id ?>/<?= $analysis->name ?>.xls">Fichier xls</a>
+	<a href="/plateforme2/index.php/project/<?= $project->id ?>/anaysis/<?= $analysis->id ?>/<?= $analysis->name ?>.zip">Fichier xls</a>
       </li>
       <? endforeach; ?>
     </ul>
