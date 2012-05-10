@@ -27,7 +27,7 @@ class Dir{
 
 		$validDirs = array();
 
-		$files = Dir::Readdir($config['celdir']);
+		$files = Dir::Readdir($config['dir_cel']);
 
 		foreach($files as $file){
 
@@ -56,7 +56,7 @@ class Dir{
 
 		$validCelfiles = array();
 
-		$files = Dir::Readdir($config['celdir'] . '/' . $this->file);
+		$files = Dir::Readdir($config['dir_cel'] . '/' . $this->file);
 
 		foreach($files as $file){
 

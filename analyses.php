@@ -156,7 +156,7 @@ $app->get('/project/:id_project/anaysis/:id_analysis/:filename.zip', function($r
 
 	# Répertoire contenant les fichiers excel
 	$file = implode('/', array(
-		$app->getConf('xlsdir'),
+		$app->getConf('dir_xls'),
 		$matches['id_project'],
 		$matches['id_analysis'],
 		$matches['filename']

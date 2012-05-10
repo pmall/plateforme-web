@@ -29,7 +29,7 @@ $app->get('/project', function($req, $res) use($app){
 
 	$dir = trim($req->param('dir'), '/');
 
-	if(!$dir or !file_exists($app->getConf('celdir') . '/' . $dir)){
+	if(!$dir or !file_exists($app->getConf('dir_cel') . '/' . $dir)){
 
 		$res->redirect('index.php');
 
@@ -63,7 +63,7 @@ $app->post('/project', function($req, $res) use($app){
 
 	$dir = trim($req->param('dir'), '/');
 
-	if(!$dir or !file_exists($app->getConf('celdir') . '/' . $dir)){
+	if(!$dir or !file_exists($app->getConf('dir_cel') . '/' . $dir)){
 
 		$res->redirect('index.php');
 
@@ -114,7 +114,7 @@ $app->get('/project/:id/edit', function($req, $res, $matches) use($app){
 
 		$dir = $project->dir;
 
-		if(!file_exists($app->getConf('celdir') . '/' . $dir)){
+		if(!file_exists($app->getConf('dir_cel') . '/' . $dir)){
 
 			$res->redirect('index.php');
 
@@ -152,7 +152,7 @@ $app->put('/project/:id', function($req, $res, $matches) use($app){
 
 		$dir = $project->dir;
 
-		if(!file_exists($app->getConf('celdir') . '/' . $dir)){
+		if(!file_exists($app->getConf('dir_cel') . '/' . $dir)){
 
 			$res->redirect('index.php');
 

@@ -6,8 +6,8 @@ function __autoload($classname){
 
 }
 
-# On inclu la configuration
-require('config.php');
+# On récupère la config
+$config = yaml_parse_file('../config.yml');
 
 # On inclu les modèles
 require('models/Dir.php');
@@ -22,7 +22,7 @@ require('helpers/forms.php');
 require('helpers/jobs.php');
 
 # On déclare l'app
-$app = new App($config['dir_app'], $config);
+$app = new App($config['dir_web'], $config);
 
 # ==============================================================================
 # Accueil
