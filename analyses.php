@@ -159,8 +159,8 @@ $app->get('/project/:id_project/anaysis/:id_analysis/:filename.zip', function($r
 		$app->getConf('dir_xls'),
 		$matches['id_project'],
 		$matches['id_analysis'],
-		$matches['filename']
-	)) . '.zip';
+		'files.zip'
+	));
 
 	# Si le fichier existe
 	if(file_exists($file)){
