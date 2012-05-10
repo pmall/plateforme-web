@@ -93,6 +93,32 @@ class Analysis extends Model{
 
 	}
 
+	# Retourne vrai si le projet est préprocessé
+	public static function isPreprocessed($id_analysis){
+
+		$table1 = '%__' . $id_analysis . '_transcription';
+		$table2 = '%__' . $id_analysis . '_splicing';
+		$table3 = '%__' . $id_analysis . '_SIs';
+		$table4 = '%__' . $id_analysis . '_NIs';
+
+		$stmt = Dbh::prepare('SHOW TABLES LIKE ?');
+
+		$stmt->execute(array($table1));
+		$nb_table1 = $stmt->rowCount();
+
+		$stmt->execute(array($table2));
+		$nb_table2 = $stmt->rowCount();
+
+		$stmt->execute(array($table2));
+		$nb_table3 = $stmt->rowCount();
+
+		$stmt->execute(array($table2));
+		$nb_table4 = $stmt->rowCount();
+
+		return ($nb_table1 == 1 and $nb_table2 == 1 and $nb_table3 == 1 and $nb_table4 == 1);
+
+	}
+
 	public function validates($context){
 
 		# On valide si l'analyse est déjà en train d'être traitée ou non

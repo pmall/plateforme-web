@@ -232,11 +232,6 @@ class Project extends Model{
 
 	}
 
-	# Suprime le préprocessing et les analyses associées
-	public static function deletePreprocessing($id){
-
-	}
-
 	# On modifie la fonction assign
 	public function assign(Array $values = array()){
 

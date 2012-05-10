@@ -125,6 +125,27 @@ class Job extends Model{
 
 			}
 
+		}elseif($this->type == 'excels'){
+
+				# Le job est une creation d'excels
+
+				# Si l'analyse est en cours
+				if(Job::isProcessing($this->id_project, $this->id_analysis, '')){
+
+					$this->addError(new Error(
+						'Ce traitement est déjà en cours'
+					));
+
+				# Si l'analyse n'est pas faite, erreur 
+				}elseif(!Analysis::isPreprocessed($this->id_analysis)){
+
+					$this->addError(new Error(
+						'Il faut faire cette analyse pour pouvoir
+						recréer les excels'
+					));
+
+				}
+
 		}else{
 
 			# Le job est une analyse !
@@ -143,6 +164,13 @@ class Job extends Model{
 				$this->addError(new Error(
 					'Il faut faire le préprocessing de ce
 					projet avant de pouvoir lancer une analyse'
+				));
+
+			# Sinon si l'analyse est déjà en cours
+			}elseif(Job::isProcessing($this->id_project, $this->id_analysis, '')){
+
+				$this->addError(new Error(
+					'Cette analyse est déjà en cours de traitement'
 				));
 
 			}
