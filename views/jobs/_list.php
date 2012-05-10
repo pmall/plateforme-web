@@ -17,8 +17,8 @@
   <tbody>
     <? foreach($jobs as $job): ?>
     <tr>
-      <td><?= h(format($job->name_project)) ?></td>
-      <td><?= h(format($job->name_analysis)) ?></td>
+      <td><?= h(format($job->id_project)) . ' (' . h(format($job->name_project)) . ')' ?></td>
+      <td><?= h(format($job->id_analysis)) . ' (' . h(format($job->name_analysis)) . ')' ?></td>
       <td><?= h(format($job->type)) ?></td>
       <td><?= h(format($job->status)) ?></td>
       <td><?= h(format($job->start)) ?></td>
