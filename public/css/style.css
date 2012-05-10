@@ -21,6 +21,14 @@
 	background-color:#f5f5f5;
 }
 
+#home_list{
+	margin:0;
+}
+
+#home_list li{
+	list-style-type:none;
+}
+
 .projects{
 	margin:0;
 }

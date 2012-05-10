@@ -33,7 +33,7 @@
 	'url' => '/plateforme2/index.php/projects',
 	'users' => $user_list))
   ?>
-  <ul>
+  <ul id="home_list">
     <? foreach($users as $user): ?>
     <li>
       <h2>

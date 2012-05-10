@@ -181,7 +181,7 @@ class Job extends Model{
 
 	public function beforeInsert(){
 
-		$this->status = 'waiting';
+		$this->status = 'starting';
 
 		# Si le job est un preprocessing, il n'est plus dirty
 		if($this->type == 'preprocessing'){
