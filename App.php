@@ -1,5 +1,7 @@
 <?php
 
+// kikou
+
 class App{
 
 	private $conf;
