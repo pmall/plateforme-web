@@ -75,7 +75,7 @@ class Dir{
 	private function isValid(){
 
 		return (strlen($this->file) <= 255) and preg_match(
-			'/^[a-zA-Z0-9][a-zA-Z0-9_\-]+[a-zA-Z0-9]$/',
+			'/^[a-zA-Z0-9][a-zA-Z0-9_\-.]+[a-zA-Z0-9]$/',
 			$this->file
 		);
 
