@@ -396,14 +396,7 @@ class Project extends Model{
 		}
 
 		# Lignée ne doit pas être vide
-		if(empty($this->cell_line)){
-
-			$this->addError(new Error(
-				'Lignée ne doit pas être vide',
-				'cell_line'
-			));
-
-		}else{
+		if(!empty($this->cell_line)){
 
 			# Lignée doit faire moins de 20 caractères
 			if(strlen($this->cell_line) > 20){
