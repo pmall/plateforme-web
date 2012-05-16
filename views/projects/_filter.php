@@ -10,12 +10,12 @@
       <? endforeach; ?>
     </select>
     <select name="type" class="span2">
-      <option value="">Tout types de puces</option>
+      <option value="">Tout type de puce</option>
       <option value="exon"<? if($filter['type'] == 'exon'): ?> selected="selected"<? endif; ?>>exon</option>
       <option value="ggh"<? if($filter['type'] == 'ggh'): ?> selected="selected"<? endif; ?>>ggh</option>
     </select>
     <select name="organism" class="span2">
-      <option value="">Tout organismes</option>
+      <option value="">Tout organisme</option>
       <option value="human"<? if($filter['organism'] == 'human'): ?> selected="selected"<? endif; ?>>Humain</option>
       <option value="mouse"<? if($filter['organism'] == 'mouse'): ?> selected="selected"<? endif; ?>>Mouse</option>
     </select>

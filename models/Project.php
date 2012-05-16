@@ -450,7 +450,7 @@ class Project extends Model{
 
 				}
 
-				if(!preg_match('/^[A-Za-z0-9_\-.]+$/', $chip['condition'])){
+				if(!preg_match('/^[A-Za-z0-9_]+$/', $chip['condition'])){
 
 					$conds_format_errors[] = $chip['name'];
 
@@ -501,8 +501,7 @@ class Project extends Model{
 
 			$this->addError(new Error(
 				'Le nom d\'une condition ne doit contenir que des chiffres, des
-				lettres, des underscores, des tirets et des
-				points',
+				lettres et des underscores',
 				$conds_format_errors
 			));
 
