@@ -13,8 +13,8 @@
   </p>
   <p>
     Pour être valide, le nom d'un fichier cel ne doit contenir que des
-    lettres, des chiffres, des undersocres, des tirets et des parenthèses, pas d'espace
-    et se finir par .CEL.
+    lettres, des chiffres, des undersocres, des tirets, des points et des parenthèses,
+    pas d'espace et se finir par .CEL.
   </p>
   <p>
     <a href="/plateforme2/index.php">Retour a l'accueil</a>.
