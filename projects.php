@@ -223,7 +223,7 @@ $app->delete('/project/:id/', function($req, $res, $matches) use($app){
 });
 
 # Controle qualité !
-$app->get('/project/:id_project/:filename.pdf$', function($req, $res, $matches) use($app){
+$app->get('/project/:id_project/:filename.pdf', function($req, $res, $matches) use($app){
 
 	$file = implode('/', array(
 		$app->getConf('dir_qc'),
