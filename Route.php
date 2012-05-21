@@ -24,9 +24,7 @@ final class Route{
 
 			# On récupère la bonne partie de l'url
 			$path = preg_replace(
-			#	'#^' . $root . '(/index\.php)?(/(.*?)/?(\?.*)?)?$#',
 				'#^' . $root . '(/index\.php)?((/(.*?)/?)?(\?.*)?)?$#',
-			#	'$3',
 				'$4',
 				$request->url
 			);
@@ -41,7 +39,7 @@ final class Route{
 			$replacements = array(
 				'\.',
 				'(.*?)',
-				'(?P<$1>[a-zA-Z0-9_\-]+?)'
+				'(?P<$1>[a-zA-Z0-9_\-.]+?)'
 			);
 
 			# On transforme le pattern en regex
