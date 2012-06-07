@@ -16,6 +16,15 @@
       <?= field($analysis, 'name', 'text', array('maxlength' => 255)); ?>
     </div>
   </div>
+  <div class="control-group<?= hasError($analysis, 'version'); ?>">
+    <?= label($analysis, 'version', 'Version fasterdb') ?>
+    <div class="controls">
+      <?= select($analysis, 'version', array(
+	'fdb1' => 'fasterdb 1',
+	'fdb2' => 'fasterdb 2'
+      )) ?>
+    </div>
+  </div>
   <div class="control-group<?= hasError($analysis, 'type'); ?>">
     <?= label($analysis, 'type', 'Type d\'analyse') ?>
     <div class="controls">

@@ -5,6 +5,7 @@ class Analysis extends Model{
 	public $id;
 	public $id_project;
 	public $name;
+	public $version;
 	public $type;
 	public $groups;
 
@@ -164,6 +165,28 @@ class Analysis extends Model{
 					lettres, des underscores, des tirets et des
 					points',
 					'name'
+				));
+
+			}
+
+		}
+
+		# On valide que la version de fasterdb n'est pas vide
+		if(empty($this->version)){
+
+			$this->addError(new Error(
+				'La version de fasterdb ne doit pas être vide',
+				'version'
+			));
+
+		}else{
+
+			# Pas de fdb2 pour le moment :)
+			if($this->version == 'fdb2'){
+
+				$this->addError(new Error(
+					'Pas de fasterdb 2 pour le moment :)',
+					'version'
 				));
 
 			}
@@ -355,14 +378,15 @@ class Analysis extends Model{
 
 		$stmt = Dbh::prepare(
 			"INSERT INTO analyses
-			(id, id_project, name, type)
-			VALUES(?, ?, ?, ?)"
+			(id, id_project, name, version, type)
+			VALUES(?, ?, ?, ?, ?)"
 		);
 
 		$stmt->execute(array(
 			$this->id,
 			$this->id_project,
 			$this->name,
+			$this->version,
 			$this->type
 		));
 
@@ -373,11 +397,12 @@ class Analysis extends Model{
 	protected function rawUpdate(){
 
 		$update_analysis_stmt = Dbh::prepare(
-			"UPDATE analyses SET name = ?, type = ? WHERE id = ?"
+			"UPDATE analyses SET name = ?, version = ?, type = ? WHERE id = ?"
 		);
 
 		$update_analysis_stmt->execute(array(
 			$this->name,
+			$this->version,
 			$this->type,
 			$this->id
 		));
