@@ -56,10 +56,14 @@ function setLetters(){
 
 		var group = $(this);
 
-		if(type == 'J/O'){
+		if(type == 'compose'){
 
-			group.append('<option value="C">C</option>');
-			group.append('<option value="D">D</option>');
+			if(group.children().length == 3){
+
+				group.append('<option value="C">C</option>');
+				group.append('<option value="D">D</option>');
+
+			}
 
 		}else{
 

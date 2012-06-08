@@ -140,13 +140,6 @@ class User extends Model{
 
 	}
 
-	# Constructeur
-	protected function intialize(){
-
-		$this->projects = array();
-
-	}
-
 	# On modifie la fonction assign
 	public function assign(Array $values = array()){
 

@@ -7,6 +7,7 @@ class Analysis extends Model{
 	public $name;
 	public $version;
 	public $type;
+	public $paired;
 	public $groups;
 
 	# Retourne un tableau contenant toutes les analyses
@@ -120,6 +121,14 @@ class Analysis extends Model{
 
 	}
 
+	# On modifie la fonction assign
+	public function assign(Array $values = array()){
+
+		$this->paired = 0;
+
+		parent::assign($values);
+	}
+
 	public function validates($context){
 
 		# On valide si l'analyse est déjà en train d'être traitée ou non
@@ -216,120 +225,86 @@ class Analysis extends Model{
 
 		}
 
-		# On valide que la lettre A est présente
+		# On valide les lettres
 		$a_ok = true;
-
-		if(!array_key_exists('A', $letters)){
-
-			$a_ok = false;
-
-			$this->addError(new Error(
-				'Vous devez attribuer la lettre A à une
-				condition'
-			));
-
-		}
-
-		# On valide que la lettre B est présente
 		$b_ok = true;
+		$c_ok = true;
+		$d_ok = true;
 
-		if(!array_key_exists('B', $letters)){
+		# On valide simple
+		if($this->type == 'simple'){
 
-			$b_ok = false;
+			if(!array_key_exists('A', $letters)){
 
-			$this->addError(new Error(
-				'Vous devez attribuer la lettre B à une
-				condition'
-			));
+				$a_ok = false;
 
-		}
-
-		# On valide paire
-		if($this->type == 'paire'){
-
-			# On vérifie la répartition des conditions
-			foreach(array_keys($letters) as $letter){
-
-				if($letter == 'A' or $letter == 'B'){
-
-					if(count($letters[$letter]) > 1){
-
-						$this->addError(new Error(
-							'Pour une analyse de type paire,
-							une seule condition doit être
-							utilisé pour la lettre ' . $letter 
-						));
-
-					}
-
-				}else{
-
-					$this->addError(new Error(
-						'Pour une analyse de type paire,
-						vous ne pouvez pas utiliser la
-						lettre ' . $letter 
-					));
-
-				}
+				$this->addError(new Error(
+					'Vous devez attribuer la lettre A à une
+					condition'
+				));
 
 			}
 
-			# On vérifie que les conditions A et B ont bien le
-			# même nombre de puces (si les deux sont spécifiés)
-			if($a_ok and $b_ok){
+			if(!array_key_exists('B', $letters)){
 
-				$condition_a = $letters['A'][0];
-				$condition_b = $letters['B'][0];
+				$b_ok = false;
 
-				$nb_a = Analysis::CountChips(
-					$this->id_project,
-					$condition_a
-				);
+				$this->addError(new Error(
+					'Vous devez attribuer la lettre B à une
+					condition'
+				));
 
-				$nb_b = Analysis::CountChips(
-					$this->id_project,
-					$condition_b
-				);
+			}
 
-				if($nb_a != $nb_b){
+			if(array_key_exists('C', $letters)){
 
-					$this->addError(new Error(
-						'A et B doivent avoir le même nombre
-						de puces pour une analyse paire. Ici 
-						' . $condition_a . ' : ' . $nb_a . '
-						et ' . $condition_b . ' : ' . $nb_b
-					));
+				$this->addError(new Error(
+					'Pour une analyse simple, vous ne pouvez
+					pas utiliser la lettre C' 
+				));
 
-				}
+			}
+
+			if(array_key_exists('D', $letters)){
+
+				$this->addError(new Error(
+					'Pour une analyse simple, vous ne pouvez
+					pas utiliser la lettre D' 
+				));
 
 			}
 
 		}
 
-		# On valide impaire
-		if($this->type == 'impaire'){
+		# On valide composé
+		if($this->type == 'compose'){
 
-			foreach(array_keys($letters) as $letter){
+			if(!array_key_exists('A', $letters)){
 
-				if($letter != 'A' and $letter != 'B'){
+				$a_ok = false;
 
-					$this->addError(new Error(
-						'Pour une analyse de type
-						impaire, vous ne pouvez pas
-						utiliser la lettre ' . $letter 
-					));
-
-				}
+				$this->addError(new Error(
+					'Vous devez attribuer la lettre A à une
+					condition'
+				));
 
 			}
 
-		}
+			if(!array_key_exists('B', $letters)){
 
-		# On valide J/O
-		if($this->type == 'J/O'){
+				$b_ok = false;
 
-			# On valide que la lettre C est présente
+				$this->addError(new Error(
+					'Vous devez attribuer la lettre B à une
+					condition'
+				));
+
+			}
+
+
 			if(!array_key_exists('C', $letters)){
+
+				$c_ok = false;
 
 				$this->addError(new Error(
 					'Vous devez attribuer la lettre C à une
@@ -338,8 +313,9 @@ class Analysis extends Model{
 
 			}
 
-			# On valide que la lettre D est présente
 			if(!array_key_exists('D', $letters)){
+
+				$d_ok = false;
 
 				$this->addError(new Error(
 					'Vous devez attribuer la lettre D à une
@@ -348,14 +324,54 @@ class Analysis extends Model{
 
 			}
 
-			foreach(array_keys($letters) as $letter){
+		}
 
-				if(count($letters[$letter]) > 1){
+		# On valide paired
+		if($this->paired){
+
+			#$a_tester = ($this->type == 'simple' and $a_ok and $b_ok);
+			#$a_tester = ($a_tester or ($this->type == 'compose' and $a_ok and $b_ok and $c_ok and $d_ok));
+			$a_tester = true;
+
+			# On teste que chaque lettre est associée a une seule
+			# condition
+			foreach($letters as $letter => $conditions){
+
+				if(count($conditions) > 1){
+
+					$a_tester = false;
 
 					$this->addError(new Error(
-						'Pour une analyse de type J/O,
-						une seule condition doit être
-						doit être utilisé pour la lettre ' . $letter 
+						'Pour une analyse paire la
+						lettre ' . $letter . ' doit être
+						associée à une seule condition'
+					));
+
+				}
+
+			}
+
+			if($a_tester){
+
+				# On teste que chaque lettre contient le même
+				# nombre de puces
+				$num_chips = array();
+
+				foreach($letters as $letter => $conditions){
+
+					$num_chips[] = Analysis::CountChips(
+						$this->id_project,
+						$conditions[0]
+					);
+
+				}
+
+				if(count(array_unique($num_chips)) > 1){
+
+					$this->addError(new Error(
+						'Pour une analyse paire toutes
+						les lettres doivent correspondre
+						au même nombre de puces'
 					));
 
 				}
@@ -378,8 +394,8 @@ class Analysis extends Model{
 
 		$stmt = Dbh::prepare(
 			"INSERT INTO analyses
-			(id, id_project, name, version, type)
-			VALUES(?, ?, ?, ?, ?)"
+			(id, id_project, name, version, type, paired)
+			VALUES(?, ?, ?, ?, ?, ?)"
 		);
 
 		$stmt->execute(array(
@@ -387,7 +403,8 @@ class Analysis extends Model{
 			$this->id_project,
 			$this->name,
 			$this->version,
-			$this->type
+			$this->type,
+			$this->paired
 		));
 
 		$this->insertGroups();
@@ -397,13 +414,14 @@ class Analysis extends Model{
 	protected function rawUpdate(){
 
 		$update_analysis_stmt = Dbh::prepare(
-			"UPDATE analyses SET name = ?, version = ?, type = ? WHERE id = ?"
+			"UPDATE analyses SET name = ?, version = ?, type = ?, paired = ? WHERE id = ?"
 		);
 
 		$update_analysis_stmt->execute(array(
 			$this->name,
 			$this->version,
 			$this->type,
+			$this->paired,
 			$this->id
 		));
 

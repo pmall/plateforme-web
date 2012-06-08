@@ -53,7 +53,13 @@
         </div>
         <span class="id"><?= $analysis->id ?></span> |
         <a href="/plateforme2/index.php/project/<?= $project->id ?>/analysis/<?= $analysis->id ?>/edit"><?= $analysis->name ?></a> |
+        <?= $analysis->version ?> |
         <?= $analysis->type ?> |
+        <? if($analysis->paired): ?>
+        paire
+        <? else: ?>
+        Non paire
+        <? endif ?>|
 	<a href="/plateforme2/index.php/project/<?= $project->id ?>/anaysis/<?= $analysis->id ?>/<?= $project->name ?>__<?= $analysis->name ?>.zip">Fichier xls</a>
       </li>
       <? endforeach; ?>

@@ -29,10 +29,15 @@
     <?= label($analysis, 'type', 'Type d\'analyse') ?>
     <div class="controls">
       <?= select($analysis, 'type', array(
-	'paire' => 'paire',
-	'impaire' => 'impaire',
-	'J/O' => 'J / O'
+	'simple' => 'simple',
+	'compose' => 'compose'
       )) ?>
+    </div>
+  </div>
+  <div class="control-group">
+    <?= label($analysis, 'paired', 'Paire ? ') ?>
+    <div class="controls">
+      <?= checkbox($analysis, 'paired', 1); ?>
     </div>
   </div>
 </fieldset>

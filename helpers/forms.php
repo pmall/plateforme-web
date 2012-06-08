@@ -131,7 +131,7 @@ function checkbox(Model $model, $name, $value){
 
 	# On fait un tableau de valeur
 	$options = array(
-		'id' => $name,
+		'id' => $modelName . '_' . $name,
 		'name' => $modelName . '[' . $name . ']',
 		'type' => 'checkbox',
 		'value' => $value
