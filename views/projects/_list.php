@@ -44,7 +44,7 @@
             Options <span class="caret"></span>
           </a>
           <ul class="dropdown-menu">
-            <li><a href="#" class="job" data-type="<?= $analysis->type ?>" data-id_project="<?= $analysis->id_project ?>" data-id_analysis="<?= $analysis->id ?>">Run</a></li>
+            <li><a href="#" class="job" data-type="analysis" data-id_project="<?= $analysis->id_project ?>" data-id_analysis="<?= $analysis->id ?>">Run</a></li>
             <li><a href="#" class="job" data-type="excels" data-id_project="<?= $analysis->id_project ?>" data-id_analysis="<?= $analysis->id ?>">Run excels</a></li>
             <li><a href="/plateforme2/index.php/project/<?= $analysis->id_project ?>/analysis/<?= $analysis->id ?>/edit">Modifier</a></li>
             <li class="divider"></li>
