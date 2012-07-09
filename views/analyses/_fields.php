@@ -30,7 +30,8 @@
     <div class="controls">
       <?= select($analysis, 'type', array(
 	'simple' => 'simple',
-	'compose' => 'compose'
+	'compose' => 'compose',
+	'apriori' => 'A priori'
       )) ?>
     </div>
   </div>
