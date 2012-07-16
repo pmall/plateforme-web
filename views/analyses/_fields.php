@@ -29,9 +29,10 @@
     <?= label($analysis, 'type', 'Type d\'analyse') ?>
     <div class="controls">
       <?= select($analysis, 'type', array(
-	'simple' => 'simple',
-	'compose' => 'compose',
-	'apriori' => 'A priori'
+	'simple' => 'Simple',
+	'compose' => 'Compose',
+	'apriori' => 'A priori',
+	'jonction' => 'Jonction'
       )) ?>
     </div>
   </div>

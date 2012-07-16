@@ -188,18 +188,6 @@ class Analysis extends Model{
 				'version'
 			));
 
-		}else{
-
-			# Pas de fdb2 pour le moment :)
-			if($this->version == 'fdb2'){
-
-				$this->addError(new Error(
-					'Pas de fasterdb 2 pour le moment :)',
-					'version'
-				));
-
-			}
-
 		}
 
 		# On valide que le type n'est pas vide
@@ -209,6 +197,22 @@ class Analysis extends Model{
 				'Le type ne doit pas être vide',
 				'type'
 			));
+
+		}else{
+
+			# On va chercher le type de puces de l'exp
+			$project = Project::get($this->id_project);
+
+			# On valide les analyses jonction
+			if($this->type == 'jonction' and $project->type == 'exon'){
+
+				$this->addError(new Error(
+					'Une analyse de type jonction ne peut
+					etre faite que pour des puces GGH',
+					'type'
+				));
+
+			}
 
 		}
 
@@ -232,7 +236,9 @@ class Analysis extends Model{
 		$d_ok = true;
 
 		# On valide simple
-		if($this->type == 'simple'){
+		$types_simples = array('simple', 'apriori', 'jonction');
+
+		if(in_array($this->type, $types_simples)){
 
 			if(!array_key_exists('A', $letters)){
 
