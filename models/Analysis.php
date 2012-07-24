@@ -200,17 +200,52 @@ class Analysis extends Model{
 
 		}else{
 
-			# On va chercher le type de puces de l'exp
-			$project = Project::get($this->id_project);
+			# On valide les analyses a priori
+			if($this->type == 'apriori'){
+
+				if($this->version == 'fdb2'){
+
+					$this->addError(new Error(
+						'Une analyse de type a priori
+						ne peut être faite que sur
+						fasterdb1',
+						'type'
+					));
+
+				}
+
+				# On va chercher le type de puces de l'exp
+				$project = Project::get($this->id_project);
+
+				if($project->organism == 'mouse'){
+
+					$this->addError(new Error(
+						'Une analyse de type a priori
+						ne peut être faite que sur
+						l\'humain',
+						'type'
+					));
+
+				}
+
+			}
 
 			# On valide les analyses jonction
-			if($this->type == 'jonction' and $project->type == 'exon'){
+			if($this->type == 'jonction'){
 
-				$this->addError(new Error(
-					'Une analyse de type jonction ne peut
-					etre faite que pour des puces GGH',
-					'type'
-				));
+				# On va chercher le type de puces de l'exp
+				$project = Project::get($this->id_project);
+
+				if($project->type == 'exon'){
+
+					$this->addError(new Error(
+						'Une analyse de type jonction ne
+						peut etre faite que pour des
+						puces GGH',
+						'type'
+					));
+
+				}
 
 			}
 
