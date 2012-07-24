@@ -98,26 +98,51 @@ class Analysis extends Model{
 	# Retourne vrai si le projet est préprocessé
 	public static function isPreprocessed($id_analysis){
 
-		$table1 = '%__' . $id_analysis . '_transcription';
-		$table2 = '%__' . $id_analysis . '_splicing';
-		$table3 = '%__' . $id_analysis . '_SIs';
-		$table4 = '%__' . $id_analysis . '_NIs';
+		$stmt = Dbh::prepare("SELECT type FROM analyses WHERE id = ?");
+		$stmt->execute(array($id_analysis));
+		$row = $stmt->fetch();
+
+		$tables = array();
+
+		if($row['type'] == 'simple' or $row['type'] == 'compose'){
+
+			$tables[] = '%__' . $id_analysis . '_transcription';
+			$tables[] = '%__' . $id_analysis . '_splicing';
+
+		}
+
+		if($row['type'] == 'apriori'){
+
+			$tables[] = '%__' . $id_analysis . '_ase_apriori';
+
+		}
+
+		if($row['type'] == 'jonction'){
+
+			$tables[] = '%__' . $id_analysis . '_jonction';
+
+		}
+
+		# On vérifie que les tables sont là
+		$ok = true;
 
 		$stmt = Dbh::prepare('SHOW TABLES LIKE ?');
 
-		$stmt->execute(array($table1));
-		$nb_table1 = $stmt->rowCount();
+		foreach($tables as $table){
 
-		$stmt->execute(array($table2));
-		$nb_table2 = $stmt->rowCount();
+			$stmt->execute(array($table));
+			$nb_table = $stmt->rowCount();
 
-		$stmt->execute(array($table2));
-		$nb_table3 = $stmt->rowCount();
+			if($nb_table != 1){
 
-		$stmt->execute(array($table2));
-		$nb_table4 = $stmt->rowCount();
+				$ok = false;
+				break;
 
-		return ($nb_table1 == 1 and $nb_table2 == 1 and $nb_table3 == 1 and $nb_table4 == 1);
+			}
+
+		}
+
+		return $ok;
 
 	}
 
