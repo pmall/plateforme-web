@@ -16,6 +16,7 @@ $app->get('/users', function($req, $res) use($app){
 $app->get('/user/:id', function($req, $res, $matches) use($app){
 
 	$filter = array(
+		'id_user' => $matches['id'],
 		'name' => $req->param('name'),
 		'type' => $req->param('type'),
 		'organism' => $req->param('organism'),

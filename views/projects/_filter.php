@@ -3,10 +3,10 @@
   <fieldset>
     <legend>Filtrer les projets</legend>
     <input name="name" type="text" value="<?= h($filter['name']) ?>" placeholder="Nom du projet" class="span3" />
-    <select name="id_user" class="span2"<? if($user){ echo " disabled=\"disabled\""; } ?>>
+    <select name="id_user" class="span2"<? if(isset($user)){ echo " disabled=\"disabled\""; } ?>>
       <option value="">Tous les utilisateurs</option>
       <? foreach($users as $id_user => $name_user): ?>
-      <option value="<?= h($id_user) ?>"<? if($filter['id_user'] == $id): ?> selected="selected"<? endif; ?>><?= h($name_user) ?></option>
+      <option value="<?= h($id_user) ?>"<? if($id_user == $filter['id_user']): ?> selected="selected"<? endif; ?>><?= h($name_user) ?></option>
       <? endforeach; ?>
     </select>
     <select name="type" class="span2">

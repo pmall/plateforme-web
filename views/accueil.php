@@ -31,7 +31,8 @@
   </ul>
   <? $this->partial('projects/_filter.php', array(
 	'url' => '/plateforme2/index.php/projects',
-	'users' => $user_list))
+	'users' => $user_list
+	))
   ?>
   <ul id="home_list">
     <? foreach($users as $user): ?>
