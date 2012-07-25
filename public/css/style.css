@@ -21,6 +21,14 @@
 	background-color:#f5f5f5;
 }
 
+.analysis li:nth-child(odd){
+	background-color:inherit;
+}
+
+.analysis li:nth-child(even){
+	background-color:inherit;
+}
+
 #home_list{
 	margin:0;
 }

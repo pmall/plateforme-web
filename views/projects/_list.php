@@ -36,7 +36,7 @@
     </p>
     <? endif ?>
     <? if(count($project->analyses) > 0): ?>
-    <ul>
+    <ul class="analysis">
       <? foreach($project->analyses as $analysis): ?>
       <li id="analysis_<?= $analysis->id ?>">
         <div class="options btn-group">
