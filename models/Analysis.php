@@ -258,6 +258,17 @@ class Analysis extends Model{
 			# On valide les analyses jonction
 			if($this->type == 'jonction'){
 
+				if($this->version == 'fdb2'){
+
+					$this->addError(new Error(
+						'Une analyse de type jonction
+						ne peut être faite que sur
+						fasterdb1',
+						'type'
+					));
+
+				}
+
 				# On va chercher le type de puces de l'exp
 				$project = Project::get($this->id_project);
 
