@@ -33,6 +33,14 @@
 	background-color:inherit;
 }
 
+.dropdown-menu li:nth-child(odd), .dropdown-menu li:nth-child(even){
+	background-color:#ffffff;
+}
+
+.projects li.divider{
+	background-color:#f5f5f5;
+}
+
 #home_list{
 	margin:0;
 }
