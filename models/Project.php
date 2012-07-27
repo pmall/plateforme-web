@@ -624,19 +624,26 @@ class Project extends Model{
 
 			}
 
+			# Filter $this->chips
+			$new_chips = array_filter($this->chips, function($chip){
+
+				return !empty($chip['num']) and !empty($chip['condition']);
+
+			});
+
 			# Le projet est sale si il n'y a pas le même nombre de puces
-			$dirty = (count($this->chips) != count($current_chips));	
+			$dirty = (count($new_chips) != count($current_chips));	
 
 			# Si il y en a le même nombre on les compare une a une
 			if(!$dirty){
 
-				foreach($this->chips as $name => $value){
+				foreach($new_chips as $name => $chip){
 
-					if(array_key_exists($value['name'], $current_chips)){
+					if(array_key_exists($chip['name'], $current_chips)){
 
-						$name = $value['condition'] . '_' . $value['num'];
+						$name = $chip['condition'] . '_' . $chip['num'];
 
-						$dirty = ($dirty or ($name != $current_chips[$value['name']]));
+						$dirty = ($dirty or ($name != $current_chips[$chip['name']]));
 
 					}else{
 

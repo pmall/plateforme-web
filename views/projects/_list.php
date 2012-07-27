@@ -28,6 +28,7 @@
     <p id="notice_dirty_<?= $project->id ?>" class="alert alert-block">
       Attention : La description des puces du projet a changé depuis le dernier
       préprocessing. Il faut relancer le préprocessing.
+      Les analyses devront aussi être relancées.
     </p>
     <? endif ?>
     <? if($project->comment): ?>
