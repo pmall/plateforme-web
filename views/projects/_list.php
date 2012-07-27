@@ -35,8 +35,13 @@
       <?= nl2br(h($project->comment)); ?>
     </p>
     <? endif ?>
-    <? if(count($project->analyses) > 0): ?>
     <hr />
+    <? if(count($project->analyses) == 0): ?>
+    <p>
+      Pas d'analyse définie pour ce projet.
+      <a href="/plateforme2/index.php/project/<?= $project->id ?>/analysis">Ajouter une analyse pour ce projet</a>.
+    </p>
+    <? else: ?>
     <ul class="analysis">
       <? foreach($project->analyses as $analysis): ?>
       <li id="analysis_<?= $analysis->id ?>">
