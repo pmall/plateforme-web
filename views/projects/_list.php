@@ -3,8 +3,8 @@
   <li id="project_<?= $project->id ?>">
     <p>
       <div class="options btn-group">
-        <a class="btn btn-warning dropdown-toggle" data-toggle="dropdown" href="#">
-          Options <span class="caret"></span>
+        <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
+          Projet <span class="caret"></span>
         </a>
         <ul class="dropdown-menu">
           <li><a href="#" class="job" data-type="qc" data-id_project="<?= $project->id ?>">QC</a></li>
@@ -36,12 +36,13 @@
     </p>
     <? endif ?>
     <? if(count($project->analyses) > 0): ?>
+    <hr />
     <ul class="analysis">
       <? foreach($project->analyses as $analysis): ?>
       <li id="analysis_<?= $analysis->id ?>">
         <div class="options btn-group">
-          <a class="btn btn-warning dropdown-toggle" data-toggle="dropdown" href="#">
-            Options <span class="caret"></span>
+          <a class="btn btn-info dropdown-toggle" data-toggle="dropdown" href="#">
+            Analyse <span class="caret"></span>
           </a>
           <ul class="dropdown-menu">
             <li><a href="#" class="job" data-type="analysis" data-id_project="<?= $analysis->id_project ?>" data-id_analysis="<?= $analysis->id ?>">Run</a></li>
