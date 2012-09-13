@@ -213,6 +213,20 @@ class Analysis extends Model{
 				'version'
 			));
 
+		}else{
+
+			# On va chercher le type de puces de l'exp
+			$project = Project::get($this->id_project);
+			if($project->organism == 'mouse' and $this->version == 'fdb2'){
+
+				$this->addError(new Error(
+					'On ne peut pas utiliser fasterdb2 sur
+					un projet souris',
+					'version'
+				));
+
+			}
+
 		}
 
 		# On valide que le type n'est pas vide
