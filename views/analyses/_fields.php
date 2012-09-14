@@ -6,8 +6,8 @@
       <dd>A : controle, B : test, réplicats de B contre réplicats de A (autant de réplicats dans A et B)</dd>
       <dt>impaire</dt>
       <dd>A : controle, B : test, moyenne des réplicats de B contre moyenne des réplicats de A</dd>
-      <dt>J/O</dt>
-      <dd>A/C vs B/D ou je sais plus quoi</dd>
+      <dt>composé</dt>
+      <dd>C/D par rapport à B/A</dd>
     </dl>
   </div>
   <div class="control-group<?= hasError($analysis, 'name'); ?>">
