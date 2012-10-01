@@ -253,20 +253,6 @@ class Analysis extends Model{
 
 				}
 
-				# On va chercher le type de puces de l'exp
-				$project = Project::get($this->id_project);
-
-				if($project->organism == 'mouse'){
-
-					$this->addError(new Error(
-						'Une analyse de type a priori
-						ne peut être faite que sur
-						l\'humain',
-						'type'
-					));
-
-				}
-
 			}
 
 			# On valide les analyses jonction
