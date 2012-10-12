@@ -84,7 +84,7 @@ $app->get('/project/:id_project/analysis/:id_analysis/edit', function($req, $res
 });
 
 # Modification du formulaire dans la base de données
-$app->put('/project/:id_project/analysis/:id_analysis/edit', function($req, $res, $matches) use($app){
+$app->put('/project/:id_project/analysis/:id_analysis', function($req, $res, $matches) use($app){
 
 	$project = Project::GetWithConditions($matches['id_project']);
 	$analysis = Analysis::GetWithGroups($matches['id_analysis']);
