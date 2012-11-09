@@ -1,5 +1,5 @@
 <? if(!isset($url)): $url = ''; endif; ?>
-<form action="<?= $url ?>" method="get" class="form-inline">
+<form action="<?= $url ?>#list" method="get" class="form-inline">
   <fieldset>
     <legend>Filtrer les projets</legend>
     <input name="name" type="text" value="<?= h($filter['name']) ?>" placeholder="Nom du projet" class="span3" />

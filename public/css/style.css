@@ -83,14 +83,18 @@
 }
 
 #form_project .control-label {
-  /*original: width: 140px;*/
-  width: 280px;
+	/*original: width: 140px;*/
+	width: 280px;
 }
 #form_project .controls {
-  /*original: margin-left: 160px;*/
-  margin-left: 300px;
+	/*original: margin-left: 160px;*/
+	margin-left: 300px;
 }
 
 #form_project .form-actions{
-  padding-left: 300px;
+	padding-left: 300px;
+}
+
+h1 a{
+	color: inherit;
 }
