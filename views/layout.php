@@ -39,6 +39,10 @@
           Bienvenue sur la plateforme d'analyse de puces du labo !
         </p>
       </div>
+      <div class="alert alert-success">
+        L'algo apriori ne marche plus : il a été intégré à l'analyse simple.
+        Maintenant l'analyse simple sort 4 excels : transcription, epissage, apriori et le croisment des listes epissage et apriori.
+      </div>
       <? if(!empty($notice)): ?>
       <div class="alert alert-success">
         <button class="close" data-dismiss="alert">×</button>
