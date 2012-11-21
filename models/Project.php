@@ -45,7 +45,7 @@ class Project extends Model{
 
 		# On prépare la requete
 		$stmt = Dbh::prepare(
-			"SELECT * FROM projects " . $where
+			"SELECT * FROM projects " . $where . " ORDER BY date ASC"
 		);
 
 		# On execute la requete
