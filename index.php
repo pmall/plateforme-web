@@ -1,13 +1,12 @@
 <?php
 
+require('config.php');
+
 function __autoload($classname){
 
 	require 'framework/' . $classname . '.php';
 
 }
-
-# On récupère la config
-$config = yaml_parse_file('../config.yml');
 
 # On inclu les modèles
 require('models/Dir.php');
